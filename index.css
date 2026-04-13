@@ -1,0 +1,109 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink: #E91E8C;
+  --pink-d: #C2185B;
+  --pink-pale: #FCE4EC;
+  --green: #2E7D32;
+  --green-l: #4CAF50;
+  --green-pale: #E8F5E9;
+  --white: #FFFFFF;
+  --off-white: #FFF8FB;
+  --grey: #757575;
+  --grey-l: #F5F5F5;
+  --dark: #1A1A2E;
+  --amber: #FF6F00;
+  --red: #D32F2F;
+  --blue: #1565C0;
+  --teal: #00695C;
+  --purple: #6A1B9A;
+}
+
+html, body {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  background: var(--off-white);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+input, select, textarea, button {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--pink) !important;
+  outline: none;
+}
+
+a { -webkit-tap-highlight-color: transparent; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: var(--pink-pale); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .app-shell {
+    display: flex;
+    min-height: 100vh;
+  }
+  .sidebar {
+    display: flex !important;
+    width: 220px;
+    flex-shrink: 0;
+  }
+  .bottom-nav {
+    display: none !important;
+  }
+  .main-content {
+    flex: 1;
+    max-width: 100%;
+    padding: 24px 32px 40px !important;
+  }
+  .content-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .app-header {
+    padding: 16px 32px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar { display: none !important; }
+  .main-content { padding: 14px 14px 90px !important; }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.2s ease; }
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.slide-up { animation: slideUp 0.25s ease; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+  white-space: nowrap;
+  max-width: 90vw;
+  text-align: center;
+}

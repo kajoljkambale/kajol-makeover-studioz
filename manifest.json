@@ -1,0 +1,26 @@
+{
+  "name": "Kajol Makeover Studioz",
+  "short_name": "KMS Studio",
+  "description": "Complete Studio Management - Makeup, Mehndi, ArtWork",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8FB",
+  "theme_color": "#E91E8C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "screenshots": []
+}
