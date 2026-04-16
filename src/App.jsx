@@ -24,9 +24,19 @@ const SB_URL  = import.meta.env.VITE_SUPABASE_URL  || 'https://zlzrdpagpwlrbljfm
 const SB_KEY  = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_6_AujeG9DfoPxMELnkGCeQ_08K3XEF4'
 const sb      = createClient(SB_URL, SB_KEY)
 
-const dbLoad   = async t => { const { data, error } = await sb.from(t).select('*').order('created_at',{ascending:true}); if(error) console.error(t,error.message); return data||[] }
-const dbUpsert = async (t,row) => { const { data,error } = await sb.from(t).upsert(row,{onConflict:'id'}).select(); if(error) console.error(t,error.message); return data?.[0]||null }
-const dbDel    = async (t,id)  => { const { error } = await sb.from(t).delete().eq('id',id); if(error) console.error(t,error.message); return !error }
+const dbLoad   = async t => { 
+  const { data, error } = await sb.from(t).select('*').order('created_at',{ascending:true}); 
+  if(error) console.error(t,error.message); 
+  return data||[] 
+}
+const dbSave   = async (t,d) => { 
+  const { error } = await sb.from(t).upsert(d); 
+  if(error) alert("Error saving: "+error.message); 
+}
+const dbDelete = async (t,id) => { 
+  const { error } = await sb.from(t).delete().eq('id',id); 
+  if(error) alert("Error deleting: "+error.message); 
+}
 
 async function loadAll() {
   const [students,courses,batches,classes,hw,payments,orders,expenses,requests] = await Promise.all([
