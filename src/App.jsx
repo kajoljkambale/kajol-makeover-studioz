@@ -29,6 +29,10 @@ const dbLoad   = async t => {
   if(error) console.error(t,error.message); 
   return data||[] 
 }
+const dbUpsert = async (t,d) => {
+  const { error } = await sb.from(t).upsert(d,{onConflict:'id'});
+  if(error) console.error("Upsert error:", error.message);
+}
 const dbSave   = async (t,d) => { 
   const { error } = await sb.from(t).upsert(d); 
   if(error) alert("Error saving: "+error.message); 
@@ -1436,6 +1440,9 @@ function ReportsTab({data}) {
       {type==='monthly'&&<div><STitle><Ic n="calendar" size={15} color={C.pink}/> Monthly Report</STitle>{months.map(([m,v])=><Card key={m} accent={C.pink}><div style={{fontWeight:700,fontSize:15,marginBottom:10}}>{mLabel(m)}</div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:8}}>{[['Class Fees',fmt(v.i),C.green],['Order Income',fmt(v.o),C.teal],['Expenses',fmt(v.e),C.red],['Order Exp.',fmt(v.oe),C.amber]].map(([l,val,c])=><div key={l} style={{background:c+'10',borderRadius:10,padding:'8px 10px'}}><div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div><div style={{fontSize:15,fontWeight:800,color:c}}>{val}</div></div>)}</div><div style={{background:C.pinkPale,borderRadius:10,padding:'8px 10px',display:'flex',justifyContent:'space-between'}}><span style={{fontSize:13,fontWeight:700}}>Net Profit</span><span style={{fontSize:15,fontWeight:800,color:(v.i+v.o-v.e-v.oe)>=0?C.green:C.red}}>{fmt(v.i+v.o-v.e-v.oe)}</span></div></Card>)}{months.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32}}>No data yet.</div>}</div>}
        {type==='batch'&&<div><STitle><Ic n="batch" size={15} color={C.blue}/> Batch Report</STitle>{data.batches.map(b=>{const income=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+Number(p.paid),0);const due=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0);const exp=data.expenses.filter(e=>e.linked_to===b.id).reduce((s,e)=>s+Number(e.amount),0);const c2=data.courses.find(c=>c.id===b.course_id);return(<Card key={b.id} accent={c2?.color||C.pink}><Row style={{justifyContent:'space-between',marginBottom:8}}><div style={{fontWeight:700,fontSize:14}}>{b.name}</div><Badge color={b.status==='Active'?C.green:C.grey}>{b.status}</Badge></Row><Row gap={6} style={{marginBottom:8}}>{[['Students',b.student_ids?.length||0,C.purple],['Classes',data.classes.filter(c=>c.batch_id===b.id).length,C.blue]].map(([l,v,c])=><span key={l} style={{background:c+'12',borderRadius:8,padding:'4px 10px',fontSize:11,color:c,fontWeight:700}}>{l}: {v}</span>)}</Row>{[['Income',fmt(income),C.green],['Pending',fmt(due),C.amber],['Expenses',fmt(exp),C.red],['Net',fmt(income-exp),income-exp>=0?C.green:C.red]].map(([l,v,c])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'4px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700,color:c}}>{v}</span></div>)}</Card>)})}</div>}
      {type==='student'&&<div><STitle><Ic n="students" size={15} color={C.purple}/> Student Report</STitle>{data.students.map(s=>{const paid=data.payments.filter(p=>p.student_id===s.id).reduce((a,p)=>a+Number(p.paid),0);const due=data.payments.filter(p=>p.student_id===s.id).reduce((a,p)=>a+(Number(p.amount)-Number(p.paid)),0);const bats=data.batches.filter(b=>(b.student_ids||[]).includes(s.id));const att=data.classes.reduce((a,c)=>{if(bats.find(b=>b.id===c.batch_id)&&(c.attendees||[]).includes(s.id))return a+1;return a},0);const tc=data.classes.filter(c=>bats.find(b=>b.id===c.batch_id)).length;const hwS=data.homeworkCompliance.filter(h=>h.student_id===s.id&&h.submitted).length;const hwT=data.homeworkCompliance.filter(h=>h.student_id===s.id).length;return(<Card key={s.id}><Row gap={10} style={{marginBottom:8}}><div style={{width:38,height:38,borderRadius:'50%',background:`linear-gradient(135deg,${C.pink},${C.pinkD})`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:800,fontSize:16,flexShrink:0}}>{(s.name||'?')[0]}</div><div style={{flex:1}}><div style={{fontWeight:700,fontSize:14}}>{s.name}</div><div style={{fontSize:11,color:C.grey}}>{bats.length} batch{bats.length!==1?'es':''} · {s.mobile}</div></div></Row><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>{[['Paid',fmt(paid),C.green],['Due',fmt(due),C.amber],['Attendance',`${att}/${tc}`,C.blue],['HW Done',`${hwS}/${hwT}`,C.teal]].map(([l,v,c])=><div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 10px'}}><div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div><div style={{fontSize:14,fontWeight:800,color:c}}>{v}</div></div>)}</div></Card>)})}</div>}
+    </div>
+  )
+}
 
 function SettingsTab({data,setData,onLogout,toast}) {
   const [modal,setModal]=useState(null); const [pwd,setPwd]=useState(''); const [err,setErr]=useState(''); const [busy,setBusy]=useState(false)
@@ -1480,16 +1487,7 @@ const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 /* ═══════════════════════════════════════════════════════════════════
    ROOT APP
 ═══════════════════════════════════════════════════════════════════ */
-export default function App() {
-  // Route detection: /enroll → public form
-  const isEnroll = window.location.pathname.startsWith('/enroll')
-  if(isEnroll) return (
-    <div>
-      <style>{`*{box-sizing:border-box;margin:0;padding:0;}`}</style>
-      <EnrollForm/>
-    </div>
-  )
-
+function AdminApp() {
   const [loggedIn,setLoggedIn] = useState(false)
   const [tab,setTab]           = useState('home')
   const [data,setData]         = useState({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]})
@@ -1620,4 +1618,15 @@ export default function App() {
       <Toast msg={toastMsg}/>
     </div>
   )
+}
+
+export default function App() {
+  const isEnroll = window.location.pathname.startsWith('/enroll')
+  if(isEnroll) return (
+    <div>
+      <style>{`*{box-sizing:border-box;margin:0;padding:0;}`}</style>
+      <EnrollForm/>
+    </div>
+  )
+  return <AdminApp/>
 }
