@@ -1,15 +1,64 @@
 /**
- * AppDashboard.jsx
- * Kajol Makeover Studioz — Full Admin App + Public Enrollment Form
- * Moved to src/pages/AppDashboard.jsx for modular routing.
+ * KAJOL MAKEOVER STUDIOZ — App.jsx v3.1
  *
- * Route /app    → AdminApp  (password protected)
- * Route /enroll → EnrollForm (public)
+ * HOW THIS FILE WORKS
+ * ───────────────────
+ * • Route  /enroll  → public student enrollment form (no login needed)
+ * • Route  /        → full admin app (password protected)
+ *
+ * This is ONE file.  Drop it into  src/App.jsx  and it handles both routes.
+ *
+ * SUPABASE TABLES NEEDED
+ * ──────────────────────
+ * Run  supabase_schema_v3.sql  in your Supabase SQL editor before deploying.
+ * The new table is:  enrollment_requests
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { sb, dbUpsert, dbDelete, loadAll, clearAll } from '../supabaseClient'
+import { createClient } from '@supabase/supabase-js'
 
+/* ═══════════════════════════════════════════════════════════════════
+   SUPABASE
+═══════════════════════════════════════════════════════════════════ */
+const SB_URL  = import.meta.env.VITE_SUPABASE_URL  || 'https://zlzrdpagpwlrbljfmxzy.supabase.co'
+const SB_KEY  = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_6_AujeG9DfoPxMELnkGCeQ_08K3XEF4'
+const sb      = createClient(SB_URL, SB_KEY)
+
+const dbLoad   = async t => { 
+  const { data, error } = await sb.from(t).select('*').order('created_at',{ascending:true}); 
+  if(error) console.error(t,error.message); 
+  return data||[] 
+}
+const dbUpsert = async (t,d) => {
+  const { error } = await sb.from(t).upsert(d,{onConflict:'id'});
+  if(error) console.error("Upsert error:", error.message);
+}
+const dbSave   = async (t,d) => { 
+  const { error } = await sb.from(t).upsert(d); 
+  if(error) alert("Error saving: "+error.message); 
+}
+const dbDelete = async (t,id) => { 
+  const { error } = await sb.from(t).delete().eq('id',id); 
+  if(error) alert("Error deleting: "+error.message); 
+}
+
+async function loadAll() {
+  const [students,courses,batches,classes,hw,payments,orders,expenses,requests] = await Promise.all([
+    dbLoad('students'), dbLoad('courses'), dbLoad('batches'), dbLoad('classes'),
+    dbLoad('homework_compliance'), dbLoad('payments'), dbLoad('orders'),
+    dbLoad('expenses'), dbLoad('enrollment_requests'),
+  ])
+  return { students, courses, batches, classes, homeworkCompliance:hw,
+           payments, orders, expenses, enrollmentRequests:requests }
+}
+
+async function clearAll() {
+  for(const t of ['homework_compliance','payments','expenses','orders','classes',
+                   'batches','courses','enrollment_requests','students'])
+    await sb.from(t).delete().neq('id','__none__')
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    CONSTANTS & HELPERS
 ═══════════════════════════════════════════════════════════════════ */
 const ADMIN_PWD    = 'kajol2024'
@@ -1571,17 +1620,13 @@ function AdminApp() {
   )
 }
 
-
-/* ═══════════════════════════════════════════════════════════════════
-   PAGE EXPORT
-═══════════════════════════════════════════════════════════════════ */
 export default function AppDashboard() {
   const isEnroll = window.location.pathname.startsWith('/enroll')
-  if (isEnroll) return (
+  if(isEnroll) return (
     <div>
       <style>{`*{box-sizing:border-box;margin:0;padding:0;}`}</style>
-      <EnrollForm />
+      <EnrollForm/>
     </div>
   )
-  return <AdminApp />
+  return <AdminApp/>
 }
