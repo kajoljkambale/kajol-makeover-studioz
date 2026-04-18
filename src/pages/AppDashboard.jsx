@@ -2061,6 +2061,7 @@ function AdminApp() {
   const [data,setData]         = useState({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]})
   const [loading,setLoading]   = useState(false)
   const [toastMsg,setToastMsg] = useState('')
+  const [showExport, setShowExport] = useState(false)
 
   const toast = useCallback(msg=>{ setToastMsg(msg); setTimeout(()=>setToastMsg(''),3000) },[])
 
