@@ -2055,17 +2055,12 @@ const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 /* ═══════════════════════════════════════════════════════════════════
    ROOT APP
 ═══════════════════════════════════════════════════════════════════ */
-function Admin({ data, loading, onUpdate, onLogout }) {
-  const [tab, setTab] = useState('home');
-  const [selBatch, setSelBatch] = useState(null);
-  const [showAdd, setShowAdd] = useState(false);
-  const [search, setSearch] = useState('');
-  const [toastMsg, setToastMsg] = useState('');
-  const [pendingReq, setPendingReq] = useState(0);
-
-  // FIXED: Added missing states that were causing the crash
-  const [showExport, setShowExport] = useState(false);
-  const [exportData, setExportData] = useState([]);
+function AdminApp() {
+  const [loggedIn,setLoggedIn] = useState(false)
+  const [tab,setTab]           = useState('home')
+  const [data,setData]         = useState({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]})
+  const [loading,setLoading]   = useState(false)
+  const [toastMsg,setToastMsg] = useState('')
 
   const toast = useCallback(msg=>{ setToastMsg(msg); setTimeout(()=>setToastMsg(''),3000) },[])
 
