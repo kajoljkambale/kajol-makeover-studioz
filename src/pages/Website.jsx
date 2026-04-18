@@ -34,81 +34,83 @@ const INSTAGRAM       = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a
 const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
 // ★ Replace PLAYLIST_ID with your actual YouTube playlist ID
 // How to find it: Go to YouTube → Your Channel → Playlists → Click playlist → copy ID from URL after "list="
-const YT_PLAYLIST_ID  = 'https://youtube.com/playlist?list=PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7&si=eg3-Ncl321EAzMOi'   // ← REPLACE THIS
-const ADMIN_URL       = 'https://kajol-makeover-studioz.vercel.app/app'
+const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'  // Kajol Makeover Studioz playlist
+const ADMIN_URL       = '/app'
 
 /* ═══════════════════════════════════════════════════════════════════
-   LOGO  — mehndi mandala + makeup brush + embroidery inspired SVG
+   LOGO — hand holding makeup brushes + mehndi cone
+   Warm pink/green palette matching brand
 ═══════════════════════════════════════════════════════════════════ */
-function KMSLogo({ size = 40 }) {
+function KMSLogo({ size = 48, light = false }) {
+  const pk  = light ? '#fff'                : C.pink
+  const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
+  const gn  = light ? 'rgba(255,255,255,0.7)': C.green
+  const dk  = light ? 'rgba(255,255,255,0.9)': C.dark
+  const bg  = light ? 'rgba(255,255,255,0.15)': C.pinkPale
   return (
-    <svg width={size} height={size} viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* outer petal ring — mehndi mandala petals */}
-      {[0,45,90,135,180,225,270,315].map((deg, i) => (
-        <ellipse key={i}
-          cx={40} cy={40} rx={6} ry={14}
-          fill={i % 2 === 0 ? C.pink : C.pinkD}
-          opacity="0.75"
-          transform={`rotate(${deg} 40 40) translate(0 -20)`}
-        />
-      ))}
-      {/* middle embroidery ring — small dots */}
-      {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg, i) => {
-        const rad = (deg * Math.PI) / 180
-        const x = 40 + 22 * Math.cos(rad)
-        const y = 40 + 22 * Math.sin(rad)
-        return <circle key={i} cx={x} cy={y} r={2.2} fill={i%3===0?C.green:C.greenL} opacity="0.85"/>
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* ── background circle ── */}
+      <circle cx="50" cy="50" r="48" fill={bg}/>
+      {/* ── Hand / palm ── */}
+      <path d="M34 78 Q32 62 34 50 Q35 44 40 42 L40 28 Q40 24 43.5 24 Q47 24 47 28 L47 42 Q49 40 52 40 Q55 40 55 44 Q57 42 60 42 Q63 42 63 46 Q65 45 67 46 Q70 47 70 52 L70 67 Q70 74 64 78 Q58 82 48 82 L37 82 Q34 82 34 78Z"
+        fill={pk} opacity="0.22" stroke={pk} strokeWidth="2.5"/>
+      {/* ── Fingers ── */}
+      <line x1="40" y1="42" x2="40" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="47" y1="44" x2="47" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="55" y1="45" x2="55" y2="32" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="63" y1="47" x2="63" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      {/* ── Makeup brush 1 (angled up-right) ── */}
+      <line x1="50" y1="28" x2="68" y2="10" stroke={dk} strokeWidth="2.5" strokeLinecap="round"/>
+      <ellipse cx="50" cy="27" rx="4.5" ry="8" fill={pk} opacity="0.9" transform="rotate(-40 50 27)"/>
+      <path d="M67 11 Q73 6 71 14 Q69 12 67 11Z" fill={pkD}/>
+      {/* ── Makeup brush 2 (angled up-left) ── */}
+      <line x1="42" y1="28" x2="26" y2="12" stroke={dk} strokeWidth="2" strokeLinecap="round"/>
+      <ellipse cx="42" cy="28" rx="3.5" ry="7" fill={gn} opacity="0.9" transform="rotate(40 42 28)"/>
+      <path d="M27 13 Q21 8 23 15 Q25 13 27 13Z" fill={gn} opacity="0.85"/>
+      {/* ── Mehndi cone in hand ── */}
+      <path d="M25 40 L21 74 Q21 78 25 78 Q29 78 29 74 L25 40Z" fill={gn}/>
+      <path d="M22 40 L28 40 Q31 37 28 32 L25 25 L22 32 Q19 37 22 40Z" fill={gn}/>
+      <line x1="25" y1="78" x2="25" y2="85" stroke={pkD} strokeWidth="1.5" strokeLinecap="round"/>
+      {/* ── Mehndi dots on cone ── */}
+      <circle cx="25" cy="50" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="25" cy="60" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="25" cy="70" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      {/* ── Tiny mehndi flower top-right ── */}
+      {[0,60,120,180,240,300].map((d,i)=>{
+        const rad=(d*Math.PI)/180
+        const x=78+7*Math.cos(rad), y=22+7*Math.sin(rad)
+        return <circle key={i} cx={x} cy={y} r="2.8" fill={pk} opacity="0.55"/>
       })}
-      {/* inner filled circle — makeup compact */}
-      <circle cx={40} cy={40} r={16} fill={`url(#kmsGrad)`}/>
-      {/* makeup brush stroke across circle */}
-      <path d="M32 36 Q40 32 48 36 Q40 40 32 36Z" fill="rgba(255,255,255,0.35)"/>
-      {/* lipstick dot */}
-      <circle cx={40} cy={42} r={4} fill="#fff" opacity="0.9"/>
-      <circle cx={40} cy={42} r={2} fill={C.pink}/>
-      {/* gradient def */}
-      <defs>
-        <radialGradient id="kmsGrad" cx="40%" cy="35%" r="65%">
-          <stop offset="0%" stopColor={C.pinkD}/>
-          <stop offset="100%" stopColor="#7B1FA2"/>
-        </radialGradient>
-      </defs>
+      <circle cx="78" cy="22" r="3.5" fill={pk} opacity="0.9"/>
+      <circle cx="78" cy="22" r="1.5" fill="#fff" opacity="0.8"/>
     </svg>
   )
 }
 
-/* ── Small inline logo text mark ── */
 function LogoMark({ dark: isDark = true }) {
   return (
-    <div style={{ display:'flex', alignItems:'center', gap:9 }}>
-      <KMSLogo size={40}/>
+    <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+      <KMSLogo size={42} light={!isDark}/>
       <div>
-        <div style={{
-          fontSize: 13, fontWeight: 900, letterSpacing: 0.3, lineHeight: 1.15,
-          background: isDark ? `linear-gradient(135deg,${C.pink},${C.pinkD})` : 'linear-gradient(135deg,#fff,#FFD6EC)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          fontFamily: "'Playfair Display', serif",
-        }}>Kajol Makeover</div>
-        <div style={{
-          fontSize: 9, fontWeight: 700, letterSpacing: 2.5, color: isDark ? C.grey : 'rgba(255,255,255,0.75)',
-          textTransform:'uppercase',
-        }}>S T U D I O Z</div>
+        <div style={{ fontSize:13, fontWeight:900, letterSpacing:0.4, lineHeight:1.2, color: isDark ? C.pink : '#fff' }}>
+          Kajol Makeover
+        </div>
+        <div style={{ fontSize:9, fontWeight:700, letterSpacing:2.8, textTransform:'uppercase', color: isDark ? C.grey : 'rgba(255,255,255,0.72)' }}>
+          S T U D I O Z
+        </div>
       </div>
     </div>
   )
 }
 
-/* ── Large hero logo ── */
 function HeroLogo() {
   return (
-    <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:6 }}>
-      <KMSLogo size={88}/>
-      <div style={{
-        fontSize: 32, fontWeight: 900, color:'#fff',
-        fontFamily:"'Playfair Display',serif",
-        textShadow:'0 2px 16px rgba(0,0,0,0.3)',
-        letterSpacing:1,
-      }}>Kajol Makeover<br/><span style={{fontSize:20,letterSpacing:5,opacity:.9}}>S T U D I O Z</span></div>
+    <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:8 }}>
+      <KMSLogo size={96} light={true}/>
+      <div style={{ fontSize:32, fontWeight:900, color:'#fff', fontFamily:"'Playfair Display',serif", textShadow:'0 2px 18px rgba(0,0,0,0.32)', letterSpacing:1 }}>
+        Kajol Makeover<br/>
+        <span style={{ fontSize:19, letterSpacing:5, opacity:.88 }}>S T U D I O Z</span>
+      </div>
     </div>
   )
 }
@@ -225,36 +227,104 @@ function InstagramWidget() {
   )
 }
 
-/* ── YouTube Playlist Widget ── */
+/* ── YouTube Playlist Widget — player left + playlist list right ── */
+const PLAYLIST_ITEMS = [
+  { title:'Introduction to Mehndi Art', duration:'~18 min', cat:'Mehndi' },
+  { title:'Basic Patterns & Strokes', duration:'~24 min', cat:'Mehndi' },
+  { title:'Arabic Mehndi Full Design', duration:'~31 min', cat:'Mehndi' },
+  { title:'Bridal Mehndi — Full Hand', duration:'~45 min', cat:'Mehndi' },
+  { title:'Makeup: Skin Prep & Base', duration:'~22 min', cat:'Makeup' },
+  { title:'Eye Makeup Techniques', duration:'~28 min', cat:'Makeup' },
+  { title:'Bridal Makeup Complete Look', duration:'~52 min', cat:'Makeup' },
+  { title:'Mandala Art Basics', duration:'~20 min', cat:'Ariwork' },
+  { title:'Canvas Painting for Beginners', duration:'~35 min', cat:'Ariwork' },
+  { title:'Resin Art Introduction', duration:'~26 min', cat:'Ariwork' },
+]
+const CAT_COLOR = { Mehndi: C.green, Makeup: C.pink, Ariwork: C.purple }
+
 function YouTubePlaylistWidget({ playlistId }) {
-  // If no real playlist ID provided, show a link instead
-  const isReal = playlistId && !playlistId.startsWith('PLxxx')
-  if (!isReal) {
-    return (
-      <div style={{ background:C.dark, borderRadius:20, padding:32, textAlign:'center' }}>
-        <div style={{ fontSize:48, marginBottom:12 }}>▶</div>
-        <div style={{ color:'#fff', fontWeight:700, fontSize:16, marginBottom:8 }}>Watch Our Classes on YouTube</div>
-        <div style={{ color:'rgba(255,255,255,0.7)', fontSize:13, marginBottom:20 }}>
-          Mehndi tutorials · Makeup classes · Ariwork sessions — all recorded &amp; available anytime
-        </div>
-        <a href={YOUTUBE} target="_blank" rel="noopener noreferrer"
-          style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 28px', borderRadius:14, background:C.yt, color:'#fff', fontWeight:800, fontSize:14, textDecoration:'none', boxShadow:'0 6px 20px rgba(255,0,0,0.4)' }}>
-          ▶ Visit Our YouTube Channel
-        </a>
-      </div>
-    )
-  }
-  // Real embed
+  const [activeIdx, setActiveIdx] = useState(0)
+  const embedSrc = `https://www.youtube.com/embed/videoseries?list=${playlistId}&index=${activeIdx + 1}&rel=0&modestbranding=1`
+
   return (
-    <div style={{ borderRadius:20, overflow:'hidden', boxShadow:'0 8px 32px rgba(0,0,0,0.18)', background:C.dark }}>
-      <div style={{ position:'relative', paddingBottom:'56.25%', height:0 }}>
-        <iframe
-          style={{ position:'absolute', top:0, left:0, width:'100%', height:'100%', border:'none' }}
-          src={`https://www.youtube.com/embed/videoseries?list=${playlistId}&rel=0&modestbranding=1`}
-          title="Kajol Makeover Studioz — YouTube Playlist"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+    <div style={{
+      display:'flex', borderRadius:20, overflow:'hidden',
+      boxShadow:'0 12px 48px rgba(0,0,0,0.4)', background:'#0f0f0f',
+      flexWrap:'wrap', minHeight:320,
+    }}>
+      {/* ── Video player ── */}
+      <div style={{ flex:'1 1 58%', minWidth:260, position:'relative', background:'#000' }}>
+        <div style={{ position:'relative', paddingBottom:'56.25%', height:0 }}>
+          <iframe
+            key={activeIdx}
+            style={{ position:'absolute', top:0, left:0, width:'100%', height:'100%', border:'none' }}
+            src={embedSrc}
+            title="Kajol Makeover Studioz Classes"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        {/* Now playing label */}
+        <div style={{ padding:'10px 14px', background:'#111' }}>
+          <div style={{ fontSize:12, color:'#aaa', marginBottom:2, textTransform:'uppercase', letterSpacing:.8 }}>Now Playing</div>
+          <div style={{ fontSize:14, color:'#fff', fontWeight:700, lineHeight:1.4 }}>
+            {PLAYLIST_ITEMS[activeIdx]?.title || 'Class Video'}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Playlist sidebar ── */}
+      <div style={{ flex:'0 1 260px', minWidth:200, background:'#1a1a1a', maxHeight:380, overflowY:'auto', display:'flex', flexDirection:'column' }}>
+        {/* Header */}
+        <div style={{ padding:'12px 14px', borderBottom:'1px solid #2d2d2d', position:'sticky', top:0, background:'#111', zIndex:1 }}>
+          <div style={{ fontSize:11, fontWeight:700, color:'#fff', letterSpacing:1, textTransform:'uppercase' }}>
+            📋 Class Playlist
+          </div>
+          <div style={{ fontSize:10, color:'#888', marginTop:3 }}>{PLAYLIST_ITEMS.length} videos</div>
+        </div>
+        {/* Video list */}
+        {PLAYLIST_ITEMS.map((v, i) => {
+          const isActive = i === activeIdx
+          const catC = CAT_COLOR[v.cat] || C.pink
+          return (
+            <div key={i} onClick={() => setActiveIdx(i)} style={{
+              padding:'10px 12px', borderBottom:'1px solid #232323',
+              cursor:'pointer', display:'flex', gap:10, alignItems:'flex-start',
+              background: isActive ? '#1e0a0e' : 'transparent',
+              borderLeft: isActive ? `3px solid ${C.pink}` : '3px solid transparent',
+              transition:'all .12s',
+            }}>
+              {/* Number / play indicator */}
+              <div style={{
+                width:30, height:30, borderRadius:'50%', flexShrink:0,
+                background: isActive ? C.pink : '#2d2d2d',
+                display:'flex', alignItems:'center', justifyContent:'center',
+                fontSize:12, color:'#fff', fontWeight:800,
+              }}>
+                {isActive ? '▶' : i + 1}
+              </div>
+              <div style={{ minWidth:0, flex:1 }}>
+                <div style={{
+                  fontSize:12, fontWeight: isActive ? 700 : 400,
+                  color: isActive ? '#fff' : '#ccc', lineHeight:1.4,
+                  overflow:'hidden', textOverflow:'ellipsis',
+                  display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical',
+                }}>
+                  {v.title}
+                </div>
+                <div style={{ display:'flex', gap:6, marginTop:4, alignItems:'center' }}>
+                  <span style={{ fontSize:9, background:catC+'33', color:catC, borderRadius:5, padding:'1px 6px', fontWeight:700 }}>{v.cat}</span>
+                  <span style={{ fontSize:10, color:'#666' }}>{v.duration}</span>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+        {/* Open in YouTube */}
+        <a href={`https://www.youtube.com/playlist?list=${playlistId}`} target="_blank" rel="noopener noreferrer"
+          style={{ margin:'10px 12px', padding:'9px 12px', borderRadius:10, background:C.yt, color:'#fff', textDecoration:'none', fontSize:12, fontWeight:700, textAlign:'center', display:'block' }}>
+          ▶ Open Full Channel
+        </a>
       </div>
     </div>
   )
