@@ -84,8 +84,8 @@ const C = {
 }
 
 const COURSE_COLORS  = [C.pink,C.green,C.purple,C.teal,C.blue,C.amber]
-const COURSE_TYPES   = ['Mehndi','Makeup','ArtWork','Combined']
-const ORDER_TYPES    = ['Mehndi','Makeup','ArtWork','Combined']
+const COURSE_TYPES   = ['Mehndi','Makeup','Ariwork','Combined']
+const ORDER_TYPES    = ['Mehndi','Makeup','Ariwork','Combined']
 const SCHEDULE_OPTS  = ['Daily','3 Days/Week','Weekend Only','Tue-Thu-Sat','Mon-Wed-Fri','Custom']
 const DURATION_OPTS  = ['10 Days','Monthly','3 Months','Custom']
 const EXP_CATS       = ['Advertising','Study Material','Equipment','Mehndi Cones','Makeup Kit','Zoom','Internet','Transport','Other']
@@ -129,6 +129,9 @@ const IP = {
   info:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 16v-4M12 8h.01',
   upload:'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12',
   expenses:'M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z',
+  globe:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z',
+  image:'M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z',
+  star:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
 }
 
 function Ic({n,size=18,color='currentColor',style:sx}) {
@@ -309,7 +312,7 @@ function EnrollForm() {
             <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" style={{display:'block',background:l.bg,color:'#fff',borderRadius:12,padding:'12px',textDecoration:'none',fontWeight:700,fontSize:14}}>{l.label}</a>
           ))}
         </div>
-        <div style={{fontSize:11,color:C.grey,marginTop:16}}>Kajol Makeover Studioz · Makeup · Artwork · Mehndi</div>
+        <div style={{fontSize:11,color:C.grey,marginTop:16}}>Kajol Makeover Studioz · Makeup · Ariwork · Mehndi</div>
       </div>
     </div>
   )
@@ -355,7 +358,7 @@ function EnrollForm() {
           {inp('Email Address','email','email','your@email.com')}
           {inp('Profession / Occupation','profession','text','e.g. Homemaker, Student, Working Professional')}
           {inp('Address / City','address','text','Your city or area')}
-          {inp('Date of Birth (for birthday wishes 🎂)','birthday','date')}
+          {inp('Date of Birth','birthday','date')}
 
           {stepBox(2,'Course Selection')}
           {courses.length===0
@@ -480,7 +483,7 @@ function Dashboard({data,setTab}) {
         <div style={{position:'absolute',top:-24,right:-24,width:110,height:110,borderRadius:'50%',background:'rgba(255,255,255,0.08)'}}/>
         <div style={{fontSize:13,opacity:.9}}>Welcome,</div>
         <div style={{fontSize:22,fontWeight:900,marginTop:2}}>Kajol J Kamble 💄</div>
-        <div style={{fontSize:12,opacity:.85,marginTop:3}}>Makeup · Artwork · Mehndi Artist</div>
+        <div style={{fontSize:12,opacity:.85,marginTop:3}}>Makeup · Ariwork · Mehndi Artist</div>
         <Row gap={8} style={{marginTop:12,flexWrap:'wrap'}}>
           <div style={{background:'rgba(255,255,255,0.18)',borderRadius:10,padding:'6px 12px',fontSize:12,display:'flex',alignItems:'center',gap:5}}>
             <span style={{width:7,height:7,borderRadius:'50%',background:'#69FF47',display:'inline-block'}}/>{activeBatches.length} Active Batch{activeBatches.length!==1?'es':''}
@@ -593,7 +596,7 @@ function EnrollmentTab({data,setData,toast}) {
             <Ic n="copy" size={13} color={C.white}/>Copy Link
           </Btn>
           <Btn small color={C.wa} onClick={()=>{
-            const m=`🌸 *Enroll in Kajol Makeover Studioz!*\n\nClick to fill your enrollment form:\n${ENROLL_URL}\n\nCourses: Mehndi • Makeup • ArtWork\n\n— Kajol Ma'am 💄`
+            const m=`🌸 *Enroll in Kajol Makeover Studioz!*\n\nClick to fill your enrollment form:\n${ENROLL_URL}\n\nCourses: Mehndi • Makeup • Ariwork\n\n— Kajol Ma'am 💄`
             navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Copied!'))
           }}><Ic n="wa" size={13} color={C.white}/>Share on WhatsApp</Btn>
           <a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
@@ -795,7 +798,7 @@ function StudentsTab({data,setData,toast}) {
         {data.courses.map(c=><label key={c.id} style={{display:'flex',alignItems:'center',gap:8,fontSize:13,marginBottom:6,cursor:'pointer'}}><input type="checkbox" checked={(form.enrolled_courses||[]).includes(c.id)} onChange={e=>{const cur=form.enrolled_courses||[];setForm(x=>({...x,enrolled_courses:e.target.checked?[...cur,c.id]:cur.filter(i=>i!==c.id)}))}}/>  <Badge color={c.color||C.pink}>{c.name}</Badge></label>)}
         <Row gap={8} style={{marginTop:10}}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Add'}</Btn></Row>
       </Modal>}
-      {del&&<DelConfirm item={del.name} onConfirm={async()=>{await dbDel('students',del.id);setData(d=>({...d,students:d.students.filter(s=>s.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item={del.name} onConfirm={async()=>{await dbDelete('students',del.id);setData(d=>({...d,students:d.students.filter(s=>s.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -836,7 +839,7 @@ function BroadcastTab({data,toast}) {
       const active=data.batches.filter(b=>b.status==='Active'||b.status==='Upcoming')
       return `✨ *New Batch Announcement!*\n\n💄 Kajol Makeover Studioz\n\n${active.map(b=>`📚 *${b.name}*\n⏰ ${b.timing||'TBD'} · ${b.schedule||''}\n💰 Fee: ${fmt(b.fee||0)}`).join('\n\n')}\n\n🎯 Limited seats — Enroll now!\n🔗 ${ENROLL_URL}\n\n— Kajol Ma'am 💄\n📸 ${INSTAGRAM}`
     }
-    if(type==='enrollLink') return `🌸 *Enroll in Our Online Courses!*\n\nMehndi • Makeup • ArtWork\n\n📲 Fill your enrollment form:\n🔗 ${ENROLL_URL}\n\n💄 Online classes via Zoom\n📹 Recorded classes on YouTube\n\n— Kajol Ma'am 💄\n📸 ${INSTAGRAM}`
+    if(type==='enrollLink') return `🌸 *Enroll in Our Online Courses!*\n\nMehndi • Makeup • Ariwork\n\n📲 Fill your enrollment form:\n🔗 ${ENROLL_URL}\n\n💄 Online classes via Zoom\n📹 Recorded classes on YouTube\n\n— Kajol Ma'am 💄\n📸 ${INSTAGRAM}`
     if(type==='youtube')    return `🎬 *Watch Our Latest Classes on YouTube!* 🌸\n\n▶ Subscribe & Watch: ${YOUTUBE}\n\n💄 Kajol Makeover Studioz\n📸 ${INSTAGRAM}`
     if(type==='festival')   return `🎉 *Happy ${festival}!* 🌸\n\nWishing all our students and followers a wonderful ${festival}!\n\nMay this festival bring joy, beauty and happiness! ✨\n\n💄 Kajol Makeover Studioz\n📸 ${INSTAGRAM}`
     return ''
@@ -1084,7 +1087,7 @@ function CoursesTab({data,setData,toast}) {
         <div style={{marginBottom:12}}><div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:6,textTransform:'uppercase',letterSpacing:.5}}>Color</div><Row gap={10}>{COURSE_COLORS.map(col=><div key={col} onClick={()=>setForm(x=>({...x,color:col}))} style={{width:28,height:28,borderRadius:'50%',background:col,cursor:'pointer',border:`3px solid ${form.color===col?C.dark:'transparent'}`}}/>)}</Row></div>
         <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Save'}</Btn></Row>
       </Modal>}
-      {del&&<DelConfirm item={del.name} onConfirm={async()=>{await dbDel('courses',del.id);setData(d=>({...d,courses:d.courses.filter(c=>c.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item={del.name} onConfirm={async()=>{await dbDelete('courses',del.id);setData(d=>({...d,courses:d.courses.filter(c=>c.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -1174,7 +1177,7 @@ function BatchesTab({data,setData,toast}) {
                 <select value={cl.youtube_status} onChange={async e=>{const u={...cl,youtube_status:e.target.value};await dbUpsert('classes',u);setData(d=>({...d,classes:d.classes.map(c=>c.id===cl.id?u:c)}));toast('Updated!')}} style={{fontSize:11,borderRadius:6,border:`1px solid ${C.pinkPale}`,padding:'4px 7px',fontFamily:'inherit'}}>
                   {['Pending','Processing','Uploaded'].map(s=><option key={s}>{s}</option>)}
                 </select>
-                <Btn small color={C.red} onClick={async()=>{await dbDel('classes',cl.id);setData(d=>({...d,classes:d.classes.filter(c=>c.id!==cl.id)}));toast('Deleted.')}}>🗑️</Btn>
+                <Btn small color={C.red} onClick={async()=>{await dbDelete('classes',cl.id);setData(d=>({...d,classes:d.classes.filter(c=>c.id!==cl.id)}));toast('Deleted.')}}>🗑️</Btn>
               </Row>
               {modal===('edit_cl_'+cl.id)&&<Modal onClose={()=>setModal(null)} title="Edit Class">
                 {[['day','Day #'],['topic','Topic *'],['homework','Homework'],['notes','Notes'],['zoom_link','Zoom Link'],['youtube_link','YouTube Link']].map(([f,lbl])=><Inp key={f} label={lbl} value={cf[f]} onChange={v=>setCf(x=>({...x,[f]:v}))}/>)}
@@ -1292,7 +1295,7 @@ function BatchesTab({data,setData,toast}) {
         <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={saveBatch} full disabled={busy}>{busy?'Saving…':'Save Batch'}</Btn></Row>
       </Modal>}
 
-      {del&&<DelConfirm item={del.name} onConfirm={async()=>{if(del.type==='batch'){await dbDel('batches',del.id);setData(d=>({...d,batches:d.batches.filter(b=>b.id!==del.id),classes:d.classes.filter(c=>c.batch_id!==del.id)}))}setDel(null);toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item={del.name} onConfirm={async()=>{if(del.type==='batch'){await dbDelete('batches',del.id);setData(d=>({...d,batches:d.batches.filter(b=>b.id!==del.id),classes:d.classes.filter(c=>c.batch_id!==del.id)}))}setDel(null);toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -1348,7 +1351,7 @@ function PaymentsTab({data,setData,toast}) {
         <Inp label="Note" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/>
         <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.green} onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row>
       </Modal>}
-      {del&&<DelConfirm item="this payment" onConfirm={async()=>{await dbDel('payments',del.id);setData(d=>({...d,payments:d.payments.filter(p=>p.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item="this payment" onConfirm={async()=>{await dbDelete('payments',del.id);setData(d=>({...d,payments:d.payments.filter(p=>p.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -1398,7 +1401,7 @@ function OrdersTab({data,setData,toast}) {
         </Card>
       )})}
       {modal==='add'&&<Modal onClose={()=>setModal(null)} title="New Order"><Inp label="Client Name *" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/><Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/><Inp label="Type" value={form.type||'Mehndi'} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/><Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Charge(₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/><Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/><ExpRow/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.teal} onClick={save} full disabled={busy}>{busy?'…':'Add Order'}</Btn></Row></Modal>}
-      {del&&<DelConfirm item={`order for ${del.client}`} onConfirm={async()=>{await dbDel('orders',del.id);setData(d=>({...d,orders:d.orders.filter(o=>o.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item={`order for ${del.client}`} onConfirm={async()=>{await dbDelete('orders',del.id);setData(d=>({...d,orders:d.orders.filter(o=>o.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -1421,7 +1424,7 @@ function FinanceTab({data,setData,toast}) {
         {modal===('edit_'+e.id)&&<Modal onClose={()=>setModal(null)} title="Edit Expense"><Inp label="Category" value={form.category} onChange={v=>setForm(x=>({...x,category:v}))} opts={EXP_CATS}/><Inp label="Amount(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Note" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
       </Card>)}
       {modal==='add'&&<Modal onClose={()=>setModal(null)} title="Add Expense"><Inp label="Category" value={form.category||'Advertising'} onChange={v=>setForm(x=>({...x,category:v}))} opts={EXP_CATS}/><Inp label="Amount(₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Description" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/><Inp label="Linked To" value={form.linked_to||'general'} onChange={v=>setForm(x=>({...x,linked_to:v}))} opts={[{v:'general',l:'General'},...data.batches.map(b=>({v:b.id,l:b.name}))]}/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.amber} onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
-      {del&&<DelConfirm item={`${del.category} expense`} onConfirm={async()=>{await dbDel('expenses',del.id);setData(d=>({...d,expenses:d.expenses.filter(e=>e.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {del&&<DelConfirm item={`${del.category} expense`} onConfirm={async()=>{await dbDelete('expenses',del.id);setData(d=>({...d,expenses:d.expenses.filter(e=>e.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
@@ -1465,6 +1468,172 @@ function SettingsTab({data,setData,onLogout,toast}) {
   )
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   WEBSITE EDITOR TAB
+   Saves editable content to Supabase "site_content" table.
+   Website.jsx reads these on load.
+═══════════════════════════════════════════════════════════════════ */
+function QuickReviewAdder({currentJson,onSave}) {
+  const [r,setR]=useState({name:'',role:'',text:'',initial:'',color:'#E91E8C'})
+  const add=()=>{
+    if(!r.name||!r.text){alert('Name and review text required.');return}
+    try{
+      const arr=JSON.parse(currentJson||'[]')
+      arr.push({...r,initial:r.initial||r.name[0]})
+      onSave(JSON.stringify(arr,null,2))
+      setR({name:'',role:'',text:'',initial:'',color:'#E91E8C'})
+    }catch{alert('Existing reviews JSON is invalid. Please fix it first.')}
+  }
+  const fs={width:'100%',padding:'8px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:8}
+  return(
+    <div>
+      <input value={r.name} onChange={e=>setR(x=>({...x,name:e.target.value}))} placeholder="Student name" style={fs}/>
+      <input value={r.role} onChange={e=>setR(x=>({...x,role:e.target.value}))} placeholder="Role (e.g. Homemaker · Mehndi Student)" style={fs}/>
+      <textarea rows={3} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Review text" style={{...fs,resize:'vertical'}}/>
+      <Row gap={8} style={{alignItems:'flex-start'}}>
+        <input value={r.initial} onChange={e=>setR(x=>({...x,initial:e.target.value}))} placeholder="Initial" style={{...fs,width:80,marginBottom:0}}/>
+        <input type="color" value={r.color} onChange={e=>setR(x=>({...x,color:e.target.value}))} style={{height:38,borderRadius:8,border:'none',cursor:'pointer'}}/>
+        <Btn small color={C.green} onClick={add}>+ Add Review</Btn>
+      </Row>
+    </div>
+  )
+}
+
+function WebsiteEditorTab({toast}) {
+  const [sec,setSec]=useState('about')
+  const [vals,setVals]=useState({})
+  const [busy,setBusy]=useState(false)
+  const [loaded,setLoaded]=useState(false)
+
+  useEffect(()=>{
+    sb.from('site_content').select('*').then(({data})=>{
+      if(data){const m={};data.forEach(r=>{m[r.key]=r.value});setVals(m)}
+      setLoaded(true)
+    })
+  },[])
+
+  const get=(k,fb='')=>vals[k]!=null?vals[k]:fb
+  const set=(k,v)=>setVals(x=>({...x,[k]:v}))
+
+  const saveKey=async(key,value)=>{
+    setBusy(true)
+    const {data:ex}=await sb.from('site_content').select('id').eq('key',key).maybeSingle()
+    const row={id:ex?.id||uid(),key,value,updated_at:new Date().toISOString()}
+    const {error}=await sb.from('site_content').upsert(row,{onConflict:'id'})
+    if(error) toast('Save failed: '+error.message); else toast('Saved to website!')
+    setBusy(false)
+  }
+
+  const saveAll=async(keys)=>{
+    setBusy(true)
+    for(const k of keys){
+      const {data:ex}=await sb.from('site_content').select('id').eq('key',k).maybeSingle()
+      const row={id:ex?.id||uid(),key:k,value:vals[k]??'',updated_at:new Date().toISOString()}
+      await sb.from('site_content').upsert(row,{onConflict:'id'})
+    }
+    toast('All changes saved to website!')
+    setBusy(false)
+  }
+
+  const fld={width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:10,resize:'vertical'}
+
+  if(!loaded) return <div style={{textAlign:'center',padding:40,color:C.grey}}>Loading website content…</div>
+
+  const SECS=[{v:'about',l:'📄 About'},{v:'courses',l:'📚 Courses'},{v:'gallery',l:'🖼️ Gallery'},{v:'reviews',l:'⭐ Reviews'},{v:'stats',l:'📊 Stats & CTA'}]
+
+  return(
+    <div>
+      <Card accent={C.pink}>
+        <STitle><Ic n="globe" size={15} color={C.pink}/> Website Content Editor</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Edit your public website text here. Changes save to the cloud and appear live on the website.</div>
+        <Row gap={8}>
+          <a href="/" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="globe" size={13} color={C.white}/>View Website</Btn></a>
+          <a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small outline>View Enroll Form</Btn></a>
+        </Row>
+      </Card>
+
+      <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:14,paddingBottom:4}}>
+        {SECS.map(s=><div key={s.v} onClick={()=>setSec(s.v)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,background:sec===s.v?C.pink:C.greyL,color:sec===s.v?C.white:C.grey,fontSize:12,fontWeight:sec===s.v?700:500,cursor:'pointer'}}>{s.l}</div>)}
+      </div>
+
+      {sec==='about'&&<Card>
+        <STitle><Ic n="info" size={15} color={C.pink}/> About Section</STitle>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Hero Tagline</div>
+        <textarea rows={2} value={get('hero_tagline',"Learn from Kajol J Kamble — professional artist & passionate teacher.")} onChange={e=>set('hero_tagline',e.target.value)} style={fld}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Headline</div>
+        <input value={get('about_headline','Passionate Artist. Dedicated Teacher.')} onChange={e=>set('about_headline',e.target.value)} style={{...fld,resize:'none'}}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 1</div>
+        <textarea rows={4} value={get('about_para1',"Hi! I'm Kajol, a professional Mehndi, Makeup, and Ariwork artist with years of experience working with brides, events, and art enthusiasts across India.")} onChange={e=>set('about_para1',e.target.value)} style={fld}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 2</div>
+        <textarea rows={3} value={get('about_para2','All my courses are conducted live on Zoom with recordings uploaded to YouTube, so you never miss a session.')} onChange={e=>set('about_para2',e.target.value)} style={fld}/>
+        <Btn color={C.green} onClick={()=>saveAll(['hero_tagline','about_headline','about_para1','about_para2'])} disabled={busy} full>{busy?'Saving…':'💾 Save About Section'}</Btn>
+      </Card>}
+
+      {sec==='courses'&&<Card>
+        <STitle><Ic n="course" size={15} color={C.green}/> Courses Section</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:12}}>Separate bullet items with a pipe <b>|</b> character.</div>
+        {[{key:'mehndi',emoji:'🌿',label:'Mehndi Art'},{key:'makeup',emoji:'💄',label:'Makeup Course'},{key:'ariwork',emoji:'🎨',label:'Ariwork Course'},{key:'combined',emoji:'✨',label:'Combined Course'}].map(c=>(
+          <div key={c.key} style={{marginBottom:18,background:C.greyL,borderRadius:12,padding:12}}>
+            <div style={{fontSize:13,fontWeight:800,color:C.dark,marginBottom:8}}>{c.emoji} {c.label}</div>
+            <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Description</div>
+            <textarea rows={2} value={get(`course_${c.key}_desc`,'')} onChange={e=>set(`course_${c.key}_desc`,e.target.value)} style={fld}/>
+            <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Bullet Points (separate with |)</div>
+            <input value={get(`course_${c.key}_items`,'')} onChange={e=>set(`course_${c.key}_items`,e.target.value)} style={{...fld,resize:'none'}} placeholder="Item 1|Item 2|Item 3"/>
+          </div>
+        ))}
+        <Btn color={C.green} onClick={()=>saveAll(['course_mehndi_desc','course_mehndi_items','course_makeup_desc','course_makeup_items','course_ariwork_desc','course_ariwork_items','course_combined_desc','course_combined_items'])} disabled={busy} full>{busy?'Saving…':'💾 Save All Courses'}</Btn>
+      </Card>}
+
+      {sec==='gallery'&&<Card>
+        <STitle><Ic n="image" size={15} color={C.pink}/> Gallery Section</STitle>
+        <div style={{background:C.pinkPale,borderRadius:10,padding:12,marginBottom:12,fontSize:12,color:C.pink}}>
+          📸 <b>Instagram feed</b> is live on the website via EmbedSocial widget — it auto-shows your latest posts from @kajol_makeover_studioz. No setup needed!
+        </div>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Gallery Subtitle Text</div>
+        <textarea rows={2} value={get('gallery_subtitle',"A glimpse of the beautiful art our students and Kajol Ma'am create!")} onChange={e=>set('gallery_subtitle',e.target.value)} style={fld}/>
+        <Btn color={C.green} onClick={()=>saveAll(['gallery_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Gallery Text'}</Btn>
+        <div style={{marginTop:12,background:C.greenPale,borderRadius:10,padding:12,fontSize:12,color:C.green}}>
+          💡 To add photos to the gallery, post them on Instagram @kajol_makeover_studioz — they appear in the live feed automatically.
+        </div>
+      </Card>}
+
+      {sec==='reviews'&&<Card>
+        <STitle><Ic n="star" size={15} color={C.amber}/> Reviews / Testimonials</STitle>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews Subtitle</div>
+        <input value={get('reviews_subtitle','Real words from real learners who transformed their skills with us.')} onChange={e=>set('reviews_subtitle',e.target.value)} style={{...fld,resize:'none'}}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews JSON Array</div>
+        <textarea rows={12} value={get('reviews_json','[]')} onChange={e=>set('reviews_json',e.target.value)} style={{...fld,fontFamily:'monospace',fontSize:11}}/>
+        <div style={{fontSize:11,color:C.grey,marginBottom:10}}>Leave as <b>[]</b> to show the default reviews. Each review needs: name, role, text, initial, color.</div>
+        <Btn color={C.green} onClick={()=>saveAll(['reviews_json','reviews_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Reviews'}</Btn>
+        <div style={{marginTop:16,background:C.greenPale,borderRadius:12,padding:14}}>
+          <div style={{fontSize:13,fontWeight:700,color:C.green,marginBottom:10}}>➕ Quick Add a Review</div>
+          <QuickReviewAdder currentJson={get('reviews_json','[]')} onSave={json=>{set('reviews_json',json);saveKey('reviews_json',json)}}/>
+        </div>
+      </Card>}
+
+      {sec==='stats'&&<Card>
+        <STitle><Ic n="chart" size={15} color={C.pink}/> Stats Strip & CTA</STitle>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:12}}>
+          {[['stat_students','Students Trained','200+'],['stat_courses','Expert Courses','3'],['stat_classes','Classes Delivered','50+']].map(([k,label,def])=>(
+            <div key={k}>
+              <div style={{fontSize:10,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase'}}>{label}</div>
+              <input value={get(k,def)} onChange={e=>set(k,e.target.value)} style={{...fld,marginBottom:0,resize:'none'}}/>
+            </div>
+          ))}
+        </div>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>CTA Headline</div>
+        <input value={get('cta_headline','Ready to Start Your Journey?')} onChange={e=>set('cta_headline',e.target.value)} style={{...fld,resize:'none'}}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>CTA Subtext</div>
+        <textarea rows={2} value={get('cta_subtext',"Fill our free enrollment form today and get a personal reply from Kajol Ma'am on WhatsApp within 24 hours.")} onChange={e=>set('cta_subtext',e.target.value)} style={fld}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Community Text</div>
+        <textarea rows={2} value={get('community_text','Connect with 200+ students on WhatsApp, get daily tips, and stay updated on new batches.')} onChange={e=>set('community_text',e.target.value)} style={fld}/>
+        <Btn color={C.green} onClick={()=>saveAll(['stat_students','stat_courses','stat_classes','cta_headline','cta_subtext','community_text'])} disabled={busy} full>{busy?'Saving…':'💾 Save Stats & CTA'}</Btn>
+      </Card>}
+    </div>
+  )
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    NAVIGATION CONFIG
 ═══════════════════════════════════════════════════════════════════ */
@@ -1479,9 +1648,10 @@ const TABS=[
   {id:'finance',  label:'Finance',   icon:'chart'},
   {id:'reports',  label:'Reports',   icon:'report'},
   {id:'broadcast',label:'Broadcast', icon:'broadcast'},
+  {id:'website',  label:'Website',   icon:'globe'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
-const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',settings:'Settings & Admin'}
+const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',website:'Website Editor',settings:'Settings & Admin'}
 const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1595,6 +1765,7 @@ function AdminApp() {
                 {tab==='finance'  &&<FinanceTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='reports'  &&<ReportsTab    data={data}/>}
                 {tab==='broadcast'&&<BroadcastTab  data={data} toast={toast}/>}
+                {tab==='website'  &&<WebsiteEditorTab toast={toast}/>}
                 {tab==='settings' &&<SettingsTab   data={data} setData={setData} onLogout={()=>setLoggedIn(false)} toast={toast}/>}
               </>}
             </div>
