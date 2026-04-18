@@ -14,7 +14,7 @@
  * The new table is:  enrollment_requests
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -89,6 +89,218 @@ const ORDER_TYPES    = ['Mehndi','Makeup','Ariwork','Combined']
 const SCHEDULE_OPTS  = ['Daily','3 Days/Week','Weekend Only','Tue-Thu-Sat','Mon-Wed-Fri','Custom']
 const DURATION_OPTS  = ['10 Days','Monthly','3 Months','Custom']
 const EXP_CATS       = ['Advertising','Study Material','Equipment','Mehndi Cones','Makeup Kit','Zoom','Internet','Transport','Other']
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   EXCEL / CSV EXPORT  — students, payments, batch-wise, course-wise
+═══════════════════════════════════════════════════════════════════ */
+function toCSV(headers,rows){
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`
+  return [headers.map(esc).join(','),...rows.map(r=>r.map(esc).join(','))].join('\n')
+}
+function dlCSV(filename,headers,rows){
+  const csv='\uFEFF'+toCSV(headers,rows)
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'})
+  const url=URL.createObjectURL(blob)
+  const a=document.createElement('a');a.href=url;a.download=filename;a.click()
+  URL.revokeObjectURL(url)
+}
+function inRange(d,from,to){
+  if(!d) return true
+  if(from&&d<from) return false
+  if(to&&d>to) return false
+  return true
+}
+
+function ExportModal({data,onClose}) {
+  const [type,setType]=useState('students')
+  const [from,setFrom]=useState('')
+  const [to,setTo]=useState('')
+  const [selBatch,setSelBatch]=useState('all')
+  const [selCourse,setSelCourse]=useState('all')
+
+  const run=()=>{
+    if(type==='students'){
+      const rows=data.students.map(s=>[
+        s.name,s.mobile,s.email||'',s.profession||'',s.address||'',
+        s.birthday||'',s.join_date||'',
+        (s.enrolled_courses||[]).map(cid=>data.courses.find(c=>c.id===cid)?.name||cid).join('; ')
+      ])
+      dlCSV('students.csv',['Name','Mobile','Email','Profession','Address','Birthday','Join Date','Courses'],rows)
+    }
+    else if(type==='batch_students'){
+      // Batchwise — one row per student per batch
+      const batches=selBatch==='all'?data.batches:data.batches.filter(b=>b.id===selBatch)
+      const rows=[]
+      batches.forEach(b=>{
+        const course=data.courses.find(c=>c.id===b.course_id)
+        const students=data.students.filter(s=>(b.student_ids||[]).includes(s.id))
+        students.forEach(s=>{
+          const paid=data.payments.filter(p=>p.student_id===s.id&&p.batch_id===b.id).reduce((a,p)=>a+Number(p.paid),0)
+          const due=data.payments.filter(p=>p.student_id===s.id&&p.batch_id===b.id).reduce((a,p)=>a+(Number(p.amount)-Number(p.paid)),0)
+          rows.push([b.name,b.timing||'',b.schedule||'',b.status||'',course?.name||'',s.name,s.mobile,s.email||'',s.profession||'',fmt(paid),fmt(due)])
+        })
+      })
+      dlCSV('batch_students.csv',['Batch','Timing','Schedule','Status','Course','Student Name','Mobile','Email','Profession','Paid','Pending'],rows)
+    }
+    else if(type==='course_students'){
+      // Coursewise — one row per student per enrolled course
+      const courses=selCourse==='all'?data.courses:data.courses.filter(c=>c.id===selCourse)
+      const rows=[]
+      courses.forEach(c=>{
+        const students=data.students.filter(s=>(s.enrolled_courses||[]).includes(c.id))
+        students.forEach(s=>{
+          const batches=data.batches.filter(b=>(b.student_ids||[]).includes(s.id))
+          rows.push([c.name,c.type||'',s.name,s.mobile,s.email||'',s.profession||'',s.join_date||'',batches.map(b=>b.name).join('; ')])
+        })
+      })
+      dlCSV('course_students.csv',['Course','Type','Student Name','Mobile','Email','Profession','Join Date','Batches'],rows)
+    }
+    else if(type==='payments'){
+      const filtered=data.payments.filter(p=>inRange(p.date,from,to)&&(selBatch==='all'||p.batch_id===selBatch))
+      const rows=filtered.map(p=>{
+        const s=data.students.find(x=>x.id===p.student_id)
+        const b=data.batches.find(x=>x.id===p.batch_id)
+        return [s?.name||'',s?.mobile||'',b?.name||'',p.amount,p.paid,Number(p.amount)-Number(p.paid),p.type,p.date,p.note||'']
+      })
+      dlCSV('payments.csv',['Student','Mobile','Batch','Total Fee','Paid','Due','Type','Date','Note'],rows)
+    }
+    else if(type==='batch_report'){
+      const rows=data.batches.map(b=>{
+        const course=data.courses.find(c=>c.id===b.course_id)
+        const studentCount=(b.student_ids||[]).length
+        const classCount=data.classes.filter(c=>c.batch_id===b.id).length
+        const ytDone=data.classes.filter(c=>c.batch_id===b.id&&c.youtube_status==='Uploaded').length
+        const income=data.payments.filter(p=>p.batch_id===b.id).reduce((a,p)=>a+Number(p.paid),0)
+        const due=data.payments.filter(p=>p.batch_id===b.id).reduce((a,p)=>a+(Number(p.amount)-Number(p.paid)),0)
+        return [b.name,course?.name||'',b.status||'',b.timing||'',b.schedule||'',b.start_date||'',b.end_date||'',studentCount,classCount,ytDone,income,due]
+      })
+      dlCSV('batch_report.csv',['Batch Name','Course','Status','Timing','Schedule','Start','End','Students','Classes','YT Uploaded','Income','Pending Dues'],rows)
+    }
+    else if(type==='attendance'){
+      const batch=selBatch!=='all'?data.batches.find(b=>b.id===selBatch):null
+      const classes=batch?data.classes.filter(c=>c.batch_id===batch.id).sort((a,b)=>a.day-b.day):data.classes.sort((a,b)=>a.day-b.day)
+      const students=batch?data.students.filter(s=>(batch.student_ids||[]).includes(s.id)):data.students
+      const dayHeaders=classes.map(c=>`Day${c.day}: ${c.topic.slice(0,12)}`)
+      const rows=students.map(s=>{
+        const atts=classes.map(c=>(c.attendees||[]).includes(s.id)?'Present':'Absent')
+        const pct=Math.round(atts.filter(x=>x==='Present').length/Math.max(classes.length,1)*100)
+        return [s.name,s.mobile,...atts,`${pct}%`]
+      })
+      dlCSV('attendance.csv',['Student','Mobile',...dayHeaders,'Attendance %'],rows)
+    }
+    onClose()
+  }
+
+  const needsDate=['payments'].includes(type)
+  const needsBatch=['batch_students','payments','attendance'].includes(type)
+  const needsCourse=['course_students'].includes(type)
+
+  const sel={width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:10}
+  const lbl={fontSize:11,fontWeight:700,color:C.grey,display:'block',marginBottom:4,textTransform:'uppercase',letterSpacing:.5}
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'flex-end',zIndex:900}} onClick={onClose}>
+      <div style={{background:C.white,borderRadius:'24px 24px 0 0',width:'100%',maxWidth:500,margin:'0 auto',padding:'20px 18px 32px',maxHeight:'85vh',overflowY:'auto'}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,color:C.dark,marginBottom:16,display:'flex',alignItems:'center',gap:8}}>
+          <Ic n="upload" size={16} color={C.green}/> Export to Excel / CSV
+        </div>
+
+        <label style={lbl}>Export Type</label>
+        <select value={type} onChange={e=>setType(e.target.value)} style={sel}>
+          <option value="students">📋 All Students (complete list)</option>
+          <option value="batch_students">🎓 Batch-wise Student List</option>
+          <option value="course_students">📚 Course-wise Student List</option>
+          <option value="payments">💳 Payment Records</option>
+          <option value="batch_report">📊 Batch Summary Report</option>
+          <option value="attendance">✅ Attendance Sheet</option>
+        </select>
+
+        {needsBatch&&<><label style={lbl}>Filter by Batch</label>
+          <select value={selBatch} onChange={e=>setSelBatch(e.target.value)} style={sel}>
+            <option value="all">All Batches</option>
+            {data.batches.map(b=><option key={b.id} value={b.id}>{b.name}</option>)}
+          </select></>}
+
+        {needsCourse&&<><label style={lbl}>Filter by Course</label>
+          <select value={selCourse} onChange={e=>setSelCourse(e.target.value)} style={sel}>
+            <option value="all">All Courses</option>
+            {data.courses.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select></>}
+
+        {needsDate&&<div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:4}}>
+          <div><label style={lbl}>From Date</label><input type="date" value={from} onChange={e=>setFrom(e.target.value)} style={{...sel,marginBottom:0}}/></div>
+          <div><label style={lbl}>To Date</label><input type="date" value={to} onChange={e=>setTo(e.target.value)} style={{...sel,marginBottom:0}}/></div>
+        </div>}
+
+        <div style={{background:C.greenPale,borderRadius:10,padding:'10px 12px',marginBottom:14,fontSize:12,color:C.green}}>
+          ✅ Opens as CSV — open with Microsoft Excel, Google Sheets, or any spreadsheet app.
+        </div>
+
+        <div style={{display:'flex',gap:8}}>
+          <button onClick={onClose} style={{flex:1,padding:11,borderRadius:10,border:`1.5px solid ${C.pink}`,background:'transparent',color:C.pink,fontWeight:600,cursor:'pointer',fontFamily:'inherit',fontSize:13}}>Cancel</button>
+          <button onClick={run} style={{flex:1,padding:11,borderRadius:10,border:'none',background:`linear-gradient(135deg,${C.green},${C.greenL})`,color:'#fff',fontWeight:700,cursor:'pointer',fontFamily:'inherit',fontSize:13}}>⬇ Download</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   KMS LOGO — hand holding brushes + mehndi cone
+   Used in: enrollment form header, admin header, settings
+═══════════════════════════════════════════════════════════════════ */
+function KMSLogo({size=48,light=false}) {
+  const pk = light ? '#fff' : '#E91E8C'
+  const gn = light ? 'rgba(255,255,255,0.7)' : '#2E7D32'
+  const dk = light ? 'rgba(255,255,255,0.9)' : '#1A1A2E'
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* ── Hand silhouette ── */}
+      <path d="M30 75 Q28 60 30 50 Q31 44 36 42 L36 30 Q36 26 39 26 Q42 26 42 30 L42 42 Q44 40 47 40 Q50 40 50 44 Q52 42 55 42 Q58 42 58 46 Q60 45 62 46 Q65 47 65 52 L65 65 Q65 72 60 76 Q55 80 47 80 L35 80 Q30 80 30 75Z" fill={pk} opacity="0.18"/>
+      <path d="M30 75 Q28 60 30 50 Q31 44 36 42 L36 30 Q36 26 39 26 Q42 26 42 30 L42 42 Q44 40 47 40 Q50 40 50 44 Q52 42 55 42 Q58 42 58 46 Q60 45 62 46 Q65 47 65 52 L65 65 Q65 72 60 76 Q55 80 47 80 L35 80 Q30 80 30 75Z" stroke={pk} strokeWidth="2.5" fill="none"/>
+      {/* ── Fingers ── */}
+      <line x1="36" y1="42" x2="36" y2="30" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="42" y1="44" x2="42" y2="30" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="50" y1="45" x2="50" y2="33" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="58" y1="47" x2="58" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      {/* ── Makeup brush in hand ── */}
+      <line x1="54" y1="20" x2="68" y2="8" stroke={dk} strokeWidth="3" strokeLinecap="round"/>
+      <ellipse cx="54" cy="22" rx="4" ry="7" fill={pk} transform="rotate(-40 54 22)"/>
+      <path d="M67 9 Q72 5 70 12 Q68 10 67 9Z" fill={gn}/>
+      {/* ── Mehndi cone ── */}
+      <path d="M22 35 L18 72 Q18 76 22 76 Q26 76 26 72 L22 35Z" fill={gn} opacity="0.9"/>
+      <path d="M19 35 L25 35 Q28 32 25 28 L22 22 L19 28 Q16 32 19 35Z" fill={gn}/>
+      <line x1="22" y1="76" x2="22" y2="82" stroke={dk} strokeWidth="1.5" strokeLinecap="round"/>
+      {/* ── Mehndi dot pattern on cone ── */}
+      <circle cx="22" cy="45" r="1.5" fill="rgba(255,255,255,0.6)"/>
+      <circle cx="22" cy="55" r="1.5" fill="rgba(255,255,255,0.6)"/>
+      <circle cx="22" cy="65" r="1.5" fill="rgba(255,255,255,0.6)"/>
+      {/* ── Mini mehndi flower floating ── */}
+      <circle cx="78" cy="30" r="5" fill={pk} opacity="0.15"/>
+      {[0,60,120,180,240,300].map((d,i)=>{
+        const r2=(d*Math.PI)/180; const x2=78+8*Math.cos(r2); const y2=30+8*Math.sin(r2)
+        return <circle key={i} cx={x2} cy={y2} r="2.5" fill={pk} opacity="0.55"/>
+      })}
+      <circle cx="78" cy="30" r="2.5" fill={pk} opacity="0.9"/>
+    </svg>
+  )
+}
+
+function KMSLogoMark({size=40,light=false}) {
+  const textColor = light ? '#fff' : '#1A1A2E'
+  const subColor  = light ? 'rgba(255,255,255,0.7)' : '#757575'
+  return (
+    <div style={{display:'flex',alignItems:'center',gap:9}}>
+      <KMSLogo size={size} light={light}/>
+      <div>
+        <div style={{fontSize:13,fontWeight:900,letterSpacing:0.3,lineHeight:1.2,color:light?'#fff':'#E91E8C'}}>Kajol Makeover</div>
+        <div style={{fontSize:9,fontWeight:700,letterSpacing:2.2,color:subColor,textTransform:'uppercase'}}>S T U D I O Z</div>
+      </div>
+    </div>
+  )
+}
 
 /* ═══════════════════════════════════════════════════════════════════
    ICONS
@@ -338,11 +550,13 @@ function EnrollForm() {
   return (
     <div style={{minHeight:'100vh',background:`linear-gradient(160deg,${C.pinkPale} 0%,#fff 40%,${C.greenPale} 100%)`,fontFamily:"'Nunito','Segoe UI',sans-serif"}}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');*{box-sizing:border-box;margin:0;padding:0;}input:focus,select:focus,textarea:focus{border-color:${C.pink}!important;outline:none;}`}</style>
-      {/* Header */}
-      <div style={{background:`linear-gradient(135deg,${C.pink},${C.pinkD})`,padding:'24px 20px',textAlign:'center'}}>
-        <div style={{fontSize:44,marginBottom:8}}>💄</div>
-        <div style={{fontSize:22,fontWeight:900,color:'#fff'}}>Kajol Makeover Studioz</div>
-        <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',marginTop:4}}>Course Enrollment Form</div>
+      {/* Header with new logo */}
+      <div style={{background:`linear-gradient(135deg,${C.pink},${C.pinkD})`,padding:'28px 20px',textAlign:'center'}}>
+        <div style={{display:'flex',justifyContent:'center',marginBottom:10}}>
+          <KMSLogo size={64} light={true}/>
+        </div>
+        <div style={{fontSize:22,fontWeight:900,color:'#fff',letterSpacing:0.5}}>Kajol Makeover Studioz</div>
+        <div style={{fontSize:13,color:'rgba(255,255,255,0.82)',marginTop:5,letterSpacing:1.5,textTransform:'uppercase'}}>Course Enrollment Form</div>
       </div>
       <div style={{maxWidth:500,margin:'0 auto',padding:'24px 16px 48px'}}>
         {/* Welcome */}
@@ -681,6 +895,7 @@ function StudentsTab({data,setData,toast}) {
   const [modal,setModal]=useState(null); const [del,setDel]=useState(null)
   const [search,setSearch]=useState(''); const [fb,setFb]=useState('all'); const [fc,setFc]=useState('all')
   const [form,setForm]=useState({}); const [enrollM,setEnrollM]=useState(null); const [busy,setBusy]=useState(false)
+  const [showExport,setShowExport]=useState(false)
 
   const list = useMemo(()=>data.students.filter(s=>{
     const ms=s.name?.toLowerCase().includes(search.toLowerCase())||s.mobile?.includes(search)
@@ -737,6 +952,9 @@ function StudentsTab({data,setData,toast}) {
         </select>
         <Btn small onClick={()=>{setForm({name:'',mobile:'',email:'',profession:'',address:'',birthday:'',enrolled_courses:[]});setModal('add')}}>
           <Ic n="add" size={14} color={C.white}/>Add
+        </Btn>
+        <Btn small color={C.green} onClick={()=>setShowExport(true)}>
+          <Ic n="upload" size={13} color={C.white}/>Export
         </Btn>
       </Row>
       <div style={{fontSize:12,color:C.grey,marginBottom:8}}>{list.length} student{list.length!==1?'s':''}</div>
@@ -799,6 +1017,7 @@ function StudentsTab({data,setData,toast}) {
         <Row gap={8} style={{marginTop:10}}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Add'}</Btn></Row>
       </Modal>}
       {del&&<DelConfirm item={del.name} onConfirm={async()=>{await dbDelete('students',del.id);setData(d=>({...d,students:d.students.filter(s=>s.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+      {showExport&&<ExportModal data={data} onClose={()=>setShowExport(false)}/>}
     </div>
   )
 }
@@ -1437,6 +1656,9 @@ function ReportsTab({data}) {
   const months=useMemo(()=>{const m={};data.payments.forEach(p=>{if(p.date){const k=mKey(p.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].i+=Number(p.paid)}});data.orders.forEach(o=>{if(o.date){const k=mKey(o.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].o+=Number(o.paid);m[k].oe+=(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0)}});data.expenses.forEach(e=>{if(e.date){const k=mKey(e.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].e+=Number(e.amount)}});return Object.entries(m).sort((a,b)=>b[0].localeCompare(a[0]))},[data])
   return (
     <div>
+      <Row style={{justifyContent:'flex-end',marginBottom:10}}>
+        <Btn small color={C.green} onClick={()=>setShowExport(true)}><Ic n="upload" size={13} color={C.white}/>Export to Excel</Btn>
+      </Row>
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:14,paddingBottom:4}}>{[{v:'overall',l:'Summary'},{v:'monthly',l:'Monthly'},{v:'batch',l:'Batch'},{v:'student',l:'Student'}].map(t=><div key={t.v} onClick={()=>setType(t.v)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,background:type===t.v?C.pink:C.greyL,color:type===t.v?C.white:C.grey,fontSize:12,fontWeight:type===t.v?700:500,cursor:'pointer'}}>{t.l}</div>)}</div>
       {type==='overall'&&<><Card accent={C.pink}><STitle><Ic n="rupee" size={15} color={C.pink}/> Financial Summary</STitle>{[['Class Fees',fmt(cf),C.green],['Orders Income',fmt(or_),C.teal],['Total Income',fmt(ti),C.green],['General Expenses',fmt(ge),C.red],['Order Expenses',fmt(oe),C.amber],['Total Expenses',fmt(te),C.red],['NET PROFIT',fmt(ti-te),ti-te>=0?C.green:C.red],['Pending Dues',fmt(pd),C.amber]].map(([l,v,c])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`,fontWeight:l.includes('NET')||l.includes('Total')?700:400}}><span style={{color:l.includes('NET')?C.pink:C.grey}}>{l}</span><span style={{fontWeight:700,color:c}}>{v}</span></div>)}</Card>
       <Card><STitle><Ic n="star" size={15} color={C.blue}/> Studio Stats</STitle>{[['Students',data.students.length],['Batches',data.batches.length],['Active Batches',data.batches.filter(b=>b.status==='Active').length],['Total Classes',data.classes.length],['YT Uploaded',data.classes.filter(c=>c.youtube_status==='Uploaded').length],['Enrollment Requests',(data.enrollmentRequests||[]).length]].map(([l,v])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700}}>{v}</span></div>)}</Card></>}
@@ -1447,6 +1669,7 @@ function ReportsTab({data}) {
   )
 }
 
+      {showExport&&<ExportModal data={data} onClose={()=>setShowExport(false)}/>}
 function SettingsTab({data,setData,onLogout,toast}) {
   const [modal,setModal]=useState(null); const [pwd,setPwd]=useState(''); const [err,setErr]=useState(''); const [busy,setBusy]=useState(false)
   const doClear=async()=>{if(pwd!==ADMIN_PWD){setErr('Wrong password.');return}setBusy(true);await clearAll();setData({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]});setBusy(false);setModal(null);setPwd('');toast('All data cleared.')}
