@@ -1,28 +1,21 @@
-/**
- * App.jsx
- * Kajol Makeover Studioz — Root Router
- *
- * Routes:
- *   /        → Website.jsx  (public portfolio)
- *   /app     → AppDashboard.jsx (admin app, password protected)
- *   /enroll  → handled inside AppDashboard.jsx via its own internal logic
- */
-
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Website      from './pages/Website'
-import AppDashboard from './pages/AppDashboard'
+import Website from './Website.jsx'
+import AppDashboard from './AppDashboard.jsx'
 
+/**
+ * Simple client-side router (no react-router needed).
+ *
+ * URL routes:
+ *   /           → Website  (public landing page)
+ *   /app        → AppDashboard  (admin panel — password protected inside)
+ *   /enroll     → AppDashboard  (enrollment form — handled inside AppDashboard)
+ */
 export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/"       element={<Website />} />
-        <Route path="/app"    element={<AppDashboard />} />
-        <Route path="/enroll" element={<AppDashboard />} />
-        {/* Catch-all → website */}
-        <Route path="*"       element={<Website />} />
-      </Routes>
-    </BrowserRouter>
-  )
+  const path = window.location.pathname
+
+  if (path.startsWith('/app') || path.startsWith('/enroll')) {
+    return <AppDashboard />
+  }
+
+  return <Website />
 }
