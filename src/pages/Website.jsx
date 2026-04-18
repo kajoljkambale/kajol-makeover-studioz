@@ -34,8 +34,8 @@ const INSTAGRAM       = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a
 const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
 // ★ Replace PLAYLIST_ID with your actual YouTube playlist ID
 // How to find it: Go to YouTube → Your Channel → Playlists → Click playlist → copy ID from URL after "list="
-const YT_PLAYLIST_ID  = 'PLxxxxxxxxxxxxxxxxx'   // ← REPLACE THIS
-const ADMIN_URL       = '/app'
+const YT_PLAYLIST_ID  = 'https://youtube.com/playlist?list=PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7&si=eg3-Ncl321EAzMOi'   // ← REPLACE THIS
+const ADMIN_URL       = 'https://kajol-makeover-studioz.vercel.app/app'
 
 /* ═══════════════════════════════════════════════════════════════════
    LOGO  — mehndi mandala + makeup brush + embroidery inspired SVG
