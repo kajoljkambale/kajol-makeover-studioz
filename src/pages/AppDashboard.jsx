@@ -2061,11 +2061,11 @@ function AdminApp() {
   const [data,setData]         = useState({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]})
   const [loading,setLoading]   = useState(false)
   const [toastMsg,setToastMsg] = useState('')
-  const [showExport, setShowExport] = useState(false);
-  const [exportData, setExportData] = useState([]);
+  const [showExport, setShowExport] = useState(false)
+  const [exportData, setExportData] = useState([])
 
-  const [search, setSearch] = useState('');
-  const [toastMsg, setToastMsg] = useState('');
+  const [search, setSearch] = useState('')
+  const [toastMsg, setToastMsg] = useState('')
 
   const toast = useCallback(msg=>{ setToastMsg(msg); setTimeout(()=>setToastMsg(''),3000) },[])
 
