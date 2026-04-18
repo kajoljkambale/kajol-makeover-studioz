@@ -2064,9 +2064,6 @@ function AdminApp() {
   const [showExport, setShowExport] = useState(false)
   const [exportData, setExportData] = useState([])
 
-  const [search, setSearch] = useState('')
-  const [toastMsg, setToastMsg] = useState('')
-
   const toast = useCallback(msg=>{ setToastMsg(msg); setTimeout(()=>setToastMsg(''),3000) },[])
 
   const login = async () => {
