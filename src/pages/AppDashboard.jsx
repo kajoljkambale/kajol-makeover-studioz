@@ -1470,31 +1470,80 @@ function SettingsTab({data,setData,onLogout,toast}) {
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   WEBSITE EDITOR TAB
-   Saves editable content to Supabase "site_content" table.
-   Website.jsx reads these on load.
+   WEBSITE EDITOR TAB  v2 — gallery photos, rich reviews, YouTube
 ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Supabase file upload helper (uses public bucket "site-media") ──
+   HOW TO SET UP the storage bucket (one-time):
+   1. In Supabase dashboard → Storage → New Bucket → name: "site-media" → Public: ON
+   2. In Bucket settings → Policies → add policy: allow all (anon) for insert/select
+   Then the upload buttons in this tab will work.                           ── */
+async function uploadToSupabase(file, folder) {
+  const ext = file.name.split('.').pop()
+  const path = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+  const { data, error } = await sb.storage.from('site-media').upload(path, file, { upsert:true })
+  if(error) { alert('Upload failed: '+error.message); return null }
+  const { data:pub } = sb.storage.from('site-media').getPublicUrl(path)
+  return pub.publicUrl
+}
+
+/* ── Quick Review Adder ── */
 function QuickReviewAdder({currentJson,onSave}) {
-  const [r,setR]=useState({name:'',role:'',text:'',initial:'',color:'#E91E8C'})
+  const [r,setR]=useState({type:'text',name:'',role:'',text:'',initial:'',color:'#E91E8C',media_url:''})
+  const [uploading,setUploading]=useState(false)
+  const fileRef=useRef()
+
+  const handleFile=async(e)=>{
+    const file=e.target.files[0]; if(!file) return
+    setUploading(true)
+    const url=await uploadToSupabase(file,'reviews')
+    if(url) setR(x=>({...x,media_url:url}))
+    setUploading(false)
+  }
+
   const add=()=>{
-    if(!r.name||!r.text){alert('Name and review text required.');return}
+    if(!r.name){alert('Student name required.');return}
+    if(r.type==='text'&&!r.text){alert('Review text required.');return}
     try{
       const arr=JSON.parse(currentJson||'[]')
       arr.push({...r,initial:r.initial||r.name[0]})
       onSave(JSON.stringify(arr,null,2))
-      setR({name:'',role:'',text:'',initial:'',color:'#E91E8C'})
+      setR({type:'text',name:'',role:'',text:'',initial:'',color:'#E91E8C',media_url:''})
     }catch{alert('Existing reviews JSON is invalid. Please fix it first.')}
   }
-  const fs={width:'100%',padding:'8px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:8}
+  const fs={width:'100%',padding:'9px 11px',borderRadius:9,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:9}
   return(
     <div>
-      <input value={r.name} onChange={e=>setR(x=>({...x,name:e.target.value}))} placeholder="Student name" style={fs}/>
+      <div style={{marginBottom:9}}>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:5,textTransform:'uppercase',letterSpacing:.5}}>Review Type</div>
+        <Row gap={6} style={{flexWrap:'wrap'}}>
+          {[['text','💬 Text'],['image','🖼️ Photo'],['whatsapp','📱 WA Screenshot'],['video','▶ Video']].map(([v,l])=>(
+            <div key={v} onClick={()=>setR(x=>({...x,type:v}))} style={{padding:'5px 12px',borderRadius:12,background:r.type===v?C.pink:C.greyL,color:r.type===v?C.white:C.grey,fontSize:11,fontWeight:r.type===v?700:500,cursor:'pointer'}}>{l}</div>
+          ))}
+        </Row>
+      </div>
+      <input value={r.name} onChange={e=>setR(x=>({...x,name:e.target.value}))} placeholder="Student name *" style={fs}/>
       <input value={r.role} onChange={e=>setR(x=>({...x,role:e.target.value}))} placeholder="Role (e.g. Homemaker · Mehndi Student)" style={fs}/>
-      <textarea rows={3} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Review text" style={{...fs,resize:'vertical'}}/>
-      <Row gap={8} style={{alignItems:'flex-start'}}>
-        <input value={r.initial} onChange={e=>setR(x=>({...x,initial:e.target.value}))} placeholder="Initial" style={{...fs,width:80,marginBottom:0}}/>
+      {r.type==='text'&&<textarea rows={3} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Review text *" style={{...fs,resize:'vertical'}}/>}
+      {(r.type==='image'||r.type==='whatsapp')&&<>
+        <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
+        <div style={{display:'flex',gap:8,marginBottom:9}}>
+          <Btn small onClick={()=>fileRef.current.click()} disabled={uploading} color={C.blue}>
+            {uploading?'Uploading…':'📷 Upload Photo'}
+          </Btn>
+          {r.media_url&&<span style={{fontSize:11,color:C.green,alignSelf:'center'}}>✅ Uploaded</span>}
+        </div>
+        <input value={r.media_url} onChange={e=>setR(x=>({...x,media_url:e.target.value}))} placeholder="Or paste image URL" style={fs}/>
+        <textarea rows={2} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Caption (optional)" style={{...fs,resize:'vertical'}}/>
+      </>}
+      {r.type==='video'&&<>
+        <input value={r.media_url} onChange={e=>setR(x=>({...x,media_url:e.target.value}))} placeholder="YouTube video URL or direct video link" style={fs}/>
+        <textarea rows={2} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Caption (optional)" style={{...fs,resize:'vertical'}}/>
+      </>}
+      <Row gap={8} style={{alignItems:'flex-start',marginBottom:4}}>
+        <input value={r.initial} onChange={e=>setR(x=>({...x,initial:e.target.value}))} placeholder="Initial" style={{...fs,width:70,marginBottom:0}}/>
         <input type="color" value={r.color} onChange={e=>setR(x=>({...x,color:e.target.value}))} style={{height:38,borderRadius:8,border:'none',cursor:'pointer'}}/>
-        <Btn small color={C.green} onClick={add}>+ Add Review</Btn>
+        <Btn small color={C.green} onClick={add}>+ Add</Btn>
       </Row>
     </div>
   )
@@ -1505,11 +1554,22 @@ function WebsiteEditorTab({toast}) {
   const [vals,setVals]=useState({})
   const [busy,setBusy]=useState(false)
   const [loaded,setLoaded]=useState(false)
+  const [galleryItems,setGalleryItems]=useState([])
+  const [reviewItems,setReviewItems]=useState([])
+  const [newPhoto,setNewPhoto]=useState({url:'',label:'',cat:'Mehndi',emoji:'🌿'})
+  const [uploading,setUploading]=useState(false)
+  const photoRef=useRef()
 
   useEffect(()=>{
     sb.from('site_content').select('*').then(({data})=>{
       if(data){const m={};data.forEach(r=>{m[r.key]=r.value});setVals(m)}
       setLoaded(true)
+    })
+    sb.from('site_content').select('value').eq('key','gallery_photos').maybeSingle().then(({data})=>{
+      try{if(data?.value)setGalleryItems(JSON.parse(data.value))}catch{}
+    })
+    sb.from('site_content').select('value').eq('key','reviews_rich').maybeSingle().then(({data})=>{
+      try{if(data?.value)setReviewItems(JSON.parse(data.value))}catch{}
     })
   },[])
 
@@ -1517,23 +1577,49 @@ function WebsiteEditorTab({toast}) {
   const set=(k,v)=>setVals(x=>({...x,[k]:v}))
 
   const saveKey=async(key,value)=>{
-    setBusy(true)
     const {data:ex}=await sb.from('site_content').select('id').eq('key',key).maybeSingle()
     const row={id:ex?.id||uid(),key,value,updated_at:new Date().toISOString()}
-    const {error}=await sb.from('site_content').upsert(row,{onConflict:'id'})
-    if(error) toast('Save failed: '+error.message); else toast('Saved to website!')
-    setBusy(false)
+    await sb.from('site_content').upsert(row,{onConflict:'id'})
   }
 
   const saveAll=async(keys)=>{
     setBusy(true)
     for(const k of keys){
-      const {data:ex}=await sb.from('site_content').select('id').eq('key',k).maybeSingle()
-      const row={id:ex?.id||uid(),key:k,value:vals[k]??'',updated_at:new Date().toISOString()}
-      await sb.from('site_content').upsert(row,{onConflict:'id'})
+      await saveKey(k,vals[k]??'')
     }
     toast('All changes saved to website!')
     setBusy(false)
+  }
+
+  const saveGallery=async(items)=>{
+    setBusy(true)
+    await saveKey('gallery_photos',JSON.stringify(items))
+    setGalleryItems(items)
+    toast('Gallery updated!')
+    setBusy(false)
+  }
+
+  const saveReviews=async(items)=>{
+    setBusy(true)
+    await saveKey('reviews_rich',JSON.stringify(items))
+    setReviewItems(items)
+    toast('Reviews updated!')
+    setBusy(false)
+  }
+
+  const handlePhotoUpload=async(e)=>{
+    const file=e.target.files[0]; if(!file) return
+    setUploading(true)
+    const url=await uploadToSupabase(file,'gallery')
+    if(url) setNewPhoto(x=>({...x,url}))
+    setUploading(false)
+  }
+
+  const addGalleryPhoto=async()=>{
+    if(!newPhoto.url&&!newPhoto.emoji){alert('Add a photo URL or select a file');return}
+    const items=[...galleryItems,{...newPhoto}]
+    await saveGallery(items)
+    setNewPhoto({url:'',label:'',cat:'Mehndi',emoji:'🌿'})
   }
 
   const fld={width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:10,resize:'vertical'}
@@ -1541,13 +1627,14 @@ function WebsiteEditorTab({toast}) {
   if(!loaded) return <div style={{textAlign:'center',padding:40,color:C.grey}}>Loading website content…</div>
 
   const SECS=[{v:'about',l:'📄 About'},{v:'courses',l:'📚 Courses'},{v:'gallery',l:'🖼️ Gallery'},{v:'reviews',l:'⭐ Reviews'},{v:'stats',l:'📊 Stats & CTA'}]
+  const CAT_OPTS=[{v:'Mehndi',l:'🌿 Mehndi'},{v:'Makeup',l:'💄 Makeup'},{v:'Ariwork',l:'🎨 Ariwork'},{v:'Other',l:'✨ Other'}]
 
   return(
     <div>
       <Card accent={C.pink}>
         <STitle><Ic n="globe" size={15} color={C.pink}/> Website Content Editor</STitle>
-        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Edit your public website text here. Changes save to the cloud and appear live on the website.</div>
-        <Row gap={8}>
+        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Edit your public website content. Changes appear live on the website instantly.</div>
+        <Row gap={8} style={{flexWrap:'wrap'}}>
           <a href="/" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="globe" size={13} color={C.white}/>View Website</Btn></a>
           <a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small outline>View Enroll Form</Btn></a>
         </Row>
@@ -1557,6 +1644,7 @@ function WebsiteEditorTab({toast}) {
         {SECS.map(s=><div key={s.v} onClick={()=>setSec(s.v)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,background:sec===s.v?C.pink:C.greyL,color:sec===s.v?C.white:C.grey,fontSize:12,fontWeight:sec===s.v?700:500,cursor:'pointer'}}>{s.l}</div>)}
       </div>
 
+      {/* ── ABOUT ── */}
       {sec==='about'&&<Card>
         <STitle><Ic n="info" size={15} color={C.pink}/> About Section</STitle>
         <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Hero Tagline</div>
@@ -1564,12 +1652,18 @@ function WebsiteEditorTab({toast}) {
         <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Headline</div>
         <input value={get('about_headline','Passionate Artist. Dedicated Teacher.')} onChange={e=>set('about_headline',e.target.value)} style={{...fld,resize:'none'}}/>
         <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 1</div>
-        <textarea rows={4} value={get('about_para1',"Hi! I'm Kajol, a professional Mehndi, Makeup, and Ariwork artist with years of experience working with brides, events, and art enthusiasts across India.")} onChange={e=>set('about_para1',e.target.value)} style={fld}/>
+        <textarea rows={4} value={get('about_para1',"Hi! I'm Kajol, a professional Mehndi, Makeup, and Ariwork artist...")} onChange={e=>set('about_para1',e.target.value)} style={fld}/>
         <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 2</div>
-        <textarea rows={3} value={get('about_para2','All my courses are conducted live on Zoom with recordings uploaded to YouTube, so you never miss a session.')} onChange={e=>set('about_para2',e.target.value)} style={fld}/>
-        <Btn color={C.green} onClick={()=>saveAll(['hero_tagline','about_headline','about_para1','about_para2'])} disabled={busy} full>{busy?'Saving…':'💾 Save About Section'}</Btn>
+        <textarea rows={3} value={get('about_para2','All my courses are conducted live on Zoom...')} onChange={e=>set('about_para2',e.target.value)} style={fld}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>YouTube Playlist ID (for website video section)</div>
+        <input value={get('yt_playlist_id','')} onChange={e=>set('yt_playlist_id',e.target.value)} placeholder="e.g. PLxxxxxxxxxxxxxxxxx (from YouTube playlist URL)" style={{...fld,resize:'none'}}/>
+        <div style={{fontSize:11,color:C.grey,marginBottom:10,background:C.greenPale,borderRadius:8,padding:'8px 10px'}}>
+          📋 <b>How to get Playlist ID:</b> Go to YouTube → Your Channel → Playlists → Click playlist → copy the ID from the URL after "list=" (e.g. PLxxxxxxxxx)
+        </div>
+        <Btn color={C.green} onClick={()=>saveAll(['hero_tagline','about_headline','about_para1','about_para2','yt_playlist_id'])} disabled={busy} full>{busy?'Saving…':'💾 Save About Section'}</Btn>
       </Card>}
 
+      {/* ── COURSES ── */}
       {sec==='courses'&&<Card>
         <STitle><Ic n="course" size={15} color={C.green}/> Courses Section</STitle>
         <div style={{fontSize:12,color:C.grey,marginBottom:12}}>Separate bullet items with a pipe <b>|</b> character.</div>
@@ -1585,33 +1679,113 @@ function WebsiteEditorTab({toast}) {
         <Btn color={C.green} onClick={()=>saveAll(['course_mehndi_desc','course_mehndi_items','course_makeup_desc','course_makeup_items','course_ariwork_desc','course_ariwork_items','course_combined_desc','course_combined_items'])} disabled={busy} full>{busy?'Saving…':'💾 Save All Courses'}</Btn>
       </Card>}
 
-      {sec==='gallery'&&<Card>
-        <STitle><Ic n="image" size={15} color={C.pink}/> Gallery Section</STitle>
-        <div style={{background:C.pinkPale,borderRadius:10,padding:12,marginBottom:12,fontSize:12,color:C.pink}}>
-          📸 <b>Instagram feed</b> is live on the website via EmbedSocial widget — it auto-shows your latest posts from @kajol_makeover_studioz. No setup needed!
-        </div>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Gallery Subtitle Text</div>
-        <textarea rows={2} value={get('gallery_subtitle',"A glimpse of the beautiful art our students and Kajol Ma'am create!")} onChange={e=>set('gallery_subtitle',e.target.value)} style={fld}/>
-        <Btn color={C.green} onClick={()=>saveAll(['gallery_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Gallery Text'}</Btn>
-        <div style={{marginTop:12,background:C.greenPale,borderRadius:10,padding:12,fontSize:12,color:C.green}}>
-          💡 To add photos to the gallery, post them on Instagram @kajol_makeover_studioz — they appear in the live feed automatically.
-        </div>
-      </Card>}
+      {/* ── GALLERY ── */}
+      {sec==='gallery'&&<div>
+        <Card accent={C.pink}>
+          <STitle><Ic n="image" size={15} color={C.pink}/> Gallery Photos</STitle>
+          <div style={{fontSize:12,color:C.grey,marginBottom:14}}>Upload photos of student work, your designs, and class highlights. These appear in the "Our Work" grid on the website.</div>
 
-      {sec==='reviews'&&<Card>
-        <STitle><Ic n="star" size={15} color={C.amber}/> Reviews / Testimonials</STitle>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews Subtitle</div>
-        <input value={get('reviews_subtitle','Real words from real learners who transformed their skills with us.')} onChange={e=>set('reviews_subtitle',e.target.value)} style={{...fld,resize:'none'}}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews JSON Array</div>
-        <textarea rows={12} value={get('reviews_json','[]')} onChange={e=>set('reviews_json',e.target.value)} style={{...fld,fontFamily:'monospace',fontSize:11}}/>
-        <div style={{fontSize:11,color:C.grey,marginBottom:10}}>Leave as <b>[]</b> to show the default reviews. Each review needs: name, role, text, initial, color.</div>
-        <Btn color={C.green} onClick={()=>saveAll(['reviews_json','reviews_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Reviews'}</Btn>
-        <div style={{marginTop:16,background:C.greenPale,borderRadius:12,padding:14}}>
-          <div style={{fontSize:13,fontWeight:700,color:C.green,marginBottom:10}}>➕ Quick Add a Review</div>
-          <QuickReviewAdder currentJson={get('reviews_json','[]')} onSave={json=>{set('reviews_json',json);saveKey('reviews_json',json)}}/>
-        </div>
-      </Card>}
+          {/* Add new photo */}
+          <div style={{background:C.greyL,borderRadius:14,padding:14,marginBottom:16}}>
+            <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>➕ Add New Photo</div>
 
+            {/* File upload */}
+            <input ref={photoRef} type="file" accept="image/*" style={{display:'none'}} onChange={handlePhotoUpload}/>
+            <Row gap={8} style={{marginBottom:10}}>
+              <Btn small onClick={()=>photoRef.current.click()} disabled={uploading} color={C.blue}>
+                <Ic n="upload" size={12} color={C.white}/>{uploading?'Uploading…':'📷 Upload Photo'}
+              </Btn>
+              {newPhoto.url&&<span style={{fontSize:11,color:C.green}}>✅ Photo uploaded</span>}
+            </Row>
+            <div style={{fontSize:11,color:C.grey,marginBottom:6}}>— OR paste an image URL —</div>
+            <input value={newPhoto.url} onChange={e=>setNewPhoto(x=>({...x,url:e.target.value}))} placeholder="https://… image URL" style={{...fld,marginBottom:8,resize:'none'}}/>
+            {newPhoto.url&&<img src={newPhoto.url} alt="preview" style={{width:'100%',maxHeight:140,objectFit:'cover',borderRadius:10,marginBottom:8}}/>}
+            <Row gap={8}>
+              <div style={{flex:2}}>
+                <input value={newPhoto.label} onChange={e=>setNewPhoto(x=>({...x,label:e.target.value}))} placeholder="Label (e.g. Bridal Mehndi)" style={{...fld,marginBottom:0,resize:'none'}}/>
+              </div>
+              <select value={newPhoto.cat} onChange={e=>setNewPhoto(x=>({...x,cat:e.target.value}))} style={{...fld,width:'auto',marginBottom:0,resize:'none',flex:1}}>
+                {CAT_OPTS.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}
+              </select>
+            </Row>
+            <Btn color={C.green} onClick={addGalleryPhoto} disabled={busy||uploading} full style={{marginTop:10}}>{busy?'Adding…':'+ Add to Gallery'}</Btn>
+          </div>
+
+          {/* Current gallery */}
+          <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>Current Gallery ({galleryItems.length} photos)</div>
+          {galleryItems.length===0&&<div style={{fontSize:12,color:C.grey,textAlign:'center',padding:20,background:C.pinkPale,borderRadius:10}}>
+            No photos added yet. Upload your first photo above!<br/><span style={{fontSize:11}}>Empty gallery shows emoji placeholder tiles on the website.</span>
+          </div>}
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10}}>
+            {galleryItems.map((p,i)=>(
+              <div key={i} style={{position:'relative',borderRadius:12,overflow:'hidden',aspectRatio:'1',background:C.greyL}}>
+                {p.url?<img src={p.url} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>:
+                  <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:32}}>{p.emoji||'🖼️'}</div>}
+                <div style={{position:'absolute',bottom:0,left:0,right:0,background:'rgba(0,0,0,0.55)',padding:'4px 7px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <span style={{fontSize:9,color:'#fff',fontWeight:600}}>{p.label||p.cat}</span>
+                  <button onClick={async()=>{const items=galleryItems.filter((_,j)=>j!==i);await saveGallery(items)}} style={{background:C.red,border:'none',color:'#fff',borderRadius:5,padding:'2px 6px',fontSize:10,cursor:'pointer',fontFamily:'inherit'}}>×</button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,marginTop:14,textTransform:'uppercase',letterSpacing:.5}}>Gallery Section Subtitle</div>
+          <textarea rows={2} value={get('gallery_subtitle',"A glimpse of the beautiful art our students and Kajol Ma'am create!")} onChange={e=>set('gallery_subtitle',e.target.value)} style={fld}/>
+          <Btn color={C.green} onClick={()=>saveAll(['gallery_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Subtitle'}</Btn>
+
+          <div style={{marginTop:14,background:C.pinkPale,borderRadius:10,padding:12,fontSize:12,color:C.pink}}>
+            📋 <b>Storage setup required:</b> In Supabase → Storage → Create bucket named <b>site-media</b> → set to Public → add anon insert/select policy.
+          </div>
+        </Card>
+      </div>}
+
+      {/* ── REVIEWS ── */}
+      {sec==='reviews'&&<div>
+        <Card accent={C.amber}>
+          <STitle><Ic n="star" size={15} color={C.amber}/> Student Feedback & Reviews</STitle>
+          <div style={{fontSize:12,color:C.grey,marginBottom:14}}>
+            Add text reviews, photos of student work, WhatsApp message screenshots, and YouTube video feedback. All appear in the "What Students Say" section.
+          </div>
+
+          {/* Type legend */}
+          <Row gap={8} style={{flexWrap:'wrap',marginBottom:16}}>
+            {[['💬 Text','text'],['🖼️ Photo','image'],['📱 WA Screenshot','whatsapp'],['▶ Video','video']].map(([l])=>(
+              <div key={l} style={{fontSize:11,padding:'4px 10px',borderRadius:10,background:C.greyL,color:C.grey}}>{l}</div>
+            ))}
+          </Row>
+
+          {/* Existing reviews */}
+          <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>Current Reviews ({reviewItems.length})</div>
+          {reviewItems.length===0&&<div style={{fontSize:12,color:C.grey,textAlign:'center',padding:16,background:C.greyL,borderRadius:10,marginBottom:14}}>No reviews added yet. Default reviews show on the website.</div>}
+          {reviewItems.map((r,i)=>(
+            <div key={i} style={{background:C.greyL,borderRadius:12,padding:12,marginBottom:8,display:'flex',gap:10,alignItems:'flex-start'}}>
+              <div style={{width:36,height:36,borderRadius:'50%',background:`linear-gradient(135deg,${r.color||C.pink},${r.color||C.pink}99)`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:800,fontSize:14,flexShrink:0}}>
+                {r.initial||r.name?.[0]||'S'}
+              </div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontWeight:700,fontSize:13}}>{r.name} <Badge color={r.color||C.pink}>{r.type||'text'}</Badge></div>
+                <div style={{fontSize:11,color:C.grey}}>{r.role}</div>
+                {r.text&&<div style={{fontSize:11,color:C.dark,marginTop:3,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.text}</div>}
+                {r.media_url&&<div style={{fontSize:10,color:C.blue,marginTop:2,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>📎 {r.media_url}</div>}
+              </div>
+              <button onClick={async()=>{const items=reviewItems.filter((_,j)=>j!==i);await saveReviews(items)}}
+                style={{background:C.red,border:'none',color:'#fff',borderRadius:8,padding:'5px 10px',fontSize:12,cursor:'pointer',fontFamily:'inherit',flexShrink:0}}>×</button>
+            </div>
+          ))}
+
+          {/* Add new review */}
+          <div style={{background:C.greenPale,borderRadius:14,padding:14,marginTop:8}}>
+            <div style={{fontSize:13,fontWeight:700,color:C.green,marginBottom:10}}>➕ Add New Review / Feedback</div>
+            <QuickReviewAdder currentJson={JSON.stringify(reviewItems)} onSave={json=>{saveReviews(JSON.parse(json))}}/>
+          </div>
+
+          <div style={{fontSize:11,fontWeight:700,color:C.grey,marginTop:14,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews Subtitle</div>
+          <input value={get('reviews_subtitle','Real words from real learners who transformed their skills with us.')} onChange={e=>set('reviews_subtitle',e.target.value)} style={{...fld,resize:'none'}}/>
+          <Btn color={C.green} onClick={()=>saveAll(['reviews_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Subtitle'}</Btn>
+        </Card>
+      </div>}
+
+      {/* ── STATS & CTA ── */}
       {sec==='stats'&&<Card>
         <STitle><Ic n="chart" size={15} color={C.pink}/> Stats Strip & CTA</STitle>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:12}}>
@@ -1633,6 +1807,7 @@ function WebsiteEditorTab({toast}) {
     </div>
   )
 }
+
 
 /* ═══════════════════════════════════════════════════════════════════
    NAVIGATION CONFIG
