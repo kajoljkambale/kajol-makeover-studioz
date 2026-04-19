@@ -191,7 +191,7 @@ function KMSLogo({ size = 48, light = false }) {
       ))}
     </svg>
   )
-}) {
+}
   const pk  = light ? '#fff'                : C.pink
   const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
   const gn  = light ? 'rgba(255,255,255,0.7)': C.green
