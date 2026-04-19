@@ -34,7 +34,10 @@ const INSTAGRAM       = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a
 const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
 // ★ Replace PLAYLIST_ID with your actual YouTube playlist ID
 // How to find it: Go to YouTube → Your Channel → Playlists → Click playlist → copy ID from URL after "list="
-const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'  // Kajol Makeover Studioz playlist
+const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'
+const PHONE1          = '8390695155'
+const PHONE2          = '7030825125'
+const EMAIL_KAJOL     = 'kajoljkambale@gmail.com'  // Kajol Makeover Studioz playlist
 const ADMIN_URL       = '/app'
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -91,7 +94,7 @@ function SEOHead() {
           "name": "Kajol Makeover Studioz",
           "description": "Professional online classes in Mehndi, Makeup and Ariwork by Kajol J Kamble. Live Zoom sessions and YouTube recordings.",
           "url": "https://kajol-makeover-studioz.vercel.app",
-          "telephone": "+91-XXXXXXXXXX",
+          "telephone": "+918390695155",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Pune",
@@ -148,6 +151,47 @@ function SEOHead() {
    For now this SVG logo is used automatically.
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
+  const pk   = light ? '#fff'                   : '#E91E8C'
+  const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
+  const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
+  const hsk  = light ? 'rgba(255,255,255,0.55)' : '#3D1A1A'
+  const bru  = light ? 'rgba(255,255,255,0.88)' : '#4A2C2A'
+  const bh   = light ? 'rgba(255,255,255,0.6)'  : '#8B6B60'
+  const bg   = light ? 'rgba(255,255,255,0.12)' : '#FCE4EC'
+  const h    = size * 1.2
+  return (
+    <svg width={size} height={h} viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="120" rx="16" fill={bg} opacity="0.5"/>
+      <rect x="16" y="6" width="9" height="40" rx="4.5" fill={bru} transform="rotate(-20 20 26)"/>
+      <ellipse cx="13" cy="9" rx="7" ry="11" fill={bh} transform="rotate(-20 13 9)"/>
+      <ellipse cx="13" cy="8" rx="4.5" ry="7.5" fill={bru} opacity="0.5" transform="rotate(-20 13 8)"/>
+      <line x1="18" y1="46" x2="16" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      <rect x="44" y="4" width="10" height="42" rx="5" fill={bru} transform="rotate(-3 49 25)"/>
+      <ellipse cx="46" cy="7" rx="6" ry="10" fill={bh} transform="rotate(-3 46 7)"/>
+      <ellipse cx="46" cy="6" rx="3.8" ry="7" fill={bru} opacity="0.5" transform="rotate(-3 46 6)"/>
+      <line x1="50" y1="46" x2="50" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      <rect x="70" y="7" width="9" height="38" rx="4.5" fill={bru} transform="rotate(18 74 26)"/>
+      <ellipse cx="76" cy="9" rx="6.5" ry="10" fill={bh} transform="rotate(18 76 9)"/>
+      <ellipse cx="76" cy="8" rx="4" ry="7" fill={bru} opacity="0.5" transform="rotate(18 76 8)"/>
+      <line x1="76" y1="45" x2="77" y2="53" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      <path d="M26 55 Q23 66 24 82 Q24 93 36 95 Q50 99 64 95 Q76 93 76 82 L75 55 Q69 51 63 53 Q56 49 50 53 Q44 49 38 53 Q32 49 26 55Z"
+        fill={hand} stroke={hsk} strokeWidth="2.5"/>
+      <path d="M31 62 Q35 58 39 62" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      <path d="M46 59 Q50 55 54 59" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      <path d="M61 60 Q64 56 67 60" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      <ellipse cx="30"   cy="57" rx="5.5" ry="4"   fill={nail}/>
+      <ellipse cx="50"   cy="54" rx="5.5" ry="3.8" fill={nail}/>
+      <ellipse cx="64.5" cy="55" rx="5"   ry="3.5" fill={nail}/>
+      <ellipse cx="75"   cy="58" rx="4.5" ry="3.2" fill={nail}/>
+      <ellipse cx="28.5" cy="55.5" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
+      <ellipse cx="48.5" cy="52.8" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
+      <ellipse cx="63"   cy="53.8" rx="1.8" ry="1" fill="rgba(255,255,255,0.45)"/>
+      {[0,1,2,3,4].map(i=>(
+        <circle key={i} cx={33+i*8} cy={88} r="1.8" fill={pk} opacity="0.4"/>
+      ))}
+    </svg>
+  )
+}) {
   const pk  = light ? '#fff'                : C.pink
   const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
   const gn  = light ? 'rgba(255,255,255,0.7)': C.green
@@ -773,7 +817,7 @@ export default function Website() {
           <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
           <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
           <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
-            <a href={`https://wa.me/919999999999?text=${encodeURIComponent("Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.")}`}
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.')}`}
               target="_blank" rel="noopener noreferrer"
               style={{padding:'12px 22px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',display:'flex',alignItems:'center',gap:8}}>
               💬 WhatsApp to Book
@@ -963,7 +1007,7 @@ export default function Website() {
             </div>
           </div>
           <div style={{ borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop:20, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:8 }}>
-            <div style={{ fontSize:12, opacity:.55 }}>© 2025 Kajol Makeover Studioz. All rights reserved.</div>
+            <div style={{ fontSize:12, opacity:.55 }}>© 2025 Kajol Makeover Studioz by Kajol J Kamble, Pune. All rights reserved.</div>
             <a href={ADMIN_URL} style={{ fontSize:11, opacity:.38, color:'#fff', textDecoration:'none' }}>🔒 Admin</a>
           </div>
         </div>
