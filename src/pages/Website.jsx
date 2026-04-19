@@ -773,7 +773,7 @@ export default function Website() {
           <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
           <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
           <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
-            <a href={`https://wa.me/919999999999?text=${encodeURIComponent('Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.')}`}
+            <a href={`https://wa.me/919999999999?text=${encodeURIComponent("Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.")}`}
               target="_blank" rel="noopener noreferrer"
               style={{padding:'12px 22px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',display:'flex',alignItems:'center',gap:8}}>
               💬 WhatsApp to Book
