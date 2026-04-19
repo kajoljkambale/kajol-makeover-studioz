@@ -38,8 +38,114 @@ const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'  // Kajol Makeover 
 const ADMIN_URL       = '/app'
 
 /* ═══════════════════════════════════════════════════════════════════
+   SEO HEAD — injects meta tags, Open Graph, structured data
+   Improves Google ranking for Kajol Makeover Studioz, Pune
+═══════════════════════════════════════════════════════════════════ */
+function SEOHead() {
+  useEffect(()=>{
+    // Page title
+    document.title = 'Kajol Makeover Studioz | Mehndi, Makeup & Ariwork Classes Online | Pune'
+
+    const setMeta = (name,content,prop=false) => {
+      const attr = prop ? 'property' : 'name'
+      let el = document.querySelector(`meta[${attr}="${name}"]`)
+      if(!el){ el=document.createElement('meta'); el.setAttribute(attr,name); document.head.appendChild(el) }
+      el.setAttribute('content',content)
+    }
+
+    // Core SEO meta
+    setMeta('description','Learn Mehndi, Makeup & Ariwork online from Kajol J Kamble — professional artist & teacher based in Pune. Live Zoom classes + YouTube recordings. Enroll now!')
+    setMeta('keywords','mehndi classes online, makeup course Pune, ariwork classes, mehndi design course, bridal makeup training, online beauty courses India, Kajol Makeover Studioz, mehndi teacher Pune')
+    setMeta('author','Kajol J Kamble — Kajol Makeover Studioz')
+    setMeta('robots','index, follow')
+    setMeta('language','en-IN')
+    setMeta('geo.region','IN-MH')
+    setMeta('geo.placename','Pune, Maharashtra, India')
+
+    // Open Graph (Facebook, WhatsApp preview)
+    setMeta('og:title','Kajol Makeover Studioz | Online Mehndi, Makeup & Ariwork Classes',true)
+    setMeta('og:description','Professional Mehndi, Makeup & Ariwork courses by Kajol J Kamble, Pune. Live Zoom classes + YouTube recordings. Enroll free today!',true)
+    setMeta('og:url','https://kajol-makeover-studioz.vercel.app',true)
+    setMeta('og:type','website',true)
+    setMeta('og:image','https://kajol-makeover-studioz.vercel.app/og-image.jpg',true)
+    setMeta('og:site_name','Kajol Makeover Studioz',true)
+    setMeta('og:locale','en_IN',true)
+
+    // Twitter Card
+    setMeta('twitter:card','summary_large_image')
+    setMeta('twitter:title','Kajol Makeover Studioz | Online Beauty Courses Pune')
+    setMeta('twitter:description','Learn Mehndi, Makeup & Ariwork online. Professional courses by Kajol J Kamble, Pune. Join 200+ students!')
+    setMeta('twitter:image','https://kajol-makeover-studioz.vercel.app/og-image.jpg')
+
+    // Canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]')
+    if(!canonical){ canonical=document.createElement('link'); canonical.rel='canonical'; document.head.appendChild(canonical) }
+    canonical.href = 'https://kajol-makeover-studioz.vercel.app'
+
+    // Structured Data — LocalBusiness + EducationalOrganization
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["LocalBusiness","EducationalOrganization"],
+          "name": "Kajol Makeover Studioz",
+          "description": "Professional online classes in Mehndi, Makeup and Ariwork by Kajol J Kamble. Live Zoom sessions and YouTube recordings.",
+          "url": "https://kajol-makeover-studioz.vercel.app",
+          "telephone": "+91-XXXXXXXXXX",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Pune",
+            "addressRegion": "Maharashtra",
+            "addressCountry": "IN"
+          },
+          "geo": { "@type": "GeoCoordinates", "latitude": 18.5204, "longitude": 73.8567 },
+          "sameAs": [
+            "https://www.instagram.com/kajol_makeover_studioz",
+            "https://youtube.com/@kajolmakeoverstudioz"
+          ],
+          "founder": { "@type": "Person", "name": "Kajol J Kamble" },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Beauty Courses",
+            "itemListElement": [
+              {"@type":"Offer","name":"Mehndi Art Course","category":"Mehndi"},
+              {"@type":"Offer","name":"Makeup Course","category":"Makeup"},
+              {"@type":"Offer","name":"Ariwork Course","category":"Art"},
+              {"@type":"Offer","name":"Combined Course","category":"Beauty"}
+            ]
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Kajol J Kamble",
+          "jobTitle": "Makeup Artist, Mehndi Designer, Ariwork Instructor",
+          "worksFor": {"@type":"Organization","name":"Kajol Makeover Studioz"},
+          "address": {"@type":"PostalAddress","addressLocality":"Pune","addressRegion":"Maharashtra","addressCountry":"IN"},
+          "sameAs": [
+            "https://www.instagram.com/kajol_makeover_studioz",
+            "https://youtube.com/@kajolmakeoverstudioz"
+          ]
+        }
+      ]
+    }
+    let sdScript = document.querySelector('#kms-structured-data')
+    if(!sdScript){ sdScript=document.createElement('script'); sdScript.id='kms-structured-data'; sdScript.type='application/ld+json'; document.head.appendChild(sdScript) }
+    sdScript.text = JSON.stringify(structuredData)
+
+    return ()=>{}
+  },[])
+  return null
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
    LOGO — hand holding makeup brushes + mehndi cone
-   Warm pink/green palette matching brand
+   NOTE: To use your own logo image, place the file as:
+         /public/kms-logo.png  (in your GitHub project root/public/)
+   Then replace <KMSLogo/> with:
+         <img src="/kms-logo.png" alt="KMS Logo" style={{width:size,height:size}}/>
+   For now this SVG logo is used automatically.
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
   const pk  = light ? '#fff'                : C.pink
@@ -404,6 +510,25 @@ function ReviewCard({ item }) {
   )
 }
 
+
+/* ── FAQ Item (collapsible, used for SEO rich snippets) ── */
+function FAQItem({q,a}) {
+  const [open,setOpen]=useState(false)
+  return (
+    <div style={{marginBottom:10,background:C.white,borderRadius:14,border:`1px solid ${C.pinkPale}`,overflow:'hidden'}}>
+      <button onClick={()=>setOpen(!open)} style={{
+        width:'100%',padding:'14px 18px',background:'none',border:'none',
+        display:'flex',justifyContent:'space-between',alignItems:'center',cursor:'pointer',
+        fontFamily:'inherit',textAlign:'left',
+      }}>
+        <span style={{fontSize:14,fontWeight:700,color:C.dark,lineHeight:1.4}}>{q}</span>
+        <span style={{fontSize:20,color:C.pink,flexShrink:0,marginLeft:12,transition:'transform .2s',transform:open?'rotate(45deg)':'rotate(0deg)'}}>+</span>
+      </button>
+      {open&&<div style={{padding:'0 18px 16px',fontSize:13,color:C.grey,lineHeight:1.8,borderTop:`1px solid ${C.pinkPale}`}}>{a}</div>}
+    </div>
+  )
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    MAIN EXPORT
 ═══════════════════════════════════════════════════════════════════ */
@@ -467,6 +592,7 @@ export default function Website() {
 
   return (
     <div>
+      <SEOHead/>
       <style>{CSS}</style>
 
       {/* ══════════════ NAVBAR ══════════════ */}
@@ -624,6 +750,42 @@ export default function Website() {
         </div>
       </Section>
 
+
+      {/* ══════════════ INDIVIDUAL ARTIST — Pune Bookings ══════════════ */}
+      <Section id="book" style={{background:`linear-gradient(135deg,${C.pinkPale} 0%,#fff 50%,${C.greenPale} 100%)`}}>
+        <SectionTitle emoji="🌸" title="Book Kajol for Your Event" accent
+          subtitle="Individual artist services in Pune — Bridal Mehndi, Makeup & Ariwork for your special day"/>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:18,marginBottom:28}}>
+          {[
+            {emoji:'🌿',title:'Bridal Mehndi',desc:'Traditional, Arabic, Indo-western & contemporary bridal mehndi at your venue or home',badge:'Home visits available'},
+            {emoji:'💄',title:'Bridal Makeup',desc:'HD, airbrush, natural & party makeup for brides, bridesmaids & all occasion looks',badge:'Trial session available'},
+            {emoji:'🎨',title:'Ariwork for Events',desc:'Custom mandala backdrops, rangoli, canvas art & décor for weddings & celebrations',badge:'Custom quotes'},
+          ].map(s=>(
+            <div key={s.title} style={{background:C.white,borderRadius:20,padding:22,boxShadow:'0 4px 20px rgba(233,30,140,0.09)',border:`1px solid ${C.pinkPale}`,textAlign:'center'}}>
+              <div style={{fontSize:44,marginBottom:12}}>{s.emoji}</div>
+              <div style={{fontSize:16,fontWeight:900,color:C.dark,marginBottom:8}}>{s.title}</div>
+              <div style={{fontSize:13,color:C.grey,lineHeight:1.7,marginBottom:12}}>{s.desc}</div>
+              <div style={{display:'inline-block',background:C.pinkPale,color:C.pink,borderRadius:20,padding:'4px 12px',fontSize:11,fontWeight:700}}>{s.badge}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{background:C.white,borderRadius:20,padding:24,boxShadow:'0 4px 20px rgba(233,30,140,0.09)',border:`1px solid ${C.pinkPale}`,maxWidth:540,margin:'0 auto',textAlign:'center'}}>
+          <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
+          <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
+          <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
+            <a href={`https://wa.me/919999999999?text=${encodeURIComponent('Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.')}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{padding:'12px 22px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',display:'flex',alignItems:'center',gap:8}}>
+              💬 WhatsApp to Book
+            </a>
+            <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer"
+              style={{padding:'12px 22px',borderRadius:14,background:`linear-gradient(135deg,#e6683c,#cc2366)`,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none'}}>
+              📸 View Portfolio
+            </a>
+          </div>
+        </div>
+      </Section>
+
       {/* ══════════════ COURSES ══════════════ */}
       <Section id="courses" bg={C.greyL}>
         <SectionTitle emoji="📚" title="Our Courses" accent
@@ -753,6 +915,27 @@ export default function Website() {
               💬 Ask on WhatsApp
             </a>
           </div>
+        </div>
+      </Section>
+
+
+      {/* ══════════════ FAQ — Google Rich Snippets + SEO ══════════════ */}
+      <Section bg={C.greyL}>
+        <SectionTitle emoji="❓" title="Frequently Asked Questions" accent
+          subtitle="Everything you need to know before enrolling"/>
+        <div style={{maxWidth:700,margin:'0 auto'}}>
+          {[
+            {q:'Are the classes conducted online or offline?',a:"All classes are conducted live online via Zoom. Recordings are uploaded to YouTube so you never miss a session and can revise anytime."},
+            {q:'Do I need prior experience to join?',a:"No experience needed! Our courses start from absolute basics and gradually move to advanced techniques. Anyone can join — homemakers, students, working professionals."},
+            {q:'What equipment/kit do I need?',a:"We guide you on the exact materials needed for each course. Basic kits are affordable and available locally. We share detailed lists before class begins."},
+            {q:'How long are the courses?',a:"Course durations vary — Mehndi is 10 days, Makeup is monthly, Ariwork varies by module. Check each course for details or WhatsApp us to know more."},
+            {q:'Will I receive a certificate?',a:"Yes! Every student receives a certificate of completion from Kajol Makeover Studioz after successfully finishing the course."},
+            {q:'Can I join from outside Pune?',a:"Absolutely! Our online classes welcome students from anywhere in India. The enrollment form is free and open to all."},
+            {q:'What are the class timings?',a:"Batches are scheduled at convenient timings like morning, afternoon and evening. Timings are shared once you are added to a batch."},
+            {q:'Is the course fee refundable?',a:"Please contact Kajol Ma'am directly on WhatsApp to discuss fees and payment terms before enrolling."},
+          ].map((faq,i)=>(
+            <FAQItem key={i} q={faq.q} a={faq.a}/>
+          ))}
         </div>
       </Section>
 
