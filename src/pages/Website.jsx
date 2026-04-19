@@ -192,51 +192,7 @@ function KMSLogo({ size = 48, light = false }) {
     </svg>
   )
 }
-  const pk  = light ? '#fff'                : C.pink
-  const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
-  const gn  = light ? 'rgba(255,255,255,0.7)': C.green
-  const dk  = light ? 'rgba(255,255,255,0.9)': C.dark
-  const bg  = light ? 'rgba(255,255,255,0.15)': C.pinkPale
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* ── background circle ── */}
-      <circle cx="50" cy="50" r="48" fill={bg}/>
-      {/* ── Hand / palm ── */}
-      <path d="M34 78 Q32 62 34 50 Q35 44 40 42 L40 28 Q40 24 43.5 24 Q47 24 47 28 L47 42 Q49 40 52 40 Q55 40 55 44 Q57 42 60 42 Q63 42 63 46 Q65 45 67 46 Q70 47 70 52 L70 67 Q70 74 64 78 Q58 82 48 82 L37 82 Q34 82 34 78Z"
-        fill={pk} opacity="0.22" stroke={pk} strokeWidth="2.5"/>
-      {/* ── Fingers ── */}
-      <line x1="40" y1="42" x2="40" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="47" y1="44" x2="47" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="55" y1="45" x2="55" y2="32" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="63" y1="47" x2="63" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      {/* ── Makeup brush 1 (angled up-right) ── */}
-      <line x1="50" y1="28" x2="68" y2="10" stroke={dk} strokeWidth="2.5" strokeLinecap="round"/>
-      <ellipse cx="50" cy="27" rx="4.5" ry="8" fill={pk} opacity="0.9" transform="rotate(-40 50 27)"/>
-      <path d="M67 11 Q73 6 71 14 Q69 12 67 11Z" fill={pkD}/>
-      {/* ── Makeup brush 2 (angled up-left) ── */}
-      <line x1="42" y1="28" x2="26" y2="12" stroke={dk} strokeWidth="2" strokeLinecap="round"/>
-      <ellipse cx="42" cy="28" rx="3.5" ry="7" fill={gn} opacity="0.9" transform="rotate(40 42 28)"/>
-      <path d="M27 13 Q21 8 23 15 Q25 13 27 13Z" fill={gn} opacity="0.85"/>
-      {/* ── Mehndi cone in hand ── */}
-      <path d="M25 40 L21 74 Q21 78 25 78 Q29 78 29 74 L25 40Z" fill={gn}/>
-      <path d="M22 40 L28 40 Q31 37 28 32 L25 25 L22 32 Q19 37 22 40Z" fill={gn}/>
-      <line x1="25" y1="78" x2="25" y2="85" stroke={pkD} strokeWidth="1.5" strokeLinecap="round"/>
-      {/* ── Mehndi dots on cone ── */}
-      <circle cx="25" cy="50" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      <circle cx="25" cy="60" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      <circle cx="25" cy="70" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      {/* ── Tiny mehndi flower top-right ── */}
-      {[0,60,120,180,240,300].map((d,i)=>{
-        const rad=(d*Math.PI)/180
-        const x=78+7*Math.cos(rad), y=22+7*Math.sin(rad)
-        return <circle key={i} cx={x} cy={y} r="2.8" fill={pk} opacity="0.55"/>
-      })}
-      <circle cx="78" cy="22" r="3.5" fill={pk} opacity="0.9"/>
-      <circle cx="78" cy="22" r="1.5" fill="#fff" opacity="0.8"/>
-    </svg>
-  )
-}
-
+  
 function LogoMark({ dark: isDark = true }) {
   return (
     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
