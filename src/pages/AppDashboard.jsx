@@ -342,6 +342,12 @@ const IP = {
   upload:'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12',
   expenses:'M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z',
   globe:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z',
+  portfolio:'M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z',
+  certificate:'M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM8.21 13.89L7 23l5-3 5 3-1.21-9.12',
+  mappin:'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0zM12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  mailsend:'M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z',
+  phone2:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.37h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.8-1.8a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',
+  award2:'M8.21 13.89L7 23l5-3 5 3-1.21-9.12M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z',
   image:'M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z',
   star:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
 }
@@ -2033,6 +2039,425 @@ function WebsiteEditorTab({toast}) {
 }
 
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   PORTFOLIO TAB — individual artist orders in Pune
+═══════════════════════════════════════════════════════════════════ */
+function PortfolioTab({data,setData,toast}) {
+  const [modal,setModal]=useState(null)
+  const [del,setDel]=useState(null)
+  const [form,setForm]=useState({})
+  const [busy,setBusy]=useState(false)
+  const [filter,setFilter]=useState('all')
+
+  // Portfolio leads stored in orders table with a "portfolio_lead" tag
+  const leads = data.orders.filter(o=>o.portfolio_lead===true)
+    .sort((a,b)=>new Date(b.created_at||b.date)-new Date(a.created_at||a.date))
+  const filtered = filter==='all' ? leads : leads.filter(o=>o.type===filter)
+
+  const save = async () => {
+    if(!form.client||!form.mobile) return alert('Client name and mobile required.')
+    setBusy(true)
+    const row={
+      id:form.id||uid(),
+      portfolio_lead:true,
+      type:form.type||'Mehndi',
+      client:form.client,
+      mobile:form.mobile,
+      email:form.email||'',
+      address:form.address||'',
+      event_date:form.event_date||'',
+      event_type:form.event_type||'',
+      amount:Number(form.amount||0),
+      paid:Number(form.paid||0),
+      status:form.status||'Enquiry',
+      notes:form.notes||'',
+      date:form.date||today(),
+      order_expenses:[],
+    }
+    await dbUpsert('orders',row)
+    setData(d=>({...d,orders:form.id?d.orders.map(o=>o.id===form.id?{...o,...row}:o):[...d.orders,row]}))
+    setBusy(false); setModal(null); toast('Lead saved!')
+  }
+
+  const statusColor = s => s==='Confirmed'?C.green:s==='Completed'?C.teal:s==='Cancelled'?C.red:s==='Follow-up'?C.amber:C.blue
+  const typeColor   = t => t==='Mehndi'?C.green:t==='Makeup'?C.pink:t==='Ariwork'?C.purple:C.amber
+  const typeEmoji   = t => t==='Mehndi'?'🌿':t==='Makeup'?'💄':t==='Ariwork'?'🎨':'✨'
+
+  const stats = [
+    {label:'Total Leads', val:leads.length, color:C.blue},
+    {label:'Confirmed',   val:leads.filter(l=>l.status==='Confirmed').length, color:C.green},
+    {label:'Revenue',     val:fmt(leads.reduce((s,l)=>s+Number(l.paid),0)), color:C.pink},
+    {label:'Pending Due', val:fmt(leads.reduce((s,l)=>s+Number(l.amount)-Number(l.paid),0)), color:C.amber},
+  ]
+
+  return (
+    <div>
+      {/* Header banner */}
+      <div style={{background:`linear-gradient(135deg,${C.purple},${C.pink})`,borderRadius:20,padding:'18px 16px',marginBottom:14,color:'#fff'}}>
+        <div style={{fontSize:22,marginBottom:4}}>🎨💄🌿</div>
+        <div style={{fontSize:17,fontWeight:900}}>Kajol J Kamble — Artist Portfolio</div>
+        <div style={{fontSize:12,opacity:.85,marginTop:2}}>Individual Orders · Bridal · Events · Pune &amp; nearby areas</div>
+        <div style={{marginTop:10,fontSize:11,opacity:.8,display:'flex',alignItems:'center',gap:6}}>
+          <Ic n="mappin" size={13} color="#fff"/> Serving Pune, Pimpri-Chinchwad, PCMC, Mumbai
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
+        {stats.map(s=>(
+          <div key={s.label} style={{background:C.white,borderRadius:14,padding:13,boxShadow:'0 2px 10px rgba(0,0,0,0.06)',border:`1px solid ${C.pinkPale}`}}>
+            <div style={{fontSize:10,color:C.grey,fontWeight:700,textTransform:'uppercase',letterSpacing:.5}}>{s.label}</div>
+            <div style={{fontSize:20,fontWeight:800,color:s.color,marginTop:3}}>{s.val}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Filter + Add */}
+      <Row gap={6} style={{marginBottom:12,flexWrap:'wrap'}}>
+        {['all','Mehndi','Makeup','Ariwork','Combined'].map(f=>(
+          <div key={f} onClick={()=>setFilter(f)} style={{padding:'5px 12px',borderRadius:16,background:filter===f?C.pink:C.greyL,color:filter===f?C.white:C.grey,fontSize:11,fontWeight:filter===f?700:500,cursor:'pointer'}}>
+            {f==='all'?'All':typeEmoji(f)+' '+f}
+          </div>
+        ))}
+        <div style={{marginLeft:'auto'}}>
+          <Btn small onClick={()=>{setForm({type:'Mehndi',status:'Enquiry',date:today()});setModal('form')}}>
+            <Ic n="add" size={14} color={C.white}/>New Lead
+          </Btn>
+        </div>
+      </Row>
+      <div style={{fontSize:12,color:C.grey,marginBottom:8}}>{filtered.length} lead{filtered.length!==1?'s':''}</div>
+
+      {/* Leads list */}
+      {filtered.length===0 && (
+        <div style={{textAlign:'center',padding:40,background:C.white,borderRadius:16,color:C.grey}}>
+          <div style={{fontSize:40,marginBottom:10}}>🌸</div>
+          <div style={{fontWeight:700,marginBottom:6}}>No leads yet</div>
+          <div style={{fontSize:13}}>Add enquiries for bridal mehndi, makeup or ariwork bookings in Pune</div>
+        </div>
+      )}
+
+      {filtered.map(lead=>{
+        const due = Number(lead.amount)-Number(lead.paid)
+        return (
+          <Card key={lead.id} accent={typeColor(lead.type)}>
+            <Row style={{justifyContent:'space-between',marginBottom:8}}>
+              <div>
+                <div style={{fontWeight:800,fontSize:15,color:C.dark}}>{lead.client} {typeEmoji(lead.type)}</div>
+                <div style={{fontSize:12,color:C.grey}}>📱 {lead.mobile}</div>
+                {lead.email&&<div style={{fontSize:11,color:C.grey}}>✉️ {lead.email}</div>}
+                {lead.address&&<div style={{fontSize:11,color:C.grey}}>📍 {lead.address}</div>}
+              </div>
+              <div style={{textAlign:'right'}}>
+                <Badge color={statusColor(lead.status)}>{lead.status}</Badge>
+                <div style={{marginTop:6}}><Badge color={typeColor(lead.type)}>{lead.type}</Badge></div>
+              </div>
+            </Row>
+
+            {lead.event_type&&<div style={{fontSize:12,color:C.dark,marginBottom:3}}>🎉 {lead.event_type}{lead.event_date?` — ${fmtDate(lead.event_date)}`:''}</div>}
+
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:8}}>
+              {[['Quote',fmt(lead.amount),C.dark],['Paid',fmt(lead.paid),C.green],['Due',fmt(due),due>0?C.amber:C.green]].map(([l,v,c])=>(
+                <div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 8px',textAlign:'center'}}>
+                  <div style={{fontSize:9,color:c}}>{l}</div>
+                  <div style={{fontSize:13,fontWeight:700,color:c}}>{v}</div>
+                </div>
+              ))}
+            </div>
+
+            {lead.notes&&<div style={{fontSize:12,color:C.grey,background:C.greyL,borderRadius:8,padding:'6px 10px',marginBottom:8}}>{lead.notes}</div>}
+
+            <Row gap={7} style={{flexWrap:'wrap'}}>
+              <Btn small outline onClick={()=>{setForm({...lead});setModal('form')}}>✏️ Edit</Btn>
+              <a href={`https://wa.me/91${lead.mobile}?text=${encodeURIComponent(`Hi ${lead.client}! 🌸 Thank you for your enquiry for ${lead.type} services. I am Kajol from Kajol Makeover Studioz, Pune. Let me share my portfolio and discuss your requirements.
+
+📸 Instagram: https://www.instagram.com/kajol_makeover_studioz
+
+Looking forward to making your occasion special! 💄`)}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
+                <Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>WhatsApp</Btn>
+              </a>
+              {lead.mobile&&<a href={`tel:+91${lead.mobile}`} style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="phone2" size={12} color={C.white}/>Call</Btn></a>}
+              <select value={lead.status} onChange={async e=>{
+                const u={...lead,status:e.target.value}
+                await dbUpsert('orders',u)
+                setData(d=>({...d,orders:d.orders.map(o=>o.id===lead.id?u:o)}))
+                toast('Status updated!')
+              }} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
+                {['Enquiry','Follow-up','Confirmed','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
+              </select>
+              <Btn small color={C.red} onClick={()=>setDel(lead)}>🗑️</Btn>
+            </Row>
+          </Card>
+        )
+      })}
+
+      {/* Services info card */}
+      <Card>
+        <STitle><Ic n="mappin" size={15} color={C.pink}/> My Artist Services — Pune</STitle>
+        {[
+          {emoji:'🌿',type:'Mehndi',desc:'Bridal, party, Arabic & traditional designs',areas:'Home visits, banquet halls, events'},
+          {emoji:'💄',type:'Makeup',desc:'Bridal, HD, airbrush, party & reception looks',areas:'Studio, home visits & event venues'},
+          {emoji:'🎨',type:'Ariwork',desc:'Custom canvas, mandala, resin décor',areas:'Studio-based, delivery available'},
+        ].map(s=>(
+          <div key={s.type} style={{padding:'10px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+            <div style={{fontWeight:700,fontSize:13,color:C.dark}}>{s.emoji} {s.type}</div>
+            <div style={{fontSize:12,color:C.grey}}>{s.desc}</div>
+            <div style={{fontSize:11,color:C.pink,marginTop:2}}>📍 {s.areas}</div>
+          </div>
+        ))}
+      </Card>
+
+      {/* Add/Edit form modal */}
+      {modal==='form'&&(
+        <Modal onClose={()=>setModal(null)} title={<><Ic n="portfolio" color={C.purple}/> {form.id?'Edit':'New'} Portfolio Lead</>}>
+          <Inp label="Client Name *" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/>
+          <Inp label="Mobile *" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))} type="tel"/>
+          <Inp label="Email" value={form.email} onChange={v=>setForm(x=>({...x,email:v}))} type="email"/>
+          <Inp label="Address / Area in Pune" value={form.address} onChange={v=>setForm(x=>({...x,address:v}))} placeholder="e.g. Baner, Kothrud, Hadapsar"/>
+          <Inp label="Service Type" value={form.type||'Mehndi'} onChange={v=>setForm(x=>({...x,type:v}))} opts={['Mehndi','Makeup','Ariwork','Combined']}/>
+          <Inp label="Event Type" value={form.event_type} onChange={v=>setForm(x=>({...x,event_type:v}))} placeholder="e.g. Bridal, Engagement, Birthday, Sangeet"/>
+          <Inp label="Event Date" value={form.event_date} onChange={v=>setForm(x=>({...x,event_date:v}))} type="date"/>
+          <Inp label="Quotation (₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+          <Inp label="Advance Received (₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
+          <Inp label="Status" value={form.status||'Enquiry'} onChange={v=>setForm(x=>({...x,status:v}))} opts={['Enquiry','Follow-up','Confirmed','Completed','Cancelled']}/>
+          <Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))} rows={3} placeholder="Special requirements, venue details, etc."/>
+          <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Save Lead'}</Btn></Row>
+        </Modal>
+      )}
+      {del&&<DelConfirm item={del.client} onConfirm={async()=>{await dbDelete('orders',del.id);setData(d=>({...d,orders:d.orders.filter(o=>o.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CERTIFICATE TAB — generate & dispatch certificates per batch
+═══════════════════════════════════════════════════════════════════ */
+function CertificateTab({data,toast}) {
+  const [selBatch,setSelBatch]=useState(data.batches[0]?.id||'')
+  const [selStudent,setSelStudent]=useState('all')
+  const [certDate,setCertDate]=useState(today())
+  const [directorName]=useState('Kajol J Kamble')
+  const [preview,setPreview]=useState(null)
+  const certRef=useRef()
+
+  const batch   = data.batches.find(b=>b.id===selBatch)
+  const course  = batch ? data.courses.find(c=>c.id===batch.course_id) : null
+  const students= batch ? data.students.filter(s=>(batch.student_ids||[]).includes(s.id)) : []
+  const targetStudents = selStudent==='all' ? students : students.filter(s=>s.id===selStudent)
+
+  // Generate certificate SVG for a student
+  const CertSVG = ({student}) => {
+    const courseEmoji = course?.type==='Mehndi'?'🌿':course?.type==='Makeup'?'💄':'🎨'
+    return (
+      <div ref={certRef} style={{
+        width:'100%',maxWidth:700,margin:'0 auto',
+        background:'linear-gradient(135deg,#fff9fc 0%,#fff 50%,#f0fdf4 100%)',
+        border:'8px solid transparent',
+        backgroundClip:'padding-box',
+        position:'relative',
+        borderRadius:8,
+        fontFamily:"'Georgia',serif",
+        aspectRatio:'1.41', // A4 landscape ratio
+        display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+        padding:'5%',
+        boxShadow:'0 8px 40px rgba(233,30,140,0.15)',
+        overflow:'hidden',
+      }}>
+        {/* Decorative borders */}
+        <div style={{position:'absolute',inset:12,border:`3px solid ${C.pink}`,borderRadius:4,pointerEvents:'none'}}/>
+        <div style={{position:'absolute',inset:18,border:`1px solid ${C.green}`,borderRadius:4,pointerEvents:'none',opacity:.5}}/>
+
+        {/* Corner decorations */}
+        {[{top:8,left:8},{top:8,right:8},{bottom:8,left:8},{bottom:8,right:8}].map((pos,i)=>(
+          <div key={i} style={{position:'absolute',...pos,width:32,height:32,fontSize:22,lineHeight:1}}>
+            {courseEmoji}
+          </div>
+        ))}
+
+        {/* Logo area */}
+        <div style={{textAlign:'center',marginBottom:10}}>
+          <div style={{fontSize:28}}>💄🌿🎨</div>
+          <div style={{fontSize:16,fontWeight:900,color:C.pink,letterSpacing:1,marginTop:4}}>KAJOL MAKEOVER STUDIOZ</div>
+          <div style={{fontSize:9,color:C.grey,letterSpacing:3,textTransform:'uppercase',marginTop:2}}>Pune · Maharashtra</div>
+        </div>
+
+        {/* Certificate title */}
+        <div style={{fontSize:11,color:C.grey,letterSpacing:4,textTransform:'uppercase',marginBottom:8}}>Certificate of Completion</div>
+        <div style={{width:120,height:2,background:`linear-gradient(90deg,transparent,${C.pink},transparent)`,marginBottom:16}}/>
+
+        {/* Main content */}
+        <div style={{fontSize:11,color:C.grey,textAlign:'center',marginBottom:6}}>This is to certify that</div>
+        <div style={{fontSize:22,fontWeight:900,color:C.dark,textAlign:'center',marginBottom:6,letterSpacing:.5}}>
+          {student.name}
+        </div>
+        <div style={{fontSize:11,color:C.grey,textAlign:'center',marginBottom:10}}>has successfully completed the</div>
+        <div style={{fontSize:16,fontWeight:800,color:C.pink,textAlign:'center',marginBottom:4}}>
+          {courseEmoji} {course?.name || batch?.name} {courseEmoji}
+        </div>
+        <div style={{fontSize:10,color:C.grey,textAlign:'center',marginBottom:16}}>
+          conducted at Kajol Makeover Studioz, Pune
+        </div>
+
+        {/* Divider */}
+        <div style={{width:'60%',height:1,background:`linear-gradient(90deg,transparent,${C.pinkPale},transparent)`,marginBottom:16}}/>
+
+        {/* Date + Signature row */}
+        <div style={{display:'flex',justifyContent:'space-between',width:'80%',alignItems:'flex-end'}}>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontSize:11,fontWeight:700,color:C.dark}}>{fmtDate(certDate)}</div>
+            <div style={{width:100,height:1,background:C.grey,margin:'4px auto'}}/>
+            <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DATE</div>
+          </div>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontSize:14,fontStyle:'italic',color:C.pink,fontWeight:700,marginBottom:4,fontFamily:"'Dancing Script',cursive"}}>{directorName}</div>
+            <div style={{width:130,height:1,background:C.grey,margin:'4px auto'}}/>
+            <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DIRECTOR & INSTRUCTOR</div>
+          </div>
+        </div>
+
+        {/* Batch info */}
+        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',fontSize:8,color:C.grey,letterSpacing:.5,textAlign:'center',whiteSpace:'nowrap'}}>
+          Batch: {batch?.name} | {batch?.timing} | kajol-makeover-studioz.vercel.app
+        </div>
+      </div>
+    )
+  }
+
+  const printCert = (student) => {
+    const el = document.createElement('div')
+    el.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:10000;display:flex;align-items:center;justify-content:center;'
+    const inner = document.createElement('div')
+    inner.style.width = '80vw'
+    el.appendChild(inner)
+    document.body.appendChild(el)
+
+    // We'll use window.print() with the preview visible
+    setPreview(student)
+    setTimeout(()=>{
+      window.print()
+      document.body.removeChild(el)
+    },300)
+  }
+
+  const sendWhatsApp = (student) => {
+    const msg = `🎓 *Certificate of Completion*
+
+Dear ${student.name},
+
+Congratulations! 🌸 You have successfully completed the *${course?.name||batch?.name}* course at Kajol Makeover Studioz, Pune.
+
+Your certificate has been prepared and will be dispatched to you shortly.
+
+Keep creating beautiful art! 💄🌿🎨
+
+— Kajol Ma'am
+Kajol Makeover Studioz, Pune`
+    window.open(`https://wa.me/91${student.mobile}?text=${encodeURIComponent(msg)}`, '_blank')
+  }
+
+  const sendEmail = (student) => {
+    const subject = `Certificate of Completion — ${course?.name||batch?.name} | Kajol Makeover Studioz`
+    const body = `Dear ${student.name},
+
+Congratulations on successfully completing the ${course?.name||batch?.name} course at Kajol Makeover Studioz, Pune!
+
+Your certificate has been prepared. Please find it attached or collect it from our studio.
+
+Thank you for being a wonderful student!
+
+Best regards,
+Kajol J Kamble
+Kajol Makeover Studioz, Pune
+https://kajol-makeover-studioz.vercel.app`
+    if(student.email) {
+      window.open(`mailto:${student.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`)
+    } else {
+      alert(`No email address saved for ${student.name}. Please update their profile in the Students tab.`)
+    }
+  }
+
+  return (
+    <div>
+      <Card accent={C.purple}>
+        <STitle><Ic n="certificate" size={15} color={C.purple}/> Certificate Generator</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:12}}>Generate, preview and send certificates to students. Print or dispatch by WhatsApp, email, or post.</div>
+
+        <Inp label="Select Batch" value={selBatch} onChange={setSelBatch} opts={data.batches.map(b=>({v:b.id,l:b.name}))}/>
+        <Inp label="Student" value={selStudent} onChange={setSelStudent} opts={[{v:'all',l:'All Students in Batch'},...students.map(s=>({v:s.id,l:s.name}))]}/>
+        <Inp label="Certificate Date" value={certDate} onChange={setCertDate} type="date"/>
+
+        {batch&&course&&(
+          <div style={{background:C.pinkPale,borderRadius:10,padding:'10px 12px',marginBottom:12,fontSize:12}}>
+            📚 Batch: <b>{batch.name}</b> · Course: <b>{course.name}</b> · {students.length} students enrolled
+          </div>
+        )}
+      </Card>
+
+      {/* Batch dispatch actions */}
+      {targetStudents.length>0&&(
+        <Card accent={C.green}>
+          <STitle><Ic n="mailsend" size={15} color={C.green}/> Batch Dispatch ({targetStudents.length} students)</STitle>
+          <div style={{fontSize:12,color:C.grey,marginBottom:12}}>Send congratulation messages to all selected students at once.</div>
+          <Row gap={8} style={{flexWrap:'wrap'}}>
+            <Btn small color={C.wa} onClick={()=>{targetStudents.forEach((s,i)=>{setTimeout(()=>sendWhatsApp(s),i*800)});toast(`WhatsApp opened for ${targetStudents.length} students!`);}}>
+              <Ic n="wa" size={12} color={C.white}/> Send All on WhatsApp
+            </Btn>
+            <Btn small color={C.blue} onClick={()=>{targetStudents.forEach(s=>sendEmail(s));toast('Email compose opened!');}}>
+              <Ic n="mailsend" size={12} color={C.white}/> Email All
+            </Btn>
+          </Row>
+          <div style={{marginTop:10,background:C.greenPale,borderRadius:8,padding:'8px 12px',fontSize:11,color:C.green}}>
+            📬 <b>Post/Courier:</b> Print each certificate (Print button below), write the student's address on envelope, and send via India Post or courier. You can find each student's address in the Students tab.
+          </div>
+        </Card>
+      )}
+
+      {/* Individual student certificates */}
+      {!batch&&<div style={{textAlign:'center',color:C.grey,padding:32,background:C.white,borderRadius:16}}>
+        <div style={{fontSize:36,marginBottom:8}}>🎓</div>
+        <div style={{fontWeight:700}}>Select a batch to generate certificates</div>
+      </div>}
+
+      {targetStudents.map(student=>(
+        <Card key={student.id} accent={C.purple}>
+          <Row style={{justifyContent:'space-between',marginBottom:12}}>
+            <div>
+              <div style={{fontWeight:700,fontSize:15,color:C.dark}}>{student.name}</div>
+              <div style={{fontSize:12,color:C.grey}}>📱 {student.mobile}{student.email&&` · ✉️ ${student.email}`}</div>
+              {student.address&&<div style={{fontSize:11,color:C.grey}}>📍 {student.address}</div>}
+            </div>
+            <div style={{fontSize:32}}>🎓</div>
+          </Row>
+
+          {/* Certificate preview */}
+          <div style={{marginBottom:12,transform:'scale(0.85)',transformOrigin:'top left',width:'117%'}}>
+            <CertSVG student={student}/>
+          </div>
+
+          {/* Actions */}
+          <Row gap={7} style={{flexWrap:'wrap',marginTop:8}}>
+            <Btn small color={C.purple} onClick={()=>{setPreview(student);window.print();}}>
+              🖨️ Print
+            </Btn>
+            <Btn small color={C.wa} onClick={()=>sendWhatsApp(student)}>
+              <Ic n="wa" size={12} color={C.white}/> WhatsApp
+            </Btn>
+            <Btn small color={C.blue} onClick={()=>sendEmail(student)}>
+              <Ic n="mailsend" size={12} color={C.white}/> Email
+            </Btn>
+            <div style={{fontSize:11,color:C.grey,alignSelf:'center',padding:'0 4px'}}>
+              {student.address?`📬 ${student.address}`:'⚠️ No address — add in Students tab for postal dispatch'}
+            </div>
+          </Row>
+        </Card>
+      ))}
+
+      {/* Print styles */}
+      <style>{`@media print{body>*:not(.print-area){display:none!important;}.print-area{display:block!important;}}`}</style>
+    </div>
+  )
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    NAVIGATION CONFIG
 ═══════════════════════════════════════════════════════════════════ */
@@ -2047,10 +2472,12 @@ const TABS=[
   {id:'finance',  label:'Finance',   icon:'chart'},
   {id:'reports',  label:'Reports',   icon:'report'},
   {id:'broadcast',label:'Broadcast', icon:'broadcast'},
+  {id:'portfolio',label:'Portfolio', icon:'portfolio'},
+  {id:'certificate',label:'Certs',  icon:'certificate'},
   {id:'website',  label:'Website',   icon:'globe'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
-const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',website:'Website Editor',settings:'Settings & Admin'}
+const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',portfolio:'Portfolio & Leads',certificate:'Certificates',website:'Website Editor',settings:'Settings & Admin'}
 const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2164,6 +2591,8 @@ function AdminApp() {
                 {tab==='finance'  &&<FinanceTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='reports'  &&<ReportsTab    data={data}/>}
                 {tab==='broadcast'&&<BroadcastTab  data={data} toast={toast}/>}
+                {tab==='portfolio'&&<PortfolioTab    data={data} setData={setData} toast={toast}/>}
+                {tab==='certificate'&&<CertificateTab  data={data} toast={toast}/>}
                 {tab==='website'  &&<WebsiteEditorTab toast={toast}/>}
                 {tab==='settings' &&<SettingsTab   data={data} setData={setData} onLogout={()=>setLoggedIn(false)} toast={toast}/>}
               </>}
