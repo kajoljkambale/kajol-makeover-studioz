@@ -37,7 +37,9 @@ const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ
 const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'
 const PHONE1          = '8390695155'
 const PHONE2          = '7030825125'
-const EMAIL_KAJOL     = 'kajoljkambale@gmail.com'  // Kajol Makeover Studioz playlist
+const EMAIL_KAJOL     = 'kajoljkambale@gmail.com'
+const UPI_ID          = 'kajalkambaleaxis@yesg'
+const UPI_NAME        = 'Kajal Jivan Kamble'  // Kajol Makeover Studioz playlist
 const ADMIN_URL       = '/app'
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -191,8 +193,52 @@ function KMSLogo({ size = 48, light = false }) {
       ))}
     </svg>
   )
+}) {
+  const pk  = light ? '#fff'                : C.pink
+  const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
+  const gn  = light ? 'rgba(255,255,255,0.7)': C.green
+  const dk  = light ? 'rgba(255,255,255,0.9)': C.dark
+  const bg  = light ? 'rgba(255,255,255,0.15)': C.pinkPale
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* ── background circle ── */}
+      <circle cx="50" cy="50" r="48" fill={bg}/>
+      {/* ── Hand / palm ── */}
+      <path d="M34 78 Q32 62 34 50 Q35 44 40 42 L40 28 Q40 24 43.5 24 Q47 24 47 28 L47 42 Q49 40 52 40 Q55 40 55 44 Q57 42 60 42 Q63 42 63 46 Q65 45 67 46 Q70 47 70 52 L70 67 Q70 74 64 78 Q58 82 48 82 L37 82 Q34 82 34 78Z"
+        fill={pk} opacity="0.22" stroke={pk} strokeWidth="2.5"/>
+      {/* ── Fingers ── */}
+      <line x1="40" y1="42" x2="40" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="47" y1="44" x2="47" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="55" y1="45" x2="55" y2="32" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="63" y1="47" x2="63" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
+      {/* ── Makeup brush 1 (angled up-right) ── */}
+      <line x1="50" y1="28" x2="68" y2="10" stroke={dk} strokeWidth="2.5" strokeLinecap="round"/>
+      <ellipse cx="50" cy="27" rx="4.5" ry="8" fill={pk} opacity="0.9" transform="rotate(-40 50 27)"/>
+      <path d="M67 11 Q73 6 71 14 Q69 12 67 11Z" fill={pkD}/>
+      {/* ── Makeup brush 2 (angled up-left) ── */}
+      <line x1="42" y1="28" x2="26" y2="12" stroke={dk} strokeWidth="2" strokeLinecap="round"/>
+      <ellipse cx="42" cy="28" rx="3.5" ry="7" fill={gn} opacity="0.9" transform="rotate(40 42 28)"/>
+      <path d="M27 13 Q21 8 23 15 Q25 13 27 13Z" fill={gn} opacity="0.85"/>
+      {/* ── Mehndi cone in hand ── */}
+      <path d="M25 40 L21 74 Q21 78 25 78 Q29 78 29 74 L25 40Z" fill={gn}/>
+      <path d="M22 40 L28 40 Q31 37 28 32 L25 25 L22 32 Q19 37 22 40Z" fill={gn}/>
+      <line x1="25" y1="78" x2="25" y2="85" stroke={pkD} strokeWidth="1.5" strokeLinecap="round"/>
+      {/* ── Mehndi dots on cone ── */}
+      <circle cx="25" cy="50" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="25" cy="60" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="25" cy="70" r="1.8" fill="rgba(255,255,255,0.7)"/>
+      {/* ── Tiny mehndi flower top-right ── */}
+      {[0,60,120,180,240,300].map((d,i)=>{
+        const rad=(d*Math.PI)/180
+        const x=78+7*Math.cos(rad), y=22+7*Math.sin(rad)
+        return <circle key={i} cx={x} cy={y} r="2.8" fill={pk} opacity="0.55"/>
+      })}
+      <circle cx="78" cy="22" r="3.5" fill={pk} opacity="0.9"/>
+      <circle cx="78" cy="22" r="1.5" fill="#fff" opacity="0.8"/>
+    </svg>
+  )
 }
-  
+
 function LogoMark({ dark: isDark = true }) {
   return (
     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
@@ -585,8 +631,10 @@ export default function Website() {
   const navLinks = [
     {href:'#about',   label:'About'},
     {href:'#courses', label:'Courses'},
+    {href:'#book',    label:'Book Me'},
     {href:'#gallery', label:'Gallery'},
     {href:'#reviews', label:'Reviews'},
+    {href:'#pay',     label:'Pay Fee'},
     {href:'#contact', label:'Contact'},
   ]
 
@@ -773,7 +821,7 @@ export default function Website() {
           <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
           <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
           <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
-            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.')}`}
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Ma\'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.')}`}
               target="_blank" rel="noopener noreferrer"
               style={{padding:'12px 22px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',display:'flex',alignItems:'center',gap:8}}>
               💬 WhatsApp to Book
@@ -802,7 +850,7 @@ export default function Website() {
             items={sc('course_ariwork_items','Mandala & dot art|Canvas painting|Resin art basics|Warli & folk art|DIY home décor projects').split('|')}/>
           <CourseCard emoji="✨" title="Combined Course" color={C.amber}
             desc={sc('course_combined_desc',"Get the best of all three courses at a special bundled fee. Perfect for aspiring freelancers.")}
-            items={sc('course_combined_items',"Mehndi + Makeup + Ariwork|Flexible batch timings|Special bundle pricing|Priority support from Kajol Ma'am|Freelance career guidance").split('|')}/>
+            items={sc('course_combined_items',"Mehndi + Makeup + Ariwork|Flexible batch timings|Special bundle pricing|Priority support from Kajol Maam|Freelance career guidance").split('|')}/>
         </div>
       </Section>
 
@@ -936,6 +984,48 @@ export default function Website() {
           ].map((faq,i)=>(
             <FAQItem key={i} q={faq.q} a={faq.a}/>
           ))}
+        </div>
+      </Section>
+
+
+      {/* ══════════════ UPI PAYMENT ══════════════ */}
+      <Section id="pay" bg={C.white} style={{padding:'48px 16px'}}>
+        <SectionTitle emoji="💳" title="Pay Course Fee" accent
+          subtitle="Secure UPI payment — scan QR or send to UPI ID"/>
+        <div style={{maxWidth:480,margin:'0 auto'}}>
+          <div style={{background:`linear-gradient(135deg,${C.pinkPale},${C.greenPale})`,borderRadius:24,padding:28,textAlign:'center',boxShadow:'0 4px 24px rgba(233,30,140,0.1)',border:`1px solid ${C.pinkPale}`}}>
+            {/* QR Code — hosted image */}
+            <div style={{background:'#fff',borderRadius:16,padding:16,marginBottom:16,display:'inline-block',boxShadow:'0 2px 12px rgba(0,0,0,0.1)'}}>
+              <img
+                src="/upi-qr.jpg"
+                alt="UPI QR Code — Kajal Jivan Kamble"
+                style={{width:200,height:200,display:'block',borderRadius:8}}
+                onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex'}}
+              />
+              {/* Fallback if image not uploaded yet */}
+              <div style={{width:200,height:200,display:'none',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:8,borderRadius:8,background:C.greyL}}>
+                <div style={{fontSize:48}}>📱</div>
+                <div style={{fontSize:12,color:C.grey,textAlign:'center'}}>QR Code<br/>coming soon</div>
+              </div>
+            </div>
+            <div style={{marginBottom:6}}>
+              <div style={{fontSize:18,fontWeight:900,color:C.dark}}>KAJAL JIVAN KAMBLE</div>
+              <div style={{fontSize:13,color:C.grey,marginTop:4}}>UPI ID: <b style={{color:C.dark,userSelect:'all'}}>kajalkambaleaxis@yesg</b></div>
+            </div>
+            <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:14,flexWrap:'wrap'}}>
+              {['Google Pay','PhonePe','Paytm','BHIM'].map(app=>(
+                <span key={app} style={{fontSize:11,background:C.white,borderRadius:8,padding:'4px 10px',color:C.dark,fontWeight:600,border:`1px solid ${C.pinkPale}`}}>{app}</span>
+              ))}
+            </div>
+            <div style={{marginTop:16,background:C.white,borderRadius:12,padding:'12px 16px',fontSize:12,color:C.grey,lineHeight:1.7}}>
+              📌 After payment, please send a screenshot on WhatsApp to confirm your enrollment.
+            </div>
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Maam! I have made the payment for the course. Please find the screenshot attached. Name: [Your Name]')}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginTop:14,padding:'12px 20px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',boxShadow:`0 4px 16px ${C.wa}44`}}>
+              💬 Send Payment Screenshot on WhatsApp
+            </a>
+          </div>
         </div>
       </Section>
 
