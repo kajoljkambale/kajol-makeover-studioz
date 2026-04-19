@@ -63,6 +63,10 @@ async function clearAll() {
 ═══════════════════════════════════════════════════════════════════ */
 const ADMIN_PWD    = 'kajol2024'
 const ENROLL_URL   = 'https://kajol-makeover-studioz.vercel.app/enroll'
+const PHONE1       = '8390695155'
+const PHONE2       = '7030825125'
+const EMAIL_KAJOL  = 'kajoljkambale@gmail.com'
+const UPI_ID       = 'kajoljkambale@upi'  // Update with your real UPI ID
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
 const INSTAGRAM    = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a3h2ZWIzbmM3M3Y3'
 const YOUTUBE      = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
@@ -252,6 +256,55 @@ function ExportModal({data,onClose}) {
    Used in: enrollment form header, admin header, settings
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({size=48,light=false}) {
+  const pk   = light ? '#fff'                   : '#E91E8C'
+  const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
+  const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
+  const hsk  = light ? 'rgba(255,255,255,0.55)' : '#3D1A1A'
+  const bru  = light ? 'rgba(255,255,255,0.88)' : '#4A2C2A'
+  const bh   = light ? 'rgba(255,255,255,0.6)'  : '#8B6B60'
+  const bg   = light ? 'rgba(255,255,255,0.12)' : '#FCE4EC'
+  const h = size * 1.2
+  return (
+    <svg width={size} height={h} viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="120" rx="16" fill={bg} opacity="0.5"/>
+      {/* === BRUSH 1 — left, angled left === */}
+      <rect x="16" y="6" width="9" height="40" rx="4.5" fill={bru} transform="rotate(-20 20 26)"/>
+      <ellipse cx="13" cy="9" rx="7" ry="11" fill={bh} transform="rotate(-20 13 9)"/>
+      <ellipse cx="13" cy="8" rx="4.5" ry="7.5" fill={bru} opacity="0.5" transform="rotate(-20 13 8)"/>
+      <line x1="18" y1="46" x2="16" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      {/* === BRUSH 2 — center, nearly upright === */}
+      <rect x="44" y="4" width="10" height="42" rx="5" fill={bru} transform="rotate(-3 49 25)"/>
+      <ellipse cx="46" cy="7" rx="6" ry="10" fill={bh} transform="rotate(-3 46 7)"/>
+      <ellipse cx="46" cy="6" rx="3.8" ry="7" fill={bru} opacity="0.5" transform="rotate(-3 46 6)"/>
+      <line x1="50" y1="46" x2="50" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      {/* === BRUSH 3 — right, angled right === */}
+      <rect x="70" y="7" width="9" height="38" rx="4.5" fill={bru} transform="rotate(18 74 26)"/>
+      <ellipse cx="76" cy="9" rx="6.5" ry="10" fill={bh} transform="rotate(18 76 9)"/>
+      <ellipse cx="76" cy="8" rx="4" ry="7" fill={bru} opacity="0.5" transform="rotate(18 76 8)"/>
+      <line x1="76" y1="45" x2="77" y2="53" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
+      {/* === HAND / PALM holding brushes === */}
+      <path d="M26 55 Q23 66 24 82 Q24 93 36 95 Q50 99 64 95 Q76 93 76 82 L75 55 Q69 51 63 53 Q56 49 50 53 Q44 49 38 53 Q32 49 26 55Z"
+        fill={hand} stroke={hsk} strokeWidth="2.5"/>
+      {/* Finger/knuckle lines */}
+      <path d="M31 62 Q35 58 39 62" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      <path d="M46 59 Q50 55 54 59" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      <path d="M61 60 Q64 56 67 60" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
+      {/* === NAILS — brand pink matching image === */}
+      <ellipse cx="30"   cy="57" rx="5.5" ry="4"   fill={nail}/>
+      <ellipse cx="50"   cy="54" rx="5.5" ry="3.8" fill={nail}/>
+      <ellipse cx="64.5" cy="55" rx="5" ry="3.5" fill={nail}/>
+      <ellipse cx="75"   cy="58" rx="4.5" ry="3.2" fill={nail}/>
+      {/* Nail highlights */}
+      <ellipse cx="28.5" cy="55.5" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
+      <ellipse cx="48.5" cy="52.8" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
+      <ellipse cx="63"   cy="53.8" rx="1.8" ry="1" fill="rgba(255,255,255,0.45)"/>
+      {/* === Mehndi dot accent on wrist === */}
+      {[0,1,2,3,4].map(i=>(
+        <circle key={i} cx={33+i*8} cy={88} r="1.8" fill={pk} opacity="0.4"/>
+      ))}
+    </svg>
+  )
+}) {
   const pk = light ? '#fff' : '#E91E8C'
   const gn = light ? 'rgba(255,255,255,0.7)' : '#2E7D32'
   const dk = light ? 'rgba(255,255,255,0.9)' : '#1A1A2E'
@@ -587,18 +640,41 @@ function EnrollForm() {
                 <div style={{fontSize:12,fontWeight:700,color:C.grey,marginBottom:10,textTransform:'uppercase',letterSpacing:.5}}>Select Courses (can choose multiple)</div>
                 {courses.map(c=>{
                   const sel=form.selected_courses.includes(c.id)
+                  const [syllOpen,setSyllOpen]=React.useState(false)
                   return (
-                    <div key={c.id} onClick={()=>toggleCourse(c.id)} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',borderRadius:12,marginBottom:8,cursor:'pointer',border:`2px solid ${sel?(c.color||C.pink):C.pinkPale}`,background:sel?(c.color||C.pink)+'12':'#fff',transition:'all .2s'}}>
-                      <div style={{width:22,height:22,borderRadius:6,flexShrink:0,border:`2px solid ${sel?(c.color||C.pink):C.grey}`,background:sel?(c.color||C.pink):'transparent',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                        {sel&&<span style={{color:'#fff',fontSize:14,fontWeight:900}}>✓</span>}
+                    <div key={c.id} style={{borderRadius:14,marginBottom:10,border:`2px solid ${sel?(c.color||C.pink):C.pinkPale}`,background:sel?(c.color||C.pink)+'08':'#fff',overflow:'hidden',transition:'all .2s'}}>
+                      <div onClick={()=>toggleCourse(c.id)} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',cursor:'pointer'}}>
+                        <div style={{width:22,height:22,borderRadius:6,flexShrink:0,border:`2px solid ${sel?(c.color||C.pink):C.grey}`,background:sel?(c.color||C.pink):'transparent',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                          {sel&&<span style={{color:'#fff',fontSize:14,fontWeight:900}}>✓</span>}
+                        </div>
+                        <div style={{flex:1}}>
+                          <div style={{fontWeight:700,fontSize:14,color:C.dark}}>{c.name}</div>
+                          <div style={{fontSize:11,color:C.grey}}>{c.type}{c.fee>0?` · ₹${c.fee}`:''}</div>
+                          {c.description&&<div style={{fontSize:11,color:C.grey,marginTop:2}}>{c.description}</div>}
+                        </div>
+                        {sel&&<span style={{fontSize:18,marginRight:4}}>✅</span>}
                       </div>
-                      <div style={{flex:1}}>
-                        <div style={{fontWeight:700,fontSize:14,color:C.dark}}>{c.name}</div>
-                        <div style={{fontSize:11,color:C.grey}}>{c.type}{c.fee>0?` · ₹${c.fee}`:''}</div>
-                        {c.description&&<div style={{fontSize:11,color:C.grey,marginTop:2}}>{c.description}</div>}
-                        {c.syllabus&&<div style={{fontSize:11,color:c.color||C.pink,marginTop:2,fontWeight:600}}>Syllabus available ✓</div>}
-                      </div>
-                      {sel&&<span style={{fontSize:18}}>✅</span>}
+                      {c.syllabus&&(
+                        <div>
+                          <button onClick={e=>{e.stopPropagation();setSyllOpen(!syllOpen)}} style={{width:'100%',padding:'8px 14px',background:(c.color||C.pink)+'15',border:'none',borderTop:`1px solid ${(c.color||C.pink)}30`,cursor:'pointer',fontSize:12,fontWeight:700,color:c.color||C.pink,fontFamily:'inherit',textAlign:'left',display:'flex',alignItems:'center',gap:6}}>
+                            📋 {syllOpen?'Hide Syllabus ▲':'View Full Syllabus ▼'}
+                          </button>
+                          {syllOpen&&(
+                            <div style={{padding:'12px 14px',background:(c.color||C.pink)+'08',borderTop:`1px solid ${(c.color||C.pink)}20`}}>
+                              <div style={{fontSize:12,fontWeight:700,color:c.color||C.pink,marginBottom:8,textTransform:'uppercase',letterSpacing:.5}}>Course Syllabus</div>
+                              <div style={{fontSize:12,color:C.dark,lineHeight:1.9,whiteSpace:'pre-wrap'}}>{c.syllabus}</div>
+                              {(c.sub_courses||[]).length>0&&(
+                                <div style={{marginTop:10}}>
+                                  <div style={{fontSize:11,fontWeight:700,color:c.color||C.pink,marginBottom:6}}>Included Modules:</div>
+                                  {(c.sub_courses||[]).map((sc,i)=>(
+                                    <div key={i} style={{fontSize:11,color:C.dark,padding:'4px 0',borderBottom:`1px solid ${C.pinkPale}`}}>✦ {sc}</div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )
                 })}
@@ -913,7 +989,7 @@ function StudentsTab({data,setData,toast}) {
   const save = async () => {
     if(!form.name||!form.mobile)return alert('Name and mobile required.')
     setBusy(true)
-    const row={id:form.id||uid(),name:form.name,mobile:form.mobile,email:form.email||'',profession:form.profession||'',address:form.address||'',birthday:form.birthday||null,enrolled_courses:form.enrolled_courses||[],join_date:form.join_date||today()}
+    const row={id:form.id||uid(),name:form.name,mobile:form.mobile,email:form.email||'',profession:form.profession||'',address:form.address||'',birthday:form.birthday||null,enrolled_courses:form.enrolled_courses||[],join_date:form.join_date||today(),created_at:form.created_at||new Date().toISOString()}
     await dbUpsert('students',row)
     setData(d=>({...d,students:form.id?d.students.map(s=>s.id===form.id?{...s,...row}:s):[...d.students,row]}))
     setBusy(false); setModal(null); toast('Student saved!')
@@ -1282,7 +1358,7 @@ function BroadcastTab({data,toast}) {
 function CoursesTab({data,setData,toast}) {
   const [modal,setModal]=useState(null); const [del,setDel]=useState(null)
   const [form,setForm]=useState({}); const [busy,setBusy]=useState(false)
-  const save=async()=>{if(!form.name)return alert('Name required.');setBusy(true);const row={id:form.id||uid(),name:form.name,type:form.type||'Mehndi',color:form.color||C.pink,description:form.description||'',syllabus:form.syllabus||'',fee:Number(form.fee||0)};await dbUpsert('courses',row);setData(d=>({...d,courses:form.id?d.courses.map(c=>c.id===form.id?{...c,...row}:c):[...d.courses,row]}));setBusy(false);setModal(null);toast('Course saved!')}
+  const save=async()=>{if(!form.name)return alert('Name required.');setBusy(true);const row={id:form.id||uid(),name:form.name,type:form.type||'Mehndi',color:form.color||C.pink,description:form.description||'',syllabus:form.syllabus||'',sub_courses:form.sub_courses||[],fee:Number(form.fee||0),created_at:form.created_at||new Date().toISOString()};await dbUpsert('courses',row);setData(d=>({...d,courses:form.id?d.courses.map(c=>c.id===form.id?{...c,...row}:c):[...d.courses,row]}));setBusy(false);setModal(null);toast('Course saved!')}
   const share=c=>{const m=`📚 *${c.name} Syllabus*\n\nType: ${c.type}\nFee: ₹${c.fee||0}\n\n${c.syllabus||'Syllabus coming soon!'}\n\nEnroll: ${ENROLL_URL}\n— Kajol Ma'am 💄`;navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Copied!'))}
   return (
     <div>
@@ -1309,6 +1385,8 @@ function CoursesTab({data,setData,toast}) {
         <Inp label="Fee (₹)" value={form.fee} onChange={v=>setForm(x=>({...x,fee:v}))} type="number"/>
         <Inp label="Short Description" value={form.description} onChange={v=>setForm(x=>({...x,description:v}))}/>
         <Inp label="Syllabus (Day-by-day details)" value={form.syllabus} onChange={v=>setForm(x=>({...x,syllabus:v}))} rows={8} placeholder={`Day 1: Introduction & Basics\nDay 2: Simple Patterns\nDay 3: Floral Designs\n...`}/>
+        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Sub-Courses / Modules (one per line)</div>
+        <textarea rows={3} value={(form.sub_courses||[]).join('\n')} onChange={e=>setForm(x=>({...x,sub_courses:e.target.value.split('\n').filter(s=>s.trim())}))} placeholder={'Basic Mehndi Module\nAdvanced Patterns Module\nBridal Specialization'} style={{width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:10,resize:'vertical'}}/>
         <div style={{marginBottom:12}}><div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:6,textTransform:'uppercase',letterSpacing:.5}}>Color</div><Row gap={10}>{COURSE_COLORS.map(col=><div key={col} onClick={()=>setForm(x=>({...x,color:col}))} style={{width:28,height:28,borderRadius:'50%',background:col,cursor:'pointer',border:`3px solid ${form.color===col?C.dark:'transparent'}`}}/>)}</Row></div>
         <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Save'}</Btn></Row>
       </Modal>}
@@ -1332,7 +1410,7 @@ function BatchesTab({data,setData,toast}) {
   const bClasses=batch?data.classes.filter(c=>c.batch_id===sel).sort((a,b)=>a.day-b.day):[]
   const course=batch?data.courses.find(c=>c.id===batch.course_id):null
 
-  const saveBatch=async()=>{if(!form.name)return alert('Name required.');setBusy(true);const row={id:form.id||uid(),name:form.name,course_id:form.course_id||'',schedule:form.schedule||'Daily',duration:form.duration||'10 Days',start_date:form.start_date||today(),end_date:form.end_date||'',timing:form.timing||'',status:form.status||'Active',fee:Number(form.fee||0),zoom_link:form.zoom_link||'',zoom_id:form.zoom_id||'',wa_group:form.wa_group||'',student_ids:form.student_ids||[]};await dbUpsert('batches',row);setData(d=>({...d,batches:form.id?d.batches.map(b=>b.id===form.id?{...b,...row}:b):[...d.batches,row]}));if(!form.id)setSel(row.id);setBusy(false);setModal(null);toast('Batch saved!')}
+  const saveBatch=async()=>{if(!form.name)return alert('Name required.');setBusy(true);const row={id:form.id||uid(),name:form.name,course_id:form.course_id||'',schedule:form.schedule||'Daily',duration:form.duration||'10 Days',start_date:form.start_date||today(),end_date:form.end_date||'',timing:form.timing||'',status:form.status||'Active',fee:Number(form.fee||0),zoom_link:form.zoom_link||'',zoom_id:form.zoom_id||'',wa_group:form.wa_group||'',student_ids:form.student_ids||[],created_at:form.created_at||new Date().toISOString()};await dbUpsert('batches',row);setData(d=>({...d,batches:form.id?d.batches.map(b=>b.id===form.id?{...b,...row}:b):[...d.batches,row]}));if(!form.id)setSel(row.id);setBusy(false);setModal(null);toast('Batch saved!')}
   const saveClass=async()=>{if(!cf.topic)return alert('Topic required.');setBusy(true);const row={id:cf.id||uid(),batch_id:sel,day:Number(cf.day||1),topic:cf.topic,date:cf.date||today(),zoom_link:cf.zoom_link||'',youtube_link:cf.youtube_link||'',youtube_status:cf.youtube_status||'Pending',homework:cf.homework||'',notes:cf.notes||'',attendees:cf.attendees||[]};await dbUpsert('classes',row);setData(d=>({...d,classes:cf.id?d.classes.map(c=>c.id===cf.id?{...c,...row}:c):[...d.classes,row]}));setBusy(false);setModal(null);toast('Class saved!')}
   const toggleHW=async(classId,studentId,cur)=>{const ex=data.homeworkCompliance.find(h=>h.class_id===classId&&h.student_id===studentId);if(ex){const u={...ex,submitted:!cur,date:today()};await dbUpsert('homework_compliance',u);setData(d=>({...d,homeworkCompliance:d.homeworkCompliance.map(h=>h.id===ex.id?u:h)}))}else{const row={id:uid(),class_id:classId,student_id:studentId,submitted:true,note:'',date:today()};await dbUpsert('homework_compliance',row);setData(d=>({...d,homeworkCompliance:[...d.homeworkCompliance,row]}))}}
 
@@ -1533,7 +1611,7 @@ function PaymentsTab({data,setData,toast}) {
   const [form,setForm]=useState({}); const [busy,setBusy]=useState(false)
   const [fb,setFb]=useState('all'); const [fs,setFs]=useState('all')
   const filtered=data.payments.filter(p=>(fb==='all'||p.batch_id===fb)&&(fs==='all'||p.student_id===fs))
-  const save=async()=>{if(!form.amount||!form.paid)return alert('Amount required.');setBusy(true);const row={id:form.id||uid(),student_id:form.student_id||data.students[0]?.id,batch_id:form.batch_id||data.batches[0]?.id,amount:Number(form.amount),paid:Number(form.paid),type:form.type||'Full',date:form.date||today(),note:form.note||''};await dbUpsert('payments',row);setData(d=>({...d,payments:form.id?d.payments.map(p=>p.id===form.id?{...p,...row}:p):[...d.payments,row]}));setBusy(false);setModal(null);toast('Payment saved!')}
+  const save=async()=>{if(!form.amount||!form.paid)return alert('Amount required.');setBusy(true);const row={id:form.id||uid(),student_id:form.student_id||data.students[0]?.id,batch_id:form.batch_id||data.batches[0]?.id,amount:Number(form.amount),paid:Number(form.paid),type:form.type||'Full',date:form.date||today(),note:form.note||'',created_at:form.created_at||new Date().toISOString()};await dbUpsert('payments',row);setData(d=>({...d,payments:form.id?d.payments.map(p=>p.id===form.id?{...p,...row}:p):[...d.payments,row]}));setBusy(false);setModal(null);toast('Payment saved!')}
   return (
     <div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
@@ -1686,7 +1764,15 @@ function SettingsTab({data,setData,onLogout,toast}) {
       <Card><div style={{textAlign:'center',padding:'8px 0 16px'}}><div style={{fontSize:48,marginBottom:8}}>💄</div><div style={{fontSize:18,fontWeight:900,color:C.dark}}>Kajol Makeover Studioz</div><div style={{fontSize:12,color:C.grey,marginTop:4}}>Version 3.1 · Cloud Edition</div></div></Card>
       <Card accent={C.pink}><STitle><Ic n="link" size={15} color={C.pink}/> Enrollment Form</STitle><div style={{background:C.pinkPale,borderRadius:10,padding:'8px 12px',fontSize:12,fontWeight:700,wordBreak:'break-all',marginBottom:10}}>🔗 {ENROLL_URL}</div><Row gap={8}><Btn small onClick={()=>{navigator.clipboard?.writeText(ENROLL_URL);toast('Copied!')}}>Copy</Btn><a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small outline>Open</Btn></a></Row></Card>
       <Card><STitle><Ic n="info" size={15} color={C.green}/> Database</STitle>{[['Students',data.students.length],['Courses',data.courses.length],['Batches',data.batches.length],['Classes',data.classes.length],['Payments',data.payments.length],['Orders',data.orders.length],['Expenses',data.expenses.length],['Enroll Requests',(data.enrollmentRequests||[]).length]].map(([l,v])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700}}>{v}</span></div>)}</Card>
-      <Card><STitle><Ic n="upload" size={15} color={C.blue}/> Backup</STitle><Btn color={C.blue} onClick={exportData} full><Ic n="upload" size={14} color={C.white}/>Export All Data (JSON)</Btn></Card>
+      <Card accent={C.green}><STitle><Ic n="rupee" size={15} color={C.green}/> UPI Payment Info</STitle>
+    <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Share UPI details with students for fee payment</div>
+    <div style={{background:C.greenPale,borderRadius:10,padding:12,marginBottom:10}}>
+      <div style={{fontSize:13,fontWeight:700,color:C.green}}>📱 Google Pay / PhonePe / Paytm</div>
+      <div style={{fontSize:15,fontWeight:900,color:C.dark,marginTop:4}}>8390695155</div>
+      <div style={{fontSize:12,color:C.grey,marginTop:2}}>Kajol J Kamble</div>
+    </div>
+    <Row gap={8}><Btn small color={C.wa} onClick={()=>{const m='💳 *Fee Payment — Kajol Makeover Studioz*\n\nPlease pay your course fee via UPI:\n📱 *8390695155* (Google Pay / PhonePe / Paytm)\nName: Kajol J Kamble\n\nPlease share payment screenshot after payment. 🙏\n— Kajol Ma'am';navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Payment info copied!'))}}>Share UPI Details</Btn></Row></Card>
+  <Card><STitle><Ic n="upload" size={15} color={C.blue}/> Backup</STitle><Btn color={C.blue} onClick={exportData} full><Ic n="upload" size={14} color={C.white}/>Export All Data (JSON)</Btn></Card>
       <Card accent={C.red}><STitle><Ic n="alert" size={15} color={C.red}/> Danger Zone</STitle><div style={{fontSize:12,color:C.grey,marginBottom:12}}>Permanently delete all records. Cannot be undone.</div><Btn color={C.red} onClick={()=>{setPwd('');setErr('');setModal('clear')}} full><Ic n="del" size={14} color={C.white}/>Clear All App Data</Btn><Btn outline onClick={onLogout} full style={{marginTop:10}}><Ic n="lock" size={14} color={C.pink}/>Logout</Btn></Card>
       {modal==='clear'&&<Modal onClose={()=>setModal(null)} title={<><Ic n="alert" size={16} color={C.red}/> Clear All Data</>}>
         <div style={{background:C.red+'12',borderRadius:10,padding:12,marginBottom:14,fontSize:13,color:C.red}}>⚠️ This will permanently delete ALL records from the database. This CANNOT be undone.</div>
@@ -2237,6 +2323,7 @@ function CertificateTab({data,toast}) {
   const [selStudent,setSelStudent]=useState('all')
   const [certDate,setCertDate]=useState(today())
   const [directorName]=useState('Kajol J Kamble')
+  const SIGNATURE_STYLE={fontFamily:"'Dancing Script',Georgia,'Times New Roman',serif",fontSize:20,fontStyle:'italic',color:C.pink,fontWeight:700}
   const [preview,setPreview]=useState(null)
   const certRef=useRef()
 
@@ -2249,7 +2336,7 @@ function CertificateTab({data,toast}) {
   const CertSVG = ({student}) => {
     const courseEmoji = course?.type==='Mehndi'?'🌿':course?.type==='Makeup'?'💄':'🎨'
     return (
-      <div ref={certRef} style={{
+      <div id={'cert_'+student.id} ref={certRef} style={{
         width:'100%',maxWidth:700,margin:'0 auto',
         background:'linear-gradient(135deg,#fff9fc 0%,#fff 50%,#f0fdf4 100%)',
         border:'8px solid transparent',
@@ -2309,7 +2396,7 @@ function CertificateTab({data,toast}) {
             <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DATE</div>
           </div>
           <div style={{textAlign:'center'}}>
-            <div style={{fontSize:14,fontStyle:'italic',color:C.pink,fontWeight:700,marginBottom:4,fontFamily:"'Dancing Script',cursive"}}>{directorName}</div>
+            <div style={{fontFamily:"'Dancing Script',Georgia,serif",fontSize:19,color:C.pink,fontWeight:700,letterSpacing:.5,marginBottom:4}}>{directorName}</div>
             <div style={{width:130,height:1,background:C.grey,margin:'4px auto'}}/>
             <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DIRECTOR & INSTRUCTOR</div>
           </div>
@@ -2436,8 +2523,19 @@ https://kajol-makeover-studioz.vercel.app`
 
           {/* Actions */}
           <Row gap={7} style={{flexWrap:'wrap',marginTop:8}}>
-            <Btn small color={C.purple} onClick={()=>{setPreview(student);window.print();}}>
-              🖨️ Print
+            <Btn small color={C.purple} onClick={()=>{
+              // Open print dialog — user can Save as PDF from browser print dialog
+              const printWin=window.open('','_blank','width=800,height=600')
+              if(!printWin) return
+              const certEl=document.getElementById('cert_'+student.id)
+              if(certEl){
+                printWin.document.write('<html><head><title>Certificate — '+student.name+'</title><style>@import url(https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap);body{margin:0;padding:20px;font-family:Georgia,serif;background:#fff;}@media print{body{padding:0;}}</style></head><body>'+certEl.innerHTML+'</body></html>')
+                printWin.document.close()
+                printWin.focus()
+                setTimeout(()=>{printWin.print();},500)
+              }else{window.print()}
+            }}>
+              📄 Save as PDF / Print
             </Btn>
             <Btn small color={C.wa} onClick={()=>sendWhatsApp(student)}>
               <Ic n="wa" size={12} color={C.white}/> WhatsApp
@@ -2472,12 +2570,12 @@ const TABS=[
   {id:'finance',  label:'Finance',   icon:'chart'},
   {id:'reports',  label:'Reports',   icon:'report'},
   {id:'broadcast',label:'Broadcast', icon:'broadcast'},
-  {id:'portfolio',label:'Portfolio', icon:'portfolio'},
+  {id:'leads',    label:'Leads',     icon:'portfolio'},
   {id:'certificate',label:'Certs',  icon:'certificate'},
   {id:'website',  label:'Website',   icon:'globe'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
-const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',portfolio:'Portfolio & Leads',certificate:'Certificates',website:'Website Editor',settings:'Settings & Admin'}
+const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Individual Orders & Leads',certificate:'Certificates',website:'Website Editor',settings:'Settings & Admin'}
 const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2591,7 +2689,7 @@ function AdminApp() {
                 {tab==='finance'  &&<FinanceTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='reports'  &&<ReportsTab    data={data}/>}
                 {tab==='broadcast'&&<BroadcastTab  data={data} toast={toast}/>}
-                {tab==='portfolio'&&<PortfolioTab    data={data} setData={setData} toast={toast}/>}
+                {tab==='leads'    &&<PortfolioTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='certificate'&&<CertificateTab  data={data} toast={toast}/>}
                 {tab==='website'  &&<WebsiteEditorTab toast={toast}/>}
                 {tab==='settings' &&<SettingsTab   data={data} setData={setData} onLogout={()=>setLoggedIn(false)} toast={toast}/>}
