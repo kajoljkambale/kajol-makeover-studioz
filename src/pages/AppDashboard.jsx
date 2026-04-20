@@ -826,7 +826,7 @@ function Dashboard({data,setTab}) {
             <div><div style={{fontWeight:700,fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:C.grey}}>{s.batch}</div></div>
             <div style={{textAlign:'right'}}>
               <div style={{fontSize:13,fontWeight:700,color:C.amber}}>Due: {fmt(s.due)}</div>
-              <a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent(`Hi ${s.name}! Gentle reminder: payment of ${fmt(s.due)} for ${s.batch} is pending. — Kajol Ma'am 💄`)}`} target="_blank" rel="noopener noreferrer" style={{fontSize:11,color:C.wa,textDecoration:'none',display:'flex',alignItems:'center',gap:3,justifyContent:'flex-end',marginTop:3}}>
+              <a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent('Hi '+s.name+'! Gentle reminder: payment of '+fmt(s.due)+' for '+s.batch+' is pending. — Kajol Maam 💄')}`} target="_blank" rel="noopener noreferrer" style={{fontSize:11,color:C.wa,textDecoration:'none',display:'flex',alignItems:'center',gap:3,justifyContent:'flex-end',marginTop:3}}>
                 <Ic n="wa" size={11} color={C.wa}/> Remind
               </a>
             </div>
@@ -941,7 +941,7 @@ function EnrollmentTab({data,setData,toast}) {
               <Btn small color={C.green} onClick={()=>approve(req)} disabled={busy}><Ic n="check" size={13} color={C.white}/>Approve & Add</Btn>
               <Btn small outline onClick={()=>{setForm({...req,enrolled_courses:req.selected_courses||[]});setModal('edit_'+req.id)}}>✏️ Edit & Approve</Btn>
               <Btn small color={C.red} onClick={()=>reject(req)}>Reject</Btn>
-              <a href={`https://wa.me/91${req.mobile}?text=${encodeURIComponent(`Hi ${req.name}! 🌸 We received your enrollment request for Kajol Makeover Studioz. We will contact you shortly with batch details.\n\n— Kajol Ma'am 💄`)}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
+              <a href={`https://wa.me/91${req.mobile}?text=${encodeURIComponent('Hi '+req.name+'! 🌸 We received your enrollment request for Kajol Makeover Studioz. We will contact you shortly with batch details.\n\n— Kajol Maam 💄')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
                 <Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>Contact</Btn>
               </a>
             </Row>}
@@ -1455,7 +1455,7 @@ function BatchesTab({data,setData,toast}) {
             <Card key={s.id}><Row style={{justifyContent:'space-between'}}>
               <div><div style={{fontWeight:700,fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:C.grey}}>📱 {s.mobile}</div></div>
               <div style={{textAlign:'right'}}><div style={{fontSize:13,fontWeight:700,color:C.green}}>{fmt(paid)}</div>
-              {total>paid&&<><div style={{fontSize:11,color:C.amber}}>Due: {fmt(total-paid)}</div><a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent(`Hi ${s.name}! Payment of ${fmt(total-paid)} pending for ${batch.name}. — Kajol Ma'am 💄`)}`} target="_blank" rel="noopener noreferrer" style={{fontSize:11,color:C.wa,textDecoration:'none',display:'flex',alignItems:'center',gap:3,justifyContent:'flex-end',marginTop:2}}><Ic n="wa" size={11} color={C.wa}/> Remind</a></>}
+              {total>paid&&<><div style={{fontSize:11,color:C.amber}}>Due: {fmt(total-paid)}</div><a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent('Hi '+s.name+'! Payment of '+fmt(total-paid)+' pending for '+batch.name+'. — Kajol Maam 💄')}`} target="_blank" rel="noopener noreferrer" style={{fontSize:11,color:C.wa,textDecoration:'none',display:'flex',alignItems:'center',gap:3,justifyContent:'flex-end',marginTop:2}}><Ic n="wa" size={11} color={C.wa}/> Remind</a></>}
               </div>
             </Row></Card>
           )})}
@@ -1632,7 +1632,7 @@ function PaymentsTab({data,setData,toast}) {
           <Row style={{justifyContent:'space-between',marginBottom:6}}><div><div style={{fontWeight:700,fontSize:14}}>{s?.name||'Unknown'}</div><div style={{fontSize:12,color:C.grey}}>{b?.name}</div></div><Badge color={p.type==='Full'?C.green:C.amber}>{p.type}</Badge></Row>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,marginBottom:8}}>{[['Fee',fmt(p.amount),C.dark],['Paid',fmt(p.paid),C.green],['Due',fmt(due),due>0?C.amber:C.green]].map(([l,v,c])=><div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 8px',textAlign:'center'}}><div style={{fontSize:10,color:c}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:c}}>{v}</div></div>)}</div>
           <div style={{fontSize:11,color:C.grey,marginBottom:6}}>📅 {p.date}{p.note&&` · ${p.note}`}</div>
-          {due>0&&s&&<a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent(`Hi ${s.name}! Gentle reminder: payment of ${fmt(due)} pending for ${b?.name||'your course'}. — Kajol Ma'am 💄`)}`} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.wa,display:'flex',alignItems:'center',gap:5,marginBottom:8,textDecoration:'none'}}><Ic n="wa" size={13} color={C.wa}/> Send Payment Reminder</a>}
+          {due>0&&s&&<a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent('Hi '+s.name+'! Gentle reminder: payment of '+fmt(due)+' pending for '+(b?.name||'your course')+'. — Kajol Maam 💄')}`} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.wa,display:'flex',alignItems:'center',gap:5,marginBottom:8,textDecoration:'none'}}><Ic n="wa" size={13} color={C.wa}/> Send Payment Reminder</a>}
           <Row gap={7}><Btn small outline onClick={()=>{setForm({...p});setModal('edit_'+p.id)}}>✏️</Btn><Btn small color={C.red} onClick={()=>setDel(p)}>🗑️</Btn></Row>
           {modal===('edit_'+p.id)&&<Modal onClose={()=>setModal(null)} title="Edit Payment">
             <Inp label="Amount(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
@@ -1697,7 +1697,7 @@ function OrdersTab({data,setData,toast}) {
             <select value={o.status} onChange={async e=>{const u={...o,status:e.target.value};await dbUpsert('orders',u);setData(d=>({...d,orders:d.orders.map(x=>x.id===o.id?u:x)}));toast('Updated.')}} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
               {['Pending','In Progress','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
             </select>
-            {o.mobile&&due>0&&<a href={`https://wa.me/91${o.mobile}?text=${encodeURIComponent(`Hi ${o.client}! Payment of ${fmt(due)} pending for your ${o.type} booking. — Kajol Makeover Studioz 💄`)}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>Remind</Btn></a>}
+            {o.mobile&&due>0&&<a href={`https://wa.me/91${o.mobile}?text=${encodeURIComponent('Hi '+o.client+'! Payment of '+fmt(due)+' pending for your '+o.type+' booking. — Kajol Makeover Studioz 💄')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>Remind</Btn></a>}
             <Btn small color={C.red} onClick={()=>setDel(o)}>🗑️</Btn>
           </Row>
           {modal===('edit_'+o.id)&&<Modal onClose={()=>setModal(null)} title="Edit Order"><Inp label="Client" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/><Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/><Inp label="Type" value={form.type} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/><Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Charge(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/><Inp label="Status" value={form.status} onChange={v=>setForm(x=>({...x,status:v}))} opts={['Pending','In Progress','Completed','Cancelled']}/><Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/><ExpRow/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
@@ -2261,11 +2261,7 @@ function PortfolioTab({data,setData,toast}) {
 
             <Row gap={7} style={{flexWrap:'wrap'}}>
               <Btn small outline onClick={()=>{setForm({...lead});setModal('form')}}>✏️ Edit</Btn>
-              <a href={`https://wa.me/91${lead.mobile}?text=${encodeURIComponent(`Hi ${lead.client}! 🌸 Thank you for your enquiry for ${lead.type} services. I am Kajol from Kajol Makeover Studioz, Pune. Let me share my portfolio and discuss your requirements.
-
-📸 Instagram: https://www.instagram.com/kajol_makeover_studioz
-
-Looking forward to making your occasion special! 💄`)}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
+              <a href={`https://wa.me/91${lead.mobile}?text=${encodeURIComponent('Hi '+lead.client+'! 🌸 Thank you for your enquiry for '+lead.type+' services. I am Kajol from Kajol Makeover Studioz, Pune. Let me share my portfolio and discuss your requirements.\n\n📸 Instagram: https://www.instagram.com/kajol_makeover_studioz\n\nLooking forward to making your occasion special! 💄')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
                 <Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>WhatsApp</Btn>
               </a>
               {lead.mobile&&<a href={`tel:+91${lead.mobile}`} style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="phone2" size={12} color={C.white}/>Call</Btn></a>}
