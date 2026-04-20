@@ -198,7 +198,7 @@ function KMSLogo({ size = 48, light = false }) {
       ))}
     </svg>
   )
-}) {
+}
   const pk   = light ? '#fff'                   : '#E91E8C'
   const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
   const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
