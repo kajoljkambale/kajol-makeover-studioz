@@ -256,6 +256,66 @@ function ExportModal({data,onClose}) {
    Used in: enrollment form header, admin header, settings
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({size=48,light=false}) {
+  /* Exact match to reference image: hand with 4 brushes, orange-red nails
+     Colors match brand: pink E91E8C, green 2E7D32, dark handle 3D2218 */
+  const nail = light ? 'rgba(255,180,190,0.95)' : '#E91E8C'
+  const hand = light ? 'rgba(255,255,255,0.93)' : '#FAEAE0'
+  const hsk  = light ? 'rgba(255,255,255,0.45)' : '#2D1008'
+  const bru  = light ? 'rgba(255,255,255,0.9)'  : '#3D2218'
+  const bh   = light ? 'rgba(255,255,255,0.65)' : '#7A5040'
+  const bhl  = light ? 'rgba(255,255,255,0.4)'  : '#A07868'
+  const bg   = light ? 'rgba(255,255,255,0.1)'  : '#FCE4EC'
+  return (
+    <svg width={size} height={size*1.28} viewBox="0 0 100 128" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+      <rect width="100" height="128" rx="14" fill={bg} opacity="0.45"/>
+      {/* BRUSH 1 — far left, strong left angle */}
+      <rect x="5" y="2" width="11" height="45" rx="5.5" fill={bru} transform="rotate(-30 10 24)"/>
+      <ellipse cx="4"  cy="5"  rx="8" ry="12.5" fill={bh}  transform="rotate(-30 4 5)"/>
+      <ellipse cx="4"  cy="4"  rx="5" ry="8.5"  fill={bhl} transform="rotate(-30 4 4)" opacity="0.7"/>
+      <rect    x="2"  y="1"   width="4" height="6" rx="2" fill={bru} transform="rotate(-30 4 4)" opacity="0.5"/>
+      <line x1="8"  y1="48" x2="5"  y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      {/* BRUSH 2 — left-center, mild left tilt */}
+      <rect x="27" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(-12 32 23)"/>
+      <ellipse cx="26" cy="4"  rx="7.5" ry="12" fill={bh}  transform="rotate(-12 26 4)"/>
+      <ellipse cx="26" cy="3"  rx="4.5" ry="8"  fill={bhl} transform="rotate(-12 26 3)" opacity="0.7"/>
+      <rect    x="24" y="1"   width="4" height="6" rx="2" fill={bru} transform="rotate(-12 26 4)" opacity="0.5"/>
+      <line x1="32" y1="48" x2="30" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      {/* BRUSH 3 — right-center, mild right tilt */}
+      <rect x="55" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(8 60 23)"/>
+      <ellipse cx="62" cy="3"  rx="7.5" ry="12" fill={bh}  transform="rotate(8 62 3)"/>
+      <ellipse cx="62" cy="2"  rx="4.5" ry="8"  fill={bhl} transform="rotate(8 62 2)" opacity="0.7"/>
+      <rect    x="59" y="0"   width="4" height="6" rx="2" fill={bru} transform="rotate(8 61 3)" opacity="0.5"/>
+      <line x1="62" y1="48" x2="64" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      {/* BRUSH 4 — far right, strong right angle */}
+      <rect x="77" y="3" width="10" height="43" rx="5" fill={bru} transform="rotate(26 82 24)"/>
+      <ellipse cx="85" cy="6"  rx="7" ry="11" fill={bh}  transform="rotate(26 85 6)"/>
+      <ellipse cx="85" cy="5"  rx="4" ry="7.5" fill={bhl} transform="rotate(26 85 5)" opacity="0.7"/>
+      <line x1="83" y1="46" x2="86" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
+      {/* HAND — clenched fist from below holding brushes */}
+      <path d="M16 62 Q12 74 14 90 Q14 103 30 107 Q50 112 70 107 Q86 103 86 90 L85 62 Q78 57 70 60 Q62 55 54 60 Q45 55 36 60 Q26 56 16 62Z"
+        fill={hand} stroke={hsk} strokeWidth="2.8"/>
+      {/* Knuckle crease lines */}
+      <path d="M20 70 Q26 65 32 70" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M38 66 Q45 61 52 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M58 66 Q64 61 70 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M74 69 Q79 64 83 69" stroke={hsk} strokeWidth="1.1" fill="none" opacity="0.28"/>
+      {/* NAILS — brand pink, wide at top of fist */}
+      <ellipse cx="26"   cy="64" rx="6.5" ry="4.5" fill={nail}/>
+      <ellipse cx="45"   cy="61" rx="6.5" ry="4.2" fill={nail}/>
+      <ellipse cx="64"   cy="61" rx="6"   ry="4"   fill={nail}/>
+      <ellipse cx="80"   cy="63" rx="5.5" ry="3.8" fill={nail}/>
+      {/* Nail highlight shine */}
+      <ellipse cx="24.5" cy="62.5" rx="2.5" ry="1.5" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="43.5" cy="59.5" rx="2.5" ry="1.4" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="62.5" cy="59.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="78.5" cy="61.5" rx="2"   ry="1.2" fill="rgba(255,255,255,0.55)"/>
+      {/* Mehndi wrist dots */}
+      {[0,1,2,3,4,5].map(ix=>(
+        <circle key={ix} cx={26+ix*9} cy={100} r="2.2" fill={nail} opacity="0.38"/>
+      ))}
+    </svg>
+  )
+}) {
   const pk   = light ? '#fff'                   : '#E91E8C'
   const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
   const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
@@ -1627,660 +1687,292 @@ function PaymentsTab({data,setData,toast}) {
 /* ═══════════════════════════════════════════════════════════════════
    ORDERS TAB
 ═══════════════════════════════════════════════════════════════════ */
-function OrdersTab({data,setData,toast}) {
-  const [modal,setModal]=useState(null); const [del,setDel]=useState(null)
-  const [form,setForm]=useState({}); const [exp,setExp]=useState({desc:'',amt:''}); const [busy,setBusy]=useState(false)
-  const save=async()=>{if(!form.client||!form.amount)return alert('Client and charge required.');setBusy(true);const row={id:form.id||uid(),type:form.type||'Mehndi',client:form.client,mobile:form.mobile||'',date:form.date||today(),amount:Number(form.amount),paid:Number(form.paid||0),status:form.status||'Pending',notes:form.notes||'',order_expenses:form.order_expenses||[]};await dbUpsert('orders',row);setData(d=>({...d,orders:form.id?d.orders.map(o=>o.id===form.id?{...o,...row}:o):[...d.orders,row]}));setBusy(false);setModal(null);toast('Order saved!')}
-  const tc=t=>t==='Mehndi'?C.green:t==='Makeup'?C.pink:C.purple
-  const ExpRow=()=><>
-    <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:6}}>Order Expenses</div>
-    {(form.order_expenses||[]).map((e,i)=><Row key={i} gap={6} style={{marginBottom:5}}><div style={{fontSize:12,flex:1,background:C.greyL,borderRadius:8,padding:'5px 8px'}}>{e.desc} — ₹{e.amt}</div><Btn small color={C.red} onClick={()=>setForm(x=>({...x,order_expenses:x.order_expenses.filter((_,j)=>j!==i)}))}>×</Btn></Row>)}
-    <Row gap={6} style={{marginBottom:12}}>
-      <input value={exp.desc} onChange={e=>setExp(x=>({...x,desc:e.target.value}))} placeholder="e.g. Mehndi cones" style={{flex:2,padding:'7px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none'}}/>
-      <input value={exp.amt} onChange={e=>setExp(x=>({...x,amt:e.target.value}))} placeholder="₹" type="number" style={{flex:1,padding:'7px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none'}}/>
-      <Btn small onClick={()=>{if(exp.desc&&exp.amt){setForm(x=>({...x,order_expenses:[...(x.order_expenses||[]),{...exp}]}));setExp({desc:'',amt:''})}}}><Ic n="add" size={13} color={C.white}/></Btn>
-    </Row>
-  </>
-  return (
-    <div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:9,marginBottom:14}}>
-        <StatBox label="Revenue" value={fmt(data.orders.reduce((s,o)=>s+Number(o.paid),0))} color={C.green} icon="rupee"/>
-        <StatBox label="Expenses" value={fmt(data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0))} color={C.amber} icon="expenses"/>
-        <StatBox label="Pending" value={data.orders.filter(o=>o.status==='Pending').length} color={C.red} icon="order"/>
-      </div>
-      <Row style={{justifyContent:'space-between',marginBottom:12}}>
-        <STitle><Ic n="order" size={15} color={C.teal}/> Individual Orders</STitle>
-        <Btn small onClick={()=>{setForm({type:'Mehndi',client:'',mobile:'',date:today(),amount:'',paid:'',status:'Pending',notes:'',order_expenses:[]});setExp({desc:'',amt:''});setModal('add')}}><Ic n="add" size={14} color={C.white}/>New</Btn>
-      </Row>
-      {data.orders.map(o=>{const due=Number(o.amount)-Number(o.paid);const oExp=(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0);return(
-        <Card key={o.id} accent={tc(o.type)}>
-          <Row style={{justifyContent:'space-between',marginBottom:6}}><div><div style={{fontWeight:700,fontSize:14}}>{o.client}</div><div style={{fontSize:12,color:C.grey}}>📱 {o.mobile} · {fmtDate(o.date)}</div>{o.notes&&<div style={{fontSize:11,color:C.grey}}>{o.notes}</div>}</div><div style={{textAlign:'right'}}><Badge color={tc(o.type)}>{o.type}</Badge><div style={{marginTop:4}}><Badge color={o.status==='Completed'?C.green:o.status==='Cancelled'?C.red:C.amber}>{o.status}</Badge></div></div></Row>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:5,marginBottom:8}}>{[['Charge',fmt(o.amount),C.dark],[due>0?'Due':'Paid',due>0?fmt(due):fmt(o.paid),due>0?C.amber:C.green],['Exp.',fmt(oExp),C.red],['Profit',fmt(Number(o.paid)-oExp),(Number(o.paid)-oExp)>=0?C.green:C.red]].map(([l,v,c])=><div key={l} style={{background:C.greyL,borderRadius:8,padding:'5px 6px',textAlign:'center'}}><div style={{fontSize:9,color:C.grey}}>{l}</div><div style={{fontSize:12,fontWeight:700,color:c}}>{v}</div></div>)}</div>
-          {(o.order_expenses||[]).length>0&&<div style={{background:'#FFF3E0',borderRadius:8,padding:'7px 10px',marginBottom:8}}>{(o.order_expenses||[]).map((e,i)=><div key={i} style={{fontSize:11,display:'flex',justifyContent:'space-between'}}><span>{e.desc}</span><span style={{fontWeight:700}}>₹{e.amt}</span></div>)}</div>}
-          <Row gap={7} style={{flexWrap:'wrap'}}>
-            <Btn small outline onClick={()=>{setForm({...o,order_expenses:[...(o.order_expenses||[])]});setExp({desc:'',amt:''});setModal('edit_'+o.id)}}>✏️</Btn>
-            <select value={o.status} onChange={async e=>{const u={...o,status:e.target.value};await dbUpsert('orders',u);setData(d=>({...d,orders:d.orders.map(x=>x.id===o.id?u:x)}));toast('Updated.')}} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
-              {['Pending','In Progress','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
-            </select>
-            {o.mobile&&due>0&&<a href={`https://wa.me/91${o.mobile}?text=${encodeURIComponent('Hi '+o.client+'! Payment of '+fmt(due)+' pending for your '+o.type+' booking. — Kajol Makeover Studioz 💄')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>Remind</Btn></a>}
-            <Btn small color={C.red} onClick={()=>setDel(o)}>🗑️</Btn>
-          </Row>
-          {modal===('edit_'+o.id)&&<Modal onClose={()=>setModal(null)} title="Edit Order"><Inp label="Client" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/><Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/><Inp label="Type" value={form.type} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/><Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Charge(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/><Inp label="Status" value={form.status} onChange={v=>setForm(x=>({...x,status:v}))} opts={['Pending','In Progress','Completed','Cancelled']}/><Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/><ExpRow/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
-        </Card>
-      )})}
-      {modal==='add'&&<Modal onClose={()=>setModal(null)} title="New Order"><Inp label="Client Name *" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/><Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/><Inp label="Type" value={form.type||'Mehndi'} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/><Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Charge(₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/><Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/><ExpRow/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.teal} onClick={save} full disabled={busy}>{busy?'…':'Add Order'}</Btn></Row></Modal>}
-      {del&&<DelConfirm item={`order for ${del.client}`} onConfirm={async()=>{await dbDelete('orders',del.id);setData(d=>({...d,orders:d.orders.filter(o=>o.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
-    </div>
-  )
-}
 
 /* ═══════════════════════════════════════════════════════════════════
-   FINANCE + REPORTS + SETTINGS  (compact inline)
+   LEADS & ORDERS TAB — merged: individual artist bookings (Pune)
+   + commercial orders with expense tracking
+   All stored in "orders" table; portfolio_lead flag separates them
 ═══════════════════════════════════════════════════════════════════ */
-function FinanceTab({data,setData,toast}) {
-  const [modal,setModal]=useState(null); const [del,setDel]=useState(null); const [form,setForm]=useState({}); const [busy,setBusy]=useState(false)
-  const save=async()=>{if(!form.amount)return alert('Amount required.');setBusy(true);const row={id:form.id||uid(),category:form.category||'Advertising',amount:Number(form.amount),date:form.date||today(),note:form.note||'',linked_to:form.linked_to||'general'};await dbUpsert('expenses',row);setData(d=>({...d,expenses:form.id?d.expenses.map(e=>e.id===form.id?{...e,...row}:e):[...d.expenses,row]}));setBusy(false);setModal(null);toast('Expense saved!')}
-  const ti=data.payments.reduce((s,p)=>s+Number(p.paid),0)+data.orders.reduce((s,o)=>s+Number(o.paid),0)
-  const te=data.expenses.reduce((s,e)=>s+Number(e.amount),0)+data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0)
-  const bi=data.batches.map(b=>({name:b.name.slice(0,14),inc:data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+Number(p.paid),0)}))
-  return (
-    <div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:14}}>{[['Income',fmt(ti),C.green],['Expenses',fmt(te),C.red],['Profit',fmt(ti-te),ti-te>=0?C.pink:C.red]].map(([l,v,c])=><div key={l} style={{background:C.white,borderRadius:14,padding:12,boxShadow:'0 2px 10px rgba(0,0,0,0.06)',border:`1px solid ${C.pinkPale}`,textAlign:'center'}}><div style={{fontSize:10,color:C.grey,fontWeight:700,textTransform:'uppercase'}}>{l}</div><div style={{fontSize:14,fontWeight:800,color:c,marginTop:4}}>{v}</div></div>)}</div>
-      <Card><STitle><Ic n="chart" size={15} color={C.pink}/> Income by Batch</STitle>{bi.map(b=><div key={b.name} style={{marginBottom:10}}><Row style={{justifyContent:'space-between',marginBottom:4}}><span style={{fontSize:12,fontWeight:600}}>{b.name}</span><span style={{fontSize:12,fontWeight:700,color:C.green}}>{fmt(b.inc)}</span></Row><div style={{background:C.pinkPale,borderRadius:10,height:8,overflow:'hidden'}}><div style={{background:`linear-gradient(90deg,${C.pink},${C.green})`,height:'100%',borderRadius:10,width:ti>0?`${(b.inc/ti)*100}%`:'0%',transition:'width .5s'}}/></div></div>)}</Card>
-      <Row style={{justifyContent:'space-between',marginBottom:12}}><STitle><Ic n="expenses" size={15} color={C.amber}/> Expenses</STitle><Btn small onClick={()=>{setForm({category:'Advertising',amount:'',date:today(),note:'',linked_to:'general'});setModal('add')}}><Ic n="add" size={14} color={C.white}/>Add</Btn></Row>
-      {data.expenses.map(e=><Card key={e.id} accent={C.amber}><Row style={{justifyContent:'space-between'}}><div><div style={{fontWeight:700,fontSize:13}}>{e.category}</div><div style={{fontSize:12,color:C.grey}}>{e.note} · {e.date}</div></div><div style={{textAlign:'right'}}><div style={{fontSize:18,fontWeight:800,color:C.amber}}>{fmt(e.amount)}</div><Row gap={5} style={{marginTop:6,justifyContent:'flex-end'}}><Btn small outline onClick={()=>{setForm({...e});setModal('edit_'+e.id)}}>✏️</Btn><Btn small color={C.red} onClick={()=>setDel(e)}>🗑️</Btn></Row></div></Row>
-        {modal===('edit_'+e.id)&&<Modal onClose={()=>setModal(null)} title="Edit Expense"><Inp label="Category" value={form.category} onChange={v=>setForm(x=>({...x,category:v}))} opts={EXP_CATS}/><Inp label="Amount(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Note" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
-      </Card>)}
-      {modal==='add'&&<Modal onClose={()=>setModal(null)} title="Add Expense"><Inp label="Category" value={form.category||'Advertising'} onChange={v=>setForm(x=>({...x,category:v}))} opts={EXP_CATS}/><Inp label="Amount(₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/><Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/><Inp label="Description" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/><Inp label="Linked To" value={form.linked_to||'general'} onChange={v=>setForm(x=>({...x,linked_to:v}))} opts={[{v:'general',l:'General'},...data.batches.map(b=>({v:b.id,l:b.name}))]}/><Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.amber} onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row></Modal>}
-      {del&&<DelConfirm item={`${del.category} expense`} onConfirm={async()=>{await dbDelete('expenses',del.id);setData(d=>({...d,expenses:d.expenses.filter(e=>e.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
-    </div>
-  )
-}
+function LeadsOrdersTab({data,setData,toast}) {
+  const [view,setView]   = useState('leads')   // leads | orders
+  const [modal,setModal] = useState(null)
+  const [del,setDel]     = useState(null)
+  const [form,setForm]   = useState({})
+  const [exp,setExp]     = useState({desc:'',amt:''})
+  const [filter,setFilter] = useState('all')
+  const [busy,setBusy]   = useState(false)
 
-function ReportsTab({data}) {
-  const [type,setType]=useState('overall')
-  const [showExport,setShowExport]=useState(false)
-  const cf=data.payments.reduce((s,p)=>s+Number(p.paid),0); const or_=data.orders.reduce((s,o)=>s+Number(o.paid),0); const ti=cf+or_
-  const ge=data.expenses.reduce((s,e)=>s+Number(e.amount),0); const oe=data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0); const te=ge+oe
-  const pd=data.payments.reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)+data.orders.reduce((s,o)=>s+(Number(o.amount)-Number(o.paid)),0)
-  const months=useMemo(()=>{const m={};data.payments.forEach(p=>{if(p.date){const k=mKey(p.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].i+=Number(p.paid)}});data.orders.forEach(o=>{if(o.date){const k=mKey(o.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].o+=Number(o.paid);m[k].oe+=(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0)}});data.expenses.forEach(e=>{if(e.date){const k=mKey(e.date);if(!m[k])m[k]={i:0,o:0,e:0,oe:0};m[k].e+=Number(e.amount)}});return Object.entries(m).sort((a,b)=>b[0].localeCompare(a[0]))},[data])
-  return (
-    <div>
-      <Row style={{justifyContent:'flex-end',marginBottom:10}}>
-        <Btn small color={C.green} onClick={()=>setShowExport(true)}><Ic n="upload" size={13} color={C.white}/>Export to Excel</Btn>
-      </Row>
-      <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:14,paddingBottom:4}}>{[{v:'overall',l:'Summary'},{v:'monthly',l:'Monthly'},{v:'batch',l:'Batch'},{v:'student',l:'Student'}].map(t=><div key={t.v} onClick={()=>setType(t.v)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,background:type===t.v?C.pink:C.greyL,color:type===t.v?C.white:C.grey,fontSize:12,fontWeight:type===t.v?700:500,cursor:'pointer'}}>{t.l}</div>)}</div>
-      {type==='overall'&&<><Card accent={C.pink}><STitle><Ic n="rupee" size={15} color={C.pink}/> Financial Summary</STitle>{[['Class Fees',fmt(cf),C.green],['Orders Income',fmt(or_),C.teal],['Total Income',fmt(ti),C.green],['General Expenses',fmt(ge),C.red],['Order Expenses',fmt(oe),C.amber],['Total Expenses',fmt(te),C.red],['NET PROFIT',fmt(ti-te),ti-te>=0?C.green:C.red],['Pending Dues',fmt(pd),C.amber]].map(([l,v,c])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`,fontWeight:l.includes('NET')||l.includes('Total')?700:400}}><span style={{color:l.includes('NET')?C.pink:C.grey}}>{l}</span><span style={{fontWeight:700,color:c}}>{v}</span></div>)}</Card>
-      <Card><STitle><Ic n="star" size={15} color={C.blue}/> Studio Stats</STitle>{[['Students',data.students.length],['Batches',data.batches.length],['Active Batches',data.batches.filter(b=>b.status==='Active').length],['Total Classes',data.classes.length],['YT Uploaded',data.classes.filter(c=>c.youtube_status==='Uploaded').length],['Enrollment Requests',(data.enrollmentRequests||[]).length]].map(([l,v])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700}}>{v}</span></div>)}</Card></>}
-      {type==='monthly'&&<div><STitle><Ic n="calendar" size={15} color={C.pink}/> Monthly Report</STitle>{months.map(([m,v])=><Card key={m} accent={C.pink}><div style={{fontWeight:700,fontSize:15,marginBottom:10}}>{mLabel(m)}</div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:8}}>{[['Class Fees',fmt(v.i),C.green],['Order Income',fmt(v.o),C.teal],['Expenses',fmt(v.e),C.red],['Order Exp.',fmt(v.oe),C.amber]].map(([l,val,c])=><div key={l} style={{background:c+'10',borderRadius:10,padding:'8px 10px'}}><div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div><div style={{fontSize:15,fontWeight:800,color:c}}>{val}</div></div>)}</div><div style={{background:C.pinkPale,borderRadius:10,padding:'8px 10px',display:'flex',justifyContent:'space-between'}}><span style={{fontSize:13,fontWeight:700}}>Net Profit</span><span style={{fontSize:15,fontWeight:800,color:(v.i+v.o-v.e-v.oe)>=0?C.green:C.red}}>{fmt(v.i+v.o-v.e-v.oe)}</span></div></Card>)}{months.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32}}>No data yet.</div>}</div>}
-       {type==='batch'&&<div><STitle><Ic n="batch" size={15} color={C.blue}/> Batch Report</STitle>{data.batches.map(b=>{const income=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+Number(p.paid),0);const due=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0);const exp=data.expenses.filter(e=>e.linked_to===b.id).reduce((s,e)=>s+Number(e.amount),0);const c2=data.courses.find(c=>c.id===b.course_id);return(<Card key={b.id} accent={c2?.color||C.pink}><Row style={{justifyContent:'space-between',marginBottom:8}}><div style={{fontWeight:700,fontSize:14}}>{b.name}</div><Badge color={b.status==='Active'?C.green:C.grey}>{b.status}</Badge></Row><Row gap={6} style={{marginBottom:8}}>{[['Students',b.student_ids?.length||0,C.purple],['Classes',data.classes.filter(c=>c.batch_id===b.id).length,C.blue]].map(([l,v,c])=><span key={l} style={{background:c+'12',borderRadius:8,padding:'4px 10px',fontSize:11,color:c,fontWeight:700}}>{l}: {v}</span>)}</Row>{[['Income',fmt(income),C.green],['Pending',fmt(due),C.amber],['Expenses',fmt(exp),C.red],['Net',fmt(income-exp),income-exp>=0?C.green:C.red]].map(([l,v,c])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'4px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700,color:c}}>{v}</span></div>)}</Card>)})}</div>}
-     {type==='student'&&<div><STitle><Ic n="students" size={15} color={C.purple}/> Student Report</STitle>{data.students.map(s=>{const paid=data.payments.filter(p=>p.student_id===s.id).reduce((a,p)=>a+Number(p.paid),0);const due=data.payments.filter(p=>p.student_id===s.id).reduce((a,p)=>a+(Number(p.amount)-Number(p.paid)),0);const bats=data.batches.filter(b=>(b.student_ids||[]).includes(s.id));const att=data.classes.reduce((a,c)=>{if(bats.find(b=>b.id===c.batch_id)&&(c.attendees||[]).includes(s.id))return a+1;return a},0);const tc=data.classes.filter(c=>bats.find(b=>b.id===c.batch_id)).length;const hwS=data.homeworkCompliance.filter(h=>h.student_id===s.id&&h.submitted).length;const hwT=data.homeworkCompliance.filter(h=>h.student_id===s.id).length;return(<Card key={s.id}><Row gap={10} style={{marginBottom:8}}><div style={{width:38,height:38,borderRadius:'50%',background:`linear-gradient(135deg,${C.pink},${C.pinkD})`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:800,fontSize:16,flexShrink:0}}>{(s.name||'?')[0]}</div><div style={{flex:1}}><div style={{fontWeight:700,fontSize:14}}>{s.name}</div><div style={{fontSize:11,color:C.grey}}>{bats.length} batch{bats.length!==1?'es':''} · {s.mobile}</div></div></Row><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>{[['Paid',fmt(paid),C.green],['Due',fmt(due),C.amber],['Attendance',`${att}/${tc}`,C.blue],['HW Done',`${hwS}/${hwT}`,C.teal]].map(([l,v,c])=><div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 10px'}}><div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div><div style={{fontSize:14,fontWeight:800,color:c}}>{v}</div></div>)}</div></Card>)})}</div>}
-      {showExport&&<ExportModal data={data} onClose={()=>setShowExport(false)}/>}
-    </div>
-  )
-}
+  const leads  = data.orders.filter(o=> o.portfolio_lead===true)
+  const orders = data.orders.filter(o=>!o.portfolio_lead)
 
-function SettingsTab({data,setData,onLogout,toast}) {
-  const [modal,setModal]=useState(null); const [pwd,setPwd]=useState(''); const [err,setErr]=useState(''); const [busy,setBusy]=useState(false)
-  const doClear=async()=>{if(pwd!==ADMIN_PWD){setErr('Wrong password.');return}setBusy(true);await clearAll();setData({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]});setBusy(false);setModal(null);setPwd('');toast('All data cleared.')}
-  const exportData=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`kajol-backup-${today()}.json`;a.click();URL.revokeObjectURL(url);toast('Exported!')}
-  return (
-    <div>
-      <Card><div style={{textAlign:'center',padding:'8px 0 16px'}}><div style={{fontSize:48,marginBottom:8}}>💄</div><div style={{fontSize:18,fontWeight:900,color:C.dark}}>Kajol Makeover Studioz</div><div style={{fontSize:12,color:C.grey,marginTop:4}}>Version 3.1 · Cloud Edition</div></div></Card>
-      <Card accent={C.pink}><STitle><Ic n="link" size={15} color={C.pink}/> Enrollment Form</STitle><div style={{background:C.pinkPale,borderRadius:10,padding:'8px 12px',fontSize:12,fontWeight:700,wordBreak:'break-all',marginBottom:10}}>🔗 {ENROLL_URL}</div><Row gap={8}><Btn small onClick={()=>{navigator.clipboard?.writeText(ENROLL_URL);toast('Copied!')}}>Copy</Btn><a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small outline>Open</Btn></a></Row></Card>
-      <Card><STitle><Ic n="info" size={15} color={C.green}/> Database</STitle>{[['Students',data.students.length],['Courses',data.courses.length],['Batches',data.batches.length],['Classes',data.classes.length],['Payments',data.payments.length],['Orders',data.orders.length],['Expenses',data.expenses.length],['Enroll Requests',(data.enrollmentRequests||[]).length]].map(([l,v])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',borderBottom:`1px solid ${C.pinkPale}`}}><span style={{color:C.grey}}>{l}</span><span style={{fontWeight:700}}>{v}</span></div>)}</Card>
-      <Card accent={C.green}><STitle><Ic n="rupee" size={15} color={C.green}/> UPI Payment Info</STitle>
-    <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Share UPI details with students for fee payment</div>
-    <div style={{background:C.greenPale,borderRadius:10,padding:12,marginBottom:10}}>
-      <div style={{fontSize:13,fontWeight:700,color:C.green}}>📱 Google Pay / PhonePe / Paytm</div>
-      <div style={{fontSize:15,fontWeight:900,color:C.dark,marginTop:4}}>8390695155</div>
-      <div style={{fontSize:12,color:C.grey,marginTop:2}}>Kajal Jivan Kamble</div>
-      <div style={{fontSize:11,color:C.grey}}>UPI ID: kajalkambaleaxis@yesg</div>
-    </div>
-    <Row gap={8}><Btn small color={C.wa} onClick={()=>{const m='💳 *Fee Payment — Kajol Makeover Studioz*\n\nPlease pay your course fee via UPI:\n📱 *8390695155* (Google Pay / PhonePe / Paytm)\nUPI ID: kajalkambaleaxis@yesg\nName: Kajal Jivan Kamble\n\nPlease share payment screenshot after payment. 🙏\n— Kajol Maam';navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Payment info copied!'))}}>Share UPI Details</Btn>
-      <Btn small color={C.blue} onClick={()=>{navigator.clipboard?.writeText('kajalkambaleaxis@yesg');toast('UPI ID copied!')}}>Copy UPI ID</Btn>
-    </Row>
-    <div style={{marginTop:10,textAlign:'center'}}>
-      <img src="/upi-qr.jpg" alt="UPI QR" style={{width:140,height:140,borderRadius:12,border:`2px solid ${C.pinkPale}`,objectFit:'contain'}} onError={e=>{e.target.style.display='none'}}/>
-    </div></Card>
-  <Card><STitle><Ic n="upload" size={15} color={C.blue}/> Backup</STitle><Btn color={C.blue} onClick={exportData} full><Ic n="upload" size={14} color={C.white}/>Export All Data (JSON)</Btn></Card>
-      <Card accent={C.red}><STitle><Ic n="alert" size={15} color={C.red}/> Danger Zone</STitle><div style={{fontSize:12,color:C.grey,marginBottom:12}}>Permanently delete all records. Cannot be undone.</div><Btn color={C.red} onClick={()=>{setPwd('');setErr('');setModal('clear')}} full><Ic n="del" size={14} color={C.white}/>Clear All App Data</Btn><Btn outline onClick={onLogout} full style={{marginTop:10}}><Ic n="lock" size={14} color={C.pink}/>Logout</Btn></Card>
-      {modal==='clear'&&<Modal onClose={()=>setModal(null)} title={<><Ic n="alert" size={16} color={C.red}/> Clear All Data</>}>
-        <div style={{background:C.red+'12',borderRadius:10,padding:12,marginBottom:14,fontSize:13,color:C.red}}>⚠️ This will permanently delete ALL records from the database. This CANNOT be undone.</div>
-        <Inp label="Admin Password to Confirm" value={pwd} onChange={v=>{setPwd(v);setErr('')}} type="password"/>
-        {err&&<div style={{color:C.red,fontSize:12,marginBottom:8,background:C.red+'12',borderRadius:8,padding:'6px 10px'}}>{err}</div>}
-        <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.red} onClick={doClear} full disabled={busy}>{busy?'Clearing…':'Delete Everything'}</Btn></Row>
-      </Modal>}
-    </div>
-  )
-}
+  const tc = t => t==='Mehndi'?C.green:t==='Makeup'?C.pink:t==='Ariwork'?C.purple:C.amber
+  const te = t => t==='Mehndi'?'🌿':t==='Makeup'?'💄':t==='Ariwork'?'🎨':'✨'
+  const sc = s => s==='Confirmed'?C.green:s==='Completed'?C.teal:s==='Cancelled'?C.red:s==='Follow-up'?C.amber:C.blue
 
+  const filteredLeads = filter==='all' ? leads : leads.filter(l=>l.type===filter)
 
-/* ═══════════════════════════════════════════════════════════════════
-   WEBSITE EDITOR TAB  v2 — gallery photos, rich reviews, YouTube
-═══════════════════════════════════════════════════════════════════ */
-
-/* ── Supabase file upload helper (uses public bucket "site-media") ──
-   HOW TO SET UP the storage bucket (one-time):
-   1. In Supabase dashboard → Storage → New Bucket → name: "site-media" → Public: ON
-   2. In Bucket settings → Policies → add policy: allow all (anon) for insert/select
-   Then the upload buttons in this tab will work.                           ── */
-async function uploadToSupabase(file, folder) {
-  const ext = file.name.split('.').pop()
-  const path = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
-  const { data, error } = await sb.storage.from('site-media').upload(path, file, { upsert:true })
-  if(error) { alert('Upload failed: '+error.message); return null }
-  const { data:pub } = sb.storage.from('site-media').getPublicUrl(path)
-  return pub.publicUrl
-}
-
-/* ── Quick Review Adder ── */
-function QuickReviewAdder({currentJson,onSave}) {
-  const [r,setR]=useState({type:'text',name:'',role:'',text:'',initial:'',color:'#E91E8C',media_url:''})
-  const [uploading,setUploading]=useState(false)
-  const fileRef=useRef()
-
-  const handleFile=async(e)=>{
-    const file=e.target.files[0]; if(!file) return
-    setUploading(true)
-    const url=await uploadToSupabase(file,'reviews')
-    if(url) setR(x=>({...x,media_url:url}))
-    setUploading(false)
-  }
-
-  const add=()=>{
-    if(!r.name){alert('Student name required.');return}
-    if(r.type==='text'&&!r.text){alert('Review text required.');return}
-    try{
-      const arr=JSON.parse(currentJson||'[]')
-      arr.push({...r,initial:r.initial||r.name[0]})
-      onSave(JSON.stringify(arr,null,2))
-      setR({type:'text',name:'',role:'',text:'',initial:'',color:'#E91E8C',media_url:''})
-    }catch{alert('Existing reviews JSON is invalid. Please fix it first.')}
-  }
-  const fs={width:'100%',padding:'9px 11px',borderRadius:9,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:9}
-  return(
-    <div>
-      <div style={{marginBottom:9}}>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:5,textTransform:'uppercase',letterSpacing:.5}}>Review Type</div>
-        <Row gap={6} style={{flexWrap:'wrap'}}>
-          {[['text','💬 Text'],['image','🖼️ Photo'],['whatsapp','📱 WA Screenshot'],['video','▶ Video']].map(([v,l])=>(
-            <div key={v} onClick={()=>setR(x=>({...x,type:v}))} style={{padding:'5px 12px',borderRadius:12,background:r.type===v?C.pink:C.greyL,color:r.type===v?C.white:C.grey,fontSize:11,fontWeight:r.type===v?700:500,cursor:'pointer'}}>{l}</div>
-          ))}
-        </Row>
-      </div>
-      <input value={r.name} onChange={e=>setR(x=>({...x,name:e.target.value}))} placeholder="Student name *" style={fs}/>
-      <input value={r.role} onChange={e=>setR(x=>({...x,role:e.target.value}))} placeholder="Role (e.g. Homemaker · Mehndi Student)" style={fs}/>
-      {r.type==='text'&&<textarea rows={3} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Review text *" style={{...fs,resize:'vertical'}}/>}
-      {(r.type==='image'||r.type==='whatsapp')&&<>
-        <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
-        <div style={{display:'flex',gap:8,marginBottom:9}}>
-          <Btn small onClick={()=>fileRef.current.click()} disabled={uploading} color={C.blue}>
-            {uploading?'Uploading…':'📷 Upload Photo'}
-          </Btn>
-          {r.media_url&&<span style={{fontSize:11,color:C.green,alignSelf:'center'}}>✅ Uploaded</span>}
-        </div>
-        <input value={r.media_url} onChange={e=>setR(x=>({...x,media_url:e.target.value}))} placeholder="Or paste image URL" style={fs}/>
-        <textarea rows={2} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Caption (optional)" style={{...fs,resize:'vertical'}}/>
-      </>}
-      {r.type==='video'&&<>
-        <input value={r.media_url} onChange={e=>setR(x=>({...x,media_url:e.target.value}))} placeholder="YouTube video URL or direct video link" style={fs}/>
-        <textarea rows={2} value={r.text} onChange={e=>setR(x=>({...x,text:e.target.value}))} placeholder="Caption (optional)" style={{...fs,resize:'vertical'}}/>
-      </>}
-      <Row gap={8} style={{alignItems:'flex-start',marginBottom:4}}>
-        <input value={r.initial} onChange={e=>setR(x=>({...x,initial:e.target.value}))} placeholder="Initial" style={{...fs,width:70,marginBottom:0}}/>
-        <input type="color" value={r.color} onChange={e=>setR(x=>({...x,color:e.target.value}))} style={{height:38,borderRadius:8,border:'none',cursor:'pointer'}}/>
-        <Btn small color={C.green} onClick={add}>+ Add</Btn>
-      </Row>
-    </div>
-  )
-}
-
-function WebsiteEditorTab({toast}) {
-  const [sec,setSec]=useState('about')
-  const [vals,setVals]=useState({})
-  const [busy,setBusy]=useState(false)
-  const [loaded,setLoaded]=useState(false)
-  const [galleryItems,setGalleryItems]=useState([])
-  const [reviewItems,setReviewItems]=useState([])
-  const [newPhoto,setNewPhoto]=useState({url:'',label:'',cat:'Mehndi',emoji:'🌿'})
-  const [uploading,setUploading]=useState(false)
-  const photoRef=useRef()
-
-  useEffect(()=>{
-    sb.from('site_content').select('*').then(({data})=>{
-      if(data){const m={};data.forEach(r=>{m[r.key]=r.value});setVals(m)}
-      setLoaded(true)
-    })
-    sb.from('site_content').select('value').eq('key','gallery_photos').maybeSingle().then(({data})=>{
-      try{if(data?.value)setGalleryItems(JSON.parse(data.value))}catch{}
-    })
-    sb.from('site_content').select('value').eq('key','reviews_rich').maybeSingle().then(({data})=>{
-      try{if(data?.value)setReviewItems(JSON.parse(data.value))}catch{}
-    })
-  },[])
-
-  const get=(k,fb='')=>vals[k]!=null?vals[k]:fb
-  const set=(k,v)=>setVals(x=>({...x,[k]:v}))
-
-  const saveKey=async(key,value)=>{
-    const {data:ex}=await sb.from('site_content').select('id').eq('key',key).maybeSingle()
-    const row={id:ex?.id||uid(),key,value,updated_at:new Date().toISOString()}
-    await sb.from('site_content').upsert(row,{onConflict:'id'})
-  }
-
-  const saveAll=async(keys)=>{
-    setBusy(true)
-    for(const k of keys){
-      await saveKey(k,vals[k]??'')
-    }
-    toast('All changes saved to website!')
-    setBusy(false)
-  }
-
-  const saveGallery=async(items)=>{
-    setBusy(true)
-    await saveKey('gallery_photos',JSON.stringify(items))
-    setGalleryItems(items)
-    toast('Gallery updated!')
-    setBusy(false)
-  }
-
-  const saveReviews=async(items)=>{
-    setBusy(true)
-    await saveKey('reviews_rich',JSON.stringify(items))
-    setReviewItems(items)
-    toast('Reviews updated!')
-    setBusy(false)
-  }
-
-  const handlePhotoUpload=async(e)=>{
-    const file=e.target.files[0]; if(!file) return
-    setUploading(true)
-    const url=await uploadToSupabase(file,'gallery')
-    if(url) setNewPhoto(x=>({...x,url}))
-    setUploading(false)
-  }
-
-  const addGalleryPhoto=async()=>{
-    if(!newPhoto.url&&!newPhoto.emoji){alert('Add a photo URL or select a file');return}
-    const items=[...galleryItems,{...newPhoto}]
-    await saveGallery(items)
-    setNewPhoto({url:'',label:'',cat:'Mehndi',emoji:'🌿'})
-  }
-
-  const fld={width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',background:C.white,marginBottom:10,resize:'vertical'}
-
-  if(!loaded) return <div style={{textAlign:'center',padding:40,color:C.grey}}>Loading website content…</div>
-
-  const SECS=[{v:'about',l:'📄 About'},{v:'courses',l:'📚 Courses'},{v:'gallery',l:'🖼️ Gallery'},{v:'reviews',l:'⭐ Reviews'},{v:'stats',l:'📊 Stats & CTA'}]
-  const CAT_OPTS=[{v:'Mehndi',l:'🌿 Mehndi'},{v:'Makeup',l:'💄 Makeup'},{v:'Ariwork',l:'🎨 Ariwork'},{v:'Other',l:'✨ Other'}]
-
-  return(
-    <div>
-      <Card accent={C.pink}>
-        <STitle><Ic n="globe" size={15} color={C.pink}/> Website Content Editor</STitle>
-        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Edit your public website content. Changes appear live on the website instantly.</div>
-        <Row gap={8} style={{flexWrap:'wrap'}}>
-          <a href="/" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="globe" size={13} color={C.white}/>View Website</Btn></a>
-          <a href={ENROLL_URL} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small outline>View Enroll Form</Btn></a>
-        </Row>
-      </Card>
-
-      <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:14,paddingBottom:4}}>
-        {SECS.map(s=><div key={s.v} onClick={()=>setSec(s.v)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,background:sec===s.v?C.pink:C.greyL,color:sec===s.v?C.white:C.grey,fontSize:12,fontWeight:sec===s.v?700:500,cursor:'pointer'}}>{s.l}</div>)}
-      </div>
-
-      {/* ── ABOUT ── */}
-      {sec==='about'&&<Card>
-        <STitle><Ic n="info" size={15} color={C.pink}/> About Section</STitle>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Hero Tagline</div>
-        <textarea rows={2} value={get('hero_tagline',"Learn from Kajol J Kamble — professional artist & passionate teacher.")} onChange={e=>set('hero_tagline',e.target.value)} style={fld}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Headline</div>
-        <input value={get('about_headline','Passionate Artist. Dedicated Teacher.')} onChange={e=>set('about_headline',e.target.value)} style={{...fld,resize:'none'}}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 1</div>
-        <textarea rows={4} value={get('about_para1',"Hi! I'm Kajol, a professional Mehndi, Makeup, and Ariwork artist...")} onChange={e=>set('about_para1',e.target.value)} style={fld}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>About Paragraph 2</div>
-        <textarea rows={3} value={get('about_para2','All my courses are conducted live on Zoom...')} onChange={e=>set('about_para2',e.target.value)} style={fld}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>YouTube Playlist ID (for website video section)</div>
-        <input value={get('yt_playlist_id','')} onChange={e=>set('yt_playlist_id',e.target.value)} placeholder="e.g. PLxxxxxxxxxxxxxxxxx (from YouTube playlist URL)" style={{...fld,resize:'none'}}/>
-        <div style={{fontSize:11,color:C.grey,marginBottom:10,background:C.greenPale,borderRadius:8,padding:'8px 10px'}}>
-          📋 <b>How to get Playlist ID:</b> Go to YouTube → Your Channel → Playlists → Click playlist → copy the ID from the URL after "list=" (e.g. PLxxxxxxxxx)
-        </div>
-        <Btn color={C.green} onClick={()=>saveAll(['hero_tagline','about_headline','about_para1','about_para2','yt_playlist_id'])} disabled={busy} full>{busy?'Saving…':'💾 Save About Section'}</Btn>
-      </Card>}
-
-      {/* ── COURSES ── */}
-      {sec==='courses'&&<Card>
-        <STitle><Ic n="course" size={15} color={C.green}/> Courses Section</STitle>
-        <div style={{fontSize:12,color:C.grey,marginBottom:12}}>Separate bullet items with a pipe <b>|</b> character.</div>
-        {[{key:'mehndi',emoji:'🌿',label:'Mehndi Art'},{key:'makeup',emoji:'💄',label:'Makeup Course'},{key:'ariwork',emoji:'🎨',label:'Ariwork Course'},{key:'combined',emoji:'✨',label:'Combined Course'}].map(c=>(
-          <div key={c.key} style={{marginBottom:18,background:C.greyL,borderRadius:12,padding:12}}>
-            <div style={{fontSize:13,fontWeight:800,color:C.dark,marginBottom:8}}>{c.emoji} {c.label}</div>
-            <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Description</div>
-            <textarea rows={2} value={get(`course_${c.key}_desc`,'')} onChange={e=>set(`course_${c.key}_desc`,e.target.value)} style={fld}/>
-            <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Bullet Points (separate with |)</div>
-            <input value={get(`course_${c.key}_items`,'')} onChange={e=>set(`course_${c.key}_items`,e.target.value)} style={{...fld,resize:'none'}} placeholder="Item 1|Item 2|Item 3"/>
-          </div>
-        ))}
-        <Btn color={C.green} onClick={()=>saveAll(['course_mehndi_desc','course_mehndi_items','course_makeup_desc','course_makeup_items','course_ariwork_desc','course_ariwork_items','course_combined_desc','course_combined_items'])} disabled={busy} full>{busy?'Saving…':'💾 Save All Courses'}</Btn>
-      </Card>}
-
-      {/* ── GALLERY ── */}
-      {sec==='gallery'&&<div>
-        <Card accent={C.pink}>
-          <STitle><Ic n="image" size={15} color={C.pink}/> Gallery Photos</STitle>
-          <div style={{fontSize:12,color:C.grey,marginBottom:14}}>Upload photos of student work, your designs, and class highlights. These appear in the "Our Work" grid on the website.</div>
-
-          {/* Add new photo */}
-          <div style={{background:C.greyL,borderRadius:14,padding:14,marginBottom:16}}>
-            <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>➕ Add New Photo</div>
-
-            {/* File upload */}
-            <input ref={photoRef} type="file" accept="image/*" style={{display:'none'}} onChange={handlePhotoUpload}/>
-            <Row gap={8} style={{marginBottom:10}}>
-              <Btn small onClick={()=>photoRef.current.click()} disabled={uploading} color={C.blue}>
-                <Ic n="upload" size={12} color={C.white}/>{uploading?'Uploading…':'📷 Upload Photo'}
-              </Btn>
-              {newPhoto.url&&<span style={{fontSize:11,color:C.green}}>✅ Photo uploaded</span>}
-            </Row>
-            <div style={{fontSize:11,color:C.grey,marginBottom:6}}>— OR paste an image URL —</div>
-            <input value={newPhoto.url} onChange={e=>setNewPhoto(x=>({...x,url:e.target.value}))} placeholder="https://… image URL" style={{...fld,marginBottom:8,resize:'none'}}/>
-            {newPhoto.url&&<img src={newPhoto.url} alt="preview" style={{width:'100%',maxHeight:140,objectFit:'cover',borderRadius:10,marginBottom:8}}/>}
-            <Row gap={8}>
-              <div style={{flex:2}}>
-                <input value={newPhoto.label} onChange={e=>setNewPhoto(x=>({...x,label:e.target.value}))} placeholder="Label (e.g. Bridal Mehndi)" style={{...fld,marginBottom:0,resize:'none'}}/>
-              </div>
-              <select value={newPhoto.cat} onChange={e=>setNewPhoto(x=>({...x,cat:e.target.value}))} style={{...fld,width:'auto',marginBottom:0,resize:'none',flex:1}}>
-                {CAT_OPTS.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}
-              </select>
-            </Row>
-            <Btn color={C.green} onClick={addGalleryPhoto} disabled={busy||uploading} full style={{marginTop:10}}>{busy?'Adding…':'+ Add to Gallery'}</Btn>
-          </div>
-
-          {/* Current gallery */}
-          <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>Current Gallery ({galleryItems.length} photos)</div>
-          {galleryItems.length===0&&<div style={{fontSize:12,color:C.grey,textAlign:'center',padding:20,background:C.pinkPale,borderRadius:10}}>
-            No photos added yet. Upload your first photo above!<br/><span style={{fontSize:11}}>Empty gallery shows emoji placeholder tiles on the website.</span>
-          </div>}
-          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10}}>
-            {galleryItems.map((p,i)=>(
-              <div key={i} style={{position:'relative',borderRadius:12,overflow:'hidden',aspectRatio:'1',background:C.greyL}}>
-                {p.url?<img src={p.url} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>:
-                  <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:32}}>{p.emoji||'🖼️'}</div>}
-                <div style={{position:'absolute',bottom:0,left:0,right:0,background:'rgba(0,0,0,0.55)',padding:'4px 7px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                  <span style={{fontSize:9,color:'#fff',fontWeight:600}}>{p.label||p.cat}</span>
-                  <button onClick={async()=>{const items=galleryItems.filter((_,j)=>j!==i);await saveGallery(items)}} style={{background:C.red,border:'none',color:'#fff',borderRadius:5,padding:'2px 6px',fontSize:10,cursor:'pointer',fontFamily:'inherit'}}>×</button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,marginTop:14,textTransform:'uppercase',letterSpacing:.5}}>Gallery Section Subtitle</div>
-          <textarea rows={2} value={get('gallery_subtitle',"A glimpse of the beautiful art our students and Kajol Ma'am create!")} onChange={e=>set('gallery_subtitle',e.target.value)} style={fld}/>
-          <Btn color={C.green} onClick={()=>saveAll(['gallery_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Subtitle'}</Btn>
-
-          <div style={{marginTop:14,background:C.pinkPale,borderRadius:10,padding:12,fontSize:12,color:C.pink}}>
-            📋 <b>Storage setup required:</b> In Supabase → Storage → Create bucket named <b>site-media</b> → set to Public → add anon insert/select policy.
-          </div>
-        </Card>
-      </div>}
-
-      {/* ── REVIEWS ── */}
-      {sec==='reviews'&&<div>
-        <Card accent={C.amber}>
-          <STitle><Ic n="star" size={15} color={C.amber}/> Student Feedback & Reviews</STitle>
-          <div style={{fontSize:12,color:C.grey,marginBottom:14}}>
-            Add text reviews, photos of student work, WhatsApp message screenshots, and YouTube video feedback. All appear in the "What Students Say" section.
-          </div>
-
-          {/* Type legend */}
-          <Row gap={8} style={{flexWrap:'wrap',marginBottom:16}}>
-            {[['💬 Text','text'],['🖼️ Photo','image'],['📱 WA Screenshot','whatsapp'],['▶ Video','video']].map(([l])=>(
-              <div key={l} style={{fontSize:11,padding:'4px 10px',borderRadius:10,background:C.greyL,color:C.grey}}>{l}</div>
-            ))}
-          </Row>
-
-          {/* Existing reviews */}
-          <div style={{fontSize:13,fontWeight:700,color:C.dark,marginBottom:10}}>Current Reviews ({reviewItems.length})</div>
-          {reviewItems.length===0&&<div style={{fontSize:12,color:C.grey,textAlign:'center',padding:16,background:C.greyL,borderRadius:10,marginBottom:14}}>No reviews added yet. Default reviews show on the website.</div>}
-          {reviewItems.map((r,i)=>(
-            <div key={i} style={{background:C.greyL,borderRadius:12,padding:12,marginBottom:8,display:'flex',gap:10,alignItems:'flex-start'}}>
-              <div style={{width:36,height:36,borderRadius:'50%',background:`linear-gradient(135deg,${r.color||C.pink},${r.color||C.pink}99)`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:800,fontSize:14,flexShrink:0}}>
-                {r.initial||r.name?.[0]||'S'}
-              </div>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontWeight:700,fontSize:13}}>{r.name} <Badge color={r.color||C.pink}>{r.type||'text'}</Badge></div>
-                <div style={{fontSize:11,color:C.grey}}>{r.role}</div>
-                {r.text&&<div style={{fontSize:11,color:C.dark,marginTop:3,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.text}</div>}
-                {r.media_url&&<div style={{fontSize:10,color:C.blue,marginTop:2,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>📎 {r.media_url}</div>}
-              </div>
-              <button onClick={async()=>{const items=reviewItems.filter((_,j)=>j!==i);await saveReviews(items)}}
-                style={{background:C.red,border:'none',color:'#fff',borderRadius:8,padding:'5px 10px',fontSize:12,cursor:'pointer',fontFamily:'inherit',flexShrink:0}}>×</button>
-            </div>
-          ))}
-
-          {/* Add new review */}
-          <div style={{background:C.greenPale,borderRadius:14,padding:14,marginTop:8}}>
-            <div style={{fontSize:13,fontWeight:700,color:C.green,marginBottom:10}}>➕ Add New Review / Feedback</div>
-            <QuickReviewAdder currentJson={JSON.stringify(reviewItems)} onSave={json=>{saveReviews(JSON.parse(json))}}/>
-          </div>
-
-          <div style={{fontSize:11,fontWeight:700,color:C.grey,marginTop:14,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Reviews Subtitle</div>
-          <input value={get('reviews_subtitle','Real words from real learners who transformed their skills with us.')} onChange={e=>set('reviews_subtitle',e.target.value)} style={{...fld,resize:'none'}}/>
-          <Btn color={C.green} onClick={()=>saveAll(['reviews_subtitle'])} disabled={busy} full>{busy?'Saving…':'💾 Save Subtitle'}</Btn>
-        </Card>
-      </div>}
-
-      {/* ── STATS & CTA ── */}
-      {sec==='stats'&&<Card>
-        <STitle><Ic n="chart" size={15} color={C.pink}/> Stats Strip & CTA</STitle>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:12}}>
-          {[['stat_students','Students Trained','200+'],['stat_courses','Expert Courses','3'],['stat_classes','Classes Delivered','50+']].map(([k,label,def])=>(
-            <div key={k}>
-              <div style={{fontSize:10,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase'}}>{label}</div>
-              <input value={get(k,def)} onChange={e=>set(k,e.target.value)} style={{...fld,marginBottom:0,resize:'none'}}/>
-            </div>
-          ))}
-        </div>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>CTA Headline</div>
-        <input value={get('cta_headline','Ready to Start Your Journey?')} onChange={e=>set('cta_headline',e.target.value)} style={{...fld,resize:'none'}}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>CTA Subtext</div>
-        <textarea rows={2} value={get('cta_subtext',"Fill our free enrollment form today and get a personal reply from Kajol Ma'am on WhatsApp within 24 hours.")} onChange={e=>set('cta_subtext',e.target.value)} style={fld}/>
-        <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>Community Text</div>
-        <textarea rows={2} value={get('community_text','Connect with 200+ students on WhatsApp, get daily tips, and stay updated on new batches.')} onChange={e=>set('community_text',e.target.value)} style={fld}/>
-        <Btn color={C.green} onClick={()=>saveAll(['stat_students','stat_courses','stat_classes','cta_headline','cta_subtext','community_text'])} disabled={busy} full>{busy?'Saving…':'💾 Save Stats & CTA'}</Btn>
-      </Card>}
-    </div>
-  )
-}
-
-
-
-/* ═══════════════════════════════════════════════════════════════════
-   PORTFOLIO TAB — individual artist orders in Pune
-═══════════════════════════════════════════════════════════════════ */
-function PortfolioTab({data,setData,toast}) {
-  const [modal,setModal]=useState(null)
-  const [del,setDel]=useState(null)
-  const [form,setForm]=useState({})
-  const [busy,setBusy]=useState(false)
-  const [filter,setFilter]=useState('all')
-
-  // Portfolio leads stored in orders table with a "portfolio_lead" tag
-  const leads = data.orders.filter(o=>o.portfolio_lead===true)
-    .sort((a,b)=>new Date(b.created_at||b.date)-new Date(a.created_at||a.date))
-  const filtered = filter==='all' ? leads : leads.filter(o=>o.type===filter)
-
-  const save = async () => {
+  /* ── Save lead ── */
+  const saveLead = async () => {
     if(!form.client||!form.mobile) return alert('Client name and mobile required.')
     setBusy(true)
-    const row={
-      id:form.id||uid(),
-      portfolio_lead:true,
-      type:form.type||'Mehndi',
-      client:form.client,
-      mobile:form.mobile,
-      email:form.email||'',
-      address:form.address||'',
-      event_date:form.event_date||'',
-      event_type:form.event_type||'',
-      amount:Number(form.amount||0),
-      paid:Number(form.paid||0),
-      status:form.status||'Enquiry',
-      notes:form.notes||'',
-      date:form.date||today(),
-      order_expenses:[],
+    const row = {
+      id:form.id||uid(), portfolio_lead:true,
+      type:form.type||'Mehndi', client:form.client,
+      mobile:form.mobile, email:form.email||'',
+      address:form.address||'', event_date:form.event_date||'',
+      event_type:form.event_type||'', amount:Number(form.amount||0),
+      paid:Number(form.paid||0), status:form.status||'Enquiry',
+      notes:form.notes||'', date:form.date||today(),
+      order_expenses:[], created_at:form.created_at||new Date().toISOString()
     }
     await dbUpsert('orders',row)
     setData(d=>({...d,orders:form.id?d.orders.map(o=>o.id===form.id?{...o,...row}:o):[...d.orders,row]}))
     setBusy(false); setModal(null); toast('Lead saved!')
   }
 
-  const statusColor = s => s==='Confirmed'?C.green:s==='Completed'?C.teal:s==='Cancelled'?C.red:s==='Follow-up'?C.amber:C.blue
-  const typeColor   = t => t==='Mehndi'?C.green:t==='Makeup'?C.pink:t==='Ariwork'?C.purple:C.amber
-  const typeEmoji   = t => t==='Mehndi'?'🌿':t==='Makeup'?'💄':t==='Ariwork'?'🎨':'✨'
+  /* ── Save order ── */
+  const saveOrder = async () => {
+    if(!form.client||!form.amount) return alert('Client and charge required.')
+    setBusy(true)
+    const row = {
+      id:form.id||uid(), portfolio_lead:false,
+      type:form.type||'Mehndi', client:form.client,
+      mobile:form.mobile||'', date:form.date||today(),
+      amount:Number(form.amount), paid:Number(form.paid||0),
+      status:form.status||'Pending', notes:form.notes||'',
+      order_expenses:form.order_expenses||[],
+      created_at:form.created_at||new Date().toISOString()
+    }
+    await dbUpsert('orders',row)
+    setData(d=>({...d,orders:form.id?d.orders.map(o=>o.id===form.id?{...o,...row}:o):[...d.orders,row]}))
+    setBusy(false); setModal(null); toast('Order saved!')
+  }
 
-  const stats = [
-    {label:'Total Leads', val:leads.length, color:C.blue},
-    {label:'Confirmed',   val:leads.filter(l=>l.status==='Confirmed').length, color:C.green},
-    {label:'Revenue',     val:fmt(leads.reduce((s,l)=>s+Number(l.paid),0)), color:C.pink},
-    {label:'Pending Due', val:fmt(leads.reduce((s,l)=>s+Number(l.amount)-Number(l.paid),0)), color:C.amber},
-  ]
+  /* ── Expense row for orders ── */
+  const ExpRow = () => (
+    <>
+      <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:6}}>Order Expenses</div>
+      {(form.order_expenses||[]).map((e,i)=>(
+        <Row key={i} gap={6} style={{marginBottom:5}}>
+          <div style={{fontSize:12,flex:1,background:C.greyL,borderRadius:8,padding:'5px 8px'}}>{e.desc} — ₹{e.amt}</div>
+          <Btn small color={C.red} onClick={()=>setForm(x=>({...x,order_expenses:x.order_expenses.filter((_,j)=>j!==i)}))}>×</Btn>
+        </Row>
+      ))}
+      <Row gap={6} style={{marginBottom:12}}>
+        <input value={exp.desc} onChange={e=>setExp(x=>({...x,desc:e.target.value}))} placeholder="Expense desc" style={{flex:2,padding:'7px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none'}}/>
+        <input value={exp.amt} onChange={e=>setExp(x=>({...x,amt:e.target.value}))} placeholder="₹" type="number" style={{flex:1,padding:'7px 10px',borderRadius:8,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none'}}/>
+        <Btn small onClick={()=>{if(exp.desc&&exp.amt){setForm(x=>({...x,order_expenses:[...(x.order_expenses||[]),{...exp}]}));setExp({desc:'',amt:''})}}}>
+          <Ic n="add" size={13} color={C.white}/>
+        </Btn>
+      </Row>
+    </>
+  )
 
+  /* ── STATS ── */
+  const totalLeadRev   = leads.reduce((s,l)=>s+Number(l.paid),0)
+  const totalOrderRev  = orders.reduce((s,o)=>s+Number(o.paid),0)
+  const totalOrderExp  = orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0)
+  const pendingLeads   = leads.filter(l=>l.status==='Enquiry'||l.status==='Follow-up').length
+  const confirmedLeads = leads.filter(l=>l.status==='Confirmed').length
+
+  /* ════════════ VIEW TOGGLE ════════════ */
   return (
     <div>
-      {/* Header banner */}
-      <div style={{background:`linear-gradient(135deg,${C.purple},${C.pink})`,borderRadius:20,padding:'18px 16px',marginBottom:14,color:'#fff'}}>
-        <div style={{fontSize:22,marginBottom:4}}>🎨💄🌿</div>
-        <div style={{fontSize:17,fontWeight:900}}>Kajol J Kamble — Artist Portfolio</div>
-        <div style={{fontSize:12,opacity:.85,marginTop:2}}>Individual Orders · Bridal · Events · Pune &amp; nearby areas</div>
-        <div style={{marginTop:10,fontSize:11,opacity:.8,display:'flex',alignItems:'center',gap:6}}>
-          <Ic n="mappin" size={13} color="#fff"/> Serving Pune, Pimpri-Chinchwad, PCMC, Mumbai
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
-        {stats.map(s=>(
-          <div key={s.label} style={{background:C.white,borderRadius:14,padding:13,boxShadow:'0 2px 10px rgba(0,0,0,0.06)',border:`1px solid ${C.pinkPale}`}}>
-            <div style={{fontSize:10,color:C.grey,fontWeight:700,textTransform:'uppercase',letterSpacing:.5}}>{s.label}</div>
-            <div style={{fontSize:20,fontWeight:800,color:s.color,marginTop:3}}>{s.val}</div>
-          </div>
+      {/* Tab switcher */}
+      <div style={{display:'flex',gap:0,marginBottom:14,background:C.greyL,borderRadius:14,padding:4}}>
+        {[['leads','🌸 Bookings & Leads'],['orders','🛍️ Commercial Orders']].map(([v,l])=>(
+          <div key={v} onClick={()=>setView(v)} style={{flex:1,textAlign:'center',padding:'9px 6px',borderRadius:10,background:view===v?C.pink:'transparent',color:view===v?'#fff':C.grey,fontWeight:view===v?700:500,fontSize:12,cursor:'pointer',transition:'all .2s'}}>{l}</div>
         ))}
       </div>
 
-      {/* Filter + Add */}
-      <Row gap={6} style={{marginBottom:12,flexWrap:'wrap'}}>
-        {['all','Mehndi','Makeup','Ariwork','Combined'].map(f=>(
-          <div key={f} onClick={()=>setFilter(f)} style={{padding:'5px 12px',borderRadius:16,background:filter===f?C.pink:C.greyL,color:filter===f?C.white:C.grey,fontSize:11,fontWeight:filter===f?700:500,cursor:'pointer'}}>
-            {f==='all'?'All':typeEmoji(f)+' '+f}
+      {/* ══════ LEADS VIEW ══════ */}
+      {view==='leads'&&<>
+        {/* Hero banner */}
+        <div style={{background:`linear-gradient(135deg,${C.purple},${C.pink})`,borderRadius:20,padding:'16px 18px',marginBottom:14,color:'#fff'}}>
+          <div style={{fontSize:20,marginBottom:4}}>🎨💄🌿</div>
+          <div style={{fontSize:16,fontWeight:900}}>Kajol J Kamble — Artist Bookings</div>
+          <div style={{fontSize:12,opacity:.85,marginTop:2}}>Bridal · Events · Parties · Pune &amp; nearby areas</div>
+          <div style={{marginTop:10,display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            {[['Enquiries / Follow-up',pendingLeads,C.amber],['Confirmed',confirmedLeads,C.green],['Total Earned',totalLeadRev,C.white,'fmt'],['All Leads',leads.length,'rgba(255,255,255,0.7)']].map(([l,v,c,f])=>(
+              <div key={l} style={{background:'rgba(255,255,255,0.12)',borderRadius:10,padding:'8px 12px'}}>
+                <div style={{fontSize:10,opacity:.8}}>{l}</div>
+                <div style={{fontSize:16,fontWeight:800,color:c==='rgba(255,255,255,0.7)'?'rgba(255,255,255,0.9)':c}}>{f?fmt(v):v}</div>
+              </div>
+            ))}
           </div>
-        ))}
-        <div style={{marginLeft:'auto'}}>
-          <Btn small onClick={()=>{setForm({type:'Mehndi',status:'Enquiry',date:today()});setModal('form')}}>
-            <Ic n="add" size={14} color={C.white}/>New Lead
-          </Btn>
         </div>
-      </Row>
-      <div style={{fontSize:12,color:C.grey,marginBottom:8}}>{filtered.length} lead{filtered.length!==1?'s':''}</div>
 
-      {/* Leads list */}
-      {filtered.length===0 && (
-        <div style={{textAlign:'center',padding:40,background:C.white,borderRadius:16,color:C.grey}}>
-          <div style={{fontSize:40,marginBottom:10}}>🌸</div>
-          <div style={{fontWeight:700,marginBottom:6}}>No leads yet</div>
-          <div style={{fontSize:13}}>Add enquiries for bridal mehndi, makeup or ariwork bookings in Pune</div>
+        {/* Pune areas served */}
+        <div style={{background:C.pinkPale,borderRadius:12,padding:'10px 14px',marginBottom:12,fontSize:11,color:C.pink,fontWeight:600}}>
+          📍 Serving: Pune · Pimpri-Chinchwad · Baner · Kothrud · Hadapsar · Viman Nagar · Wakad · Hinjewadi · Aundh · Koregaon Park · Deccan · Katraj & all Pune areas
         </div>
-      )}
 
-      {filtered.map(lead=>{
-        const due = Number(lead.amount)-Number(lead.paid)
-        return (
-          <Card key={lead.id} accent={typeColor(lead.type)}>
-            <Row style={{justifyContent:'space-between',marginBottom:8}}>
-              <div>
-                <div style={{fontWeight:800,fontSize:15,color:C.dark}}>{lead.client} {typeEmoji(lead.type)}</div>
-                <div style={{fontSize:12,color:C.grey}}>📱 {lead.mobile}</div>
-                {lead.email&&<div style={{fontSize:11,color:C.grey}}>✉️ {lead.email}</div>}
-                {lead.address&&<div style={{fontSize:11,color:C.grey}}>📍 {lead.address}</div>}
-              </div>
-              <div style={{textAlign:'right'}}>
-                <Badge color={statusColor(lead.status)}>{lead.status}</Badge>
-                <div style={{marginTop:6}}><Badge color={typeColor(lead.type)}>{lead.type}</Badge></div>
-              </div>
-            </Row>
-
-            {lead.event_type&&<div style={{fontSize:12,color:C.dark,marginBottom:3}}>🎉 {lead.event_type}{lead.event_date?` — ${fmtDate(lead.event_date)}`:''}</div>}
-
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:8}}>
-              {[['Quote',fmt(lead.amount),C.dark],['Paid',fmt(lead.paid),C.green],['Due',fmt(due),due>0?C.amber:C.green]].map(([l,v,c])=>(
-                <div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 8px',textAlign:'center'}}>
-                  <div style={{fontSize:9,color:c}}>{l}</div>
-                  <div style={{fontSize:13,fontWeight:700,color:c}}>{v}</div>
-                </div>
-              ))}
+        {/* Filter + Add */}
+        <Row gap={6} style={{marginBottom:10,flexWrap:'wrap'}}>
+          {['all','Mehndi','Makeup','Ariwork','Combined'].map(f=>(
+            <div key={f} onClick={()=>setFilter(f)} style={{padding:'5px 12px',borderRadius:16,background:filter===f?C.pink:C.greyL,color:filter===f?'#fff':C.grey,fontSize:11,fontWeight:filter===f?700:500,cursor:'pointer'}}>
+              {f==='all'?'All':te(f)+' '+f}
             </div>
-
-            {lead.notes&&<div style={{fontSize:12,color:C.grey,background:C.greyL,borderRadius:8,padding:'6px 10px',marginBottom:8}}>{lead.notes}</div>}
-
-            <Row gap={7} style={{flexWrap:'wrap'}}>
-              <Btn small outline onClick={()=>{setForm({...lead});setModal('form')}}>✏️ Edit</Btn>
-              <a href={`https://wa.me/91${lead.mobile}?text=${encodeURIComponent('Hi '+lead.client+'! 🌸 Thank you for your enquiry for '+lead.type+' services. I am Kajol from Kajol Makeover Studioz, Pune. Let me share my portfolio and discuss your requirements.\n\n📸 Instagram: https://www.instagram.com/kajol_makeover_studioz\n\nLooking forward to making your occasion special! 💄')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
-                <Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>WhatsApp</Btn>
-              </a>
-              {lead.mobile&&<a href={`tel:+91${lead.mobile}`} style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="phone2" size={12} color={C.white}/>Call</Btn></a>}
-              <select value={lead.status} onChange={async e=>{
-                const u={...lead,status:e.target.value}
-                await dbUpsert('orders',u)
-                setData(d=>({...d,orders:d.orders.map(o=>o.id===lead.id?u:o)}))
-                toast('Status updated!')
-              }} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
-                {['Enquiry','Follow-up','Confirmed','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
-              </select>
-              <Btn small color={C.red} onClick={()=>setDel(lead)}>🗑️</Btn>
-            </Row>
-          </Card>
-        )
-      })}
-
-      {/* Services info card */}
-      <Card>
-        <STitle><Ic n="mappin" size={15} color={C.pink}/> My Artist Services — Pune</STitle>
-        {[
-          {emoji:'🌿',type:'Mehndi',desc:'Bridal, party, Arabic & traditional designs',areas:'Home visits, banquet halls, events'},
-          {emoji:'💄',type:'Makeup',desc:'Bridal, HD, airbrush, party & reception looks',areas:'Studio, home visits & event venues'},
-          {emoji:'🎨',type:'Ariwork',desc:'Custom canvas, mandala, resin décor',areas:'Studio-based, delivery available'},
-        ].map(s=>(
-          <div key={s.type} style={{padding:'10px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
-            <div style={{fontWeight:700,fontSize:13,color:C.dark}}>{s.emoji} {s.type}</div>
-            <div style={{fontSize:12,color:C.grey}}>{s.desc}</div>
-            <div style={{fontSize:11,color:C.pink,marginTop:2}}>📍 {s.areas}</div>
+          ))}
+          <div style={{marginLeft:'auto'}}>
+            <Btn small onClick={()=>{setForm({type:'Mehndi',status:'Enquiry',date:today()});setModal('lead')}}>
+              <Ic n="add" size={14} color={C.white}/>New Lead
+            </Btn>
           </div>
-        ))}
-      </Card>
+        </Row>
 
-      {/* Add/Edit form modal */}
-      {modal==='form'&&(
-        <Modal onClose={()=>setModal(null)} title={<><Ic n="portfolio" color={C.purple}/> {form.id?'Edit':'New'} Portfolio Lead</>}>
+        {filteredLeads.length===0&&(
+          <div style={{textAlign:'center',padding:36,background:C.white,borderRadius:16,color:C.grey}}>
+            <div style={{fontSize:40,marginBottom:10}}>🌸</div>
+            <div style={{fontWeight:700,marginBottom:6}}>No leads yet</div>
+            <div style={{fontSize:13}}>Add enquiries for bridal mehndi, makeup or ariwork bookings in Pune</div>
+          </div>
+        )}
+
+        {filteredLeads.map(lead=>{
+          const due = Number(lead.amount)-Number(lead.paid)
+          return (
+            <Card key={lead.id} accent={tc(lead.type)}>
+              <Row style={{justifyContent:'space-between',marginBottom:8}}>
+                <div>
+                  <div style={{fontWeight:800,fontSize:15,color:C.dark}}>{lead.client} {te(lead.type)}</div>
+                  <div style={{fontSize:12,color:C.grey}}>📱 {lead.mobile}</div>
+                  {lead.email&&<div style={{fontSize:11,color:C.grey}}>✉️ {lead.email}</div>}
+                  {lead.address&&<div style={{fontSize:11,color:C.pink}}>📍 {lead.address}</div>}
+                </div>
+                <div style={{textAlign:'right',display:'flex',flexDirection:'column',gap:5}}>
+                  <Badge color={sc(lead.status)}>{lead.status}</Badge>
+                  <Badge color={tc(lead.type)}>{lead.type}</Badge>
+                </div>
+              </Row>
+              {lead.event_type&&<div style={{fontSize:12,color:C.dark,marginBottom:6,background:C.pinkPale,borderRadius:8,padding:'4px 10px',display:'inline-block'}}>
+                🎉 {lead.event_type}{lead.event_date?` — ${fmtDate(lead.event_date)}`:''}
+              </div>}
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:8}}>
+                {[['Quote',fmt(lead.amount),C.dark],['Paid',fmt(lead.paid),C.green],['Due',fmt(due),due>0?C.amber:C.green]].map(([l,v,c])=>(
+                  <div key={l} style={{background:c+'12',borderRadius:8,padding:'6px 8px',textAlign:'center'}}>
+                    <div style={{fontSize:9,color:c,fontWeight:700}}>{l}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:c}}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              {lead.notes&&<div style={{fontSize:12,color:C.grey,background:C.greyL,borderRadius:8,padding:'6px 10px',marginBottom:8}}>{lead.notes}</div>}
+              <Row gap={7} style={{flexWrap:'wrap'}}>
+                <Btn small outline onClick={()=>{setForm({...lead});setModal('lead')}}>✏️ Edit</Btn>
+                <a href={`https://wa.me/91${lead.mobile}?text=${encodeURIComponent('Hi '+lead.client+'! Thank you for your enquiry. I am Kajol from Kajol Makeover Studioz, Pune. Please share your event details so I can assist you. 💄🌿')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
+                  <Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>WhatsApp</Btn>
+                </a>
+                {lead.mobile&&<a href={`tel:+91${lead.mobile}`} style={{textDecoration:'none'}}><Btn small color={C.blue}><Ic n="phone2" size={12} color={C.white}/>Call</Btn></a>}
+                <select value={lead.status} onChange={async e=>{
+                  const u={...lead,status:e.target.value}
+                  await dbUpsert('orders',u)
+                  setData(d=>({...d,orders:d.orders.map(o=>o.id===lead.id?u:o)}))
+                  toast('Status updated!')
+                }} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
+                  {['Enquiry','Follow-up','Confirmed','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
+                </select>
+                <Btn small color={C.red} onClick={()=>setDel(lead)}>🗑️</Btn>
+              </Row>
+            </Card>
+          )
+        })}
+      </>}
+
+      {/* ══════ ORDERS VIEW ══════ */}
+      {view==='orders'&&<>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:9,marginBottom:14}}>
+          <StatBox label="Revenue"  value={fmt(totalOrderRev)} color={C.green} icon="rupee"/>
+          <StatBox label="Expenses" value={fmt(totalOrderExp)} color={C.amber} icon="expenses"/>
+          <StatBox label="Pending"  value={orders.filter(o=>o.status==='Pending').length} color={C.red} icon="order"/>
+        </div>
+        <Row style={{justifyContent:'space-between',marginBottom:12}}>
+          <STitle><Ic n="order" size={15} color={C.teal}/> Commercial Orders</STitle>
+          <Btn small onClick={()=>{setForm({type:'Mehndi',client:'',mobile:'',date:today(),amount:'',paid:'',status:'Pending',notes:'',order_expenses:[]});setExp({desc:'',amt:''});setModal('order')}}>
+            <Ic n="add" size={14} color={C.white}/>New
+          </Btn>
+        </Row>
+        {orders.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32,background:C.white,borderRadius:16}}>No commercial orders yet.</div>}
+        {orders.map(o=>{
+          const due=Number(o.amount)-Number(o.paid)
+          const oExp=(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0)
+          return (
+            <Card key={o.id} accent={tc(o.type)}>
+              <Row style={{justifyContent:'space-between',marginBottom:6}}>
+                <div>
+                  <div style={{fontWeight:700,fontSize:14}}>{o.client} <Badge color={tc(o.type)}>{o.type}</Badge></div>
+                  <div style={{fontSize:12,color:C.grey}}>📱 {o.mobile} · {fmtDate(o.date)}</div>
+                  {o.notes&&<div style={{fontSize:11,color:C.grey,marginTop:2}}>{o.notes}</div>}
+                </div>
+                <Badge color={o.status==='Completed'?C.green:o.status==='Cancelled'?C.red:C.amber}>{o.status}</Badge>
+              </Row>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:5,marginBottom:8}}>
+                {[['Charge',fmt(o.amount),C.dark],[due>0?'Due':'Paid',due>0?fmt(due):fmt(o.paid),due>0?C.amber:C.green],['Exp.',fmt(oExp),C.red],['Profit',fmt(Number(o.paid)-oExp),(Number(o.paid)-oExp)>=0?C.green:C.red]].map(([l,v,c])=>(
+                  <div key={l} style={{background:C.greyL,borderRadius:8,padding:'5px 6px',textAlign:'center'}}>
+                    <div style={{fontSize:9,color:C.grey}}>{l}</div>
+                    <div style={{fontSize:12,fontWeight:700,color:c}}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              {(o.order_expenses||[]).length>0&&<div style={{background:'#FFF3E0',borderRadius:8,padding:'7px 10px',marginBottom:8}}>{(o.order_expenses||[]).map((e,i)=><div key={i} style={{fontSize:11,display:'flex',justifyContent:'space-between'}}><span>{e.desc}</span><span style={{fontWeight:700}}>₹{e.amt}</span></div>)}</div>}
+              <Row gap={7} style={{flexWrap:'wrap'}}>
+                <Btn small outline onClick={()=>{setForm({...o,order_expenses:[...(o.order_expenses||[])]});setExp({desc:'',amt:''});setModal('edit_order_'+o.id)}}>✏️</Btn>
+                <select value={o.status} onChange={async e=>{const u={...o,status:e.target.value};await dbUpsert('orders',u);setData(d=>({...d,orders:d.orders.map(x=>x.id===o.id?u:x)}));toast('Updated.')}} style={{fontSize:11,borderRadius:8,border:`1.5px solid ${C.pinkPale}`,padding:'5px 8px',fontFamily:'inherit',cursor:'pointer',color:C.dark}}>
+                  {['Pending','In Progress','Completed','Cancelled'].map(s=><option key={s}>{s}</option>)}
+                </select>
+                {o.mobile&&due>0&&<a href={`https://wa.me/91${o.mobile}?text=${encodeURIComponent('Hi '+o.client+'! Payment of '+fmt(due)+' is pending for your '+o.type+' booking. — Kajol Makeover Studioz')}`} target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}><Btn small color={C.wa}><Ic n="wa" size={12} color={C.white}/>Remind</Btn></a>}
+                <Btn small color={C.red} onClick={()=>setDel(o)}>🗑️</Btn>
+              </Row>
+              {modal===('edit_order_'+o.id)&&<Modal onClose={()=>setModal(null)} title="Edit Order">
+                <Inp label="Client" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/>
+                <Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/>
+                <Inp label="Type" value={form.type} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/>
+                <Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/>
+                <Inp label="Charge (₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+                <Inp label="Paid (₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
+                <Inp label="Status" value={form.status} onChange={v=>setForm(x=>({...x,status:v}))} opts={['Pending','In Progress','Completed','Cancelled']}/>
+                <Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/>
+                <ExpRow/>
+                <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={saveOrder} full disabled={busy}>{busy?'…':'Save'}</Btn></Row>
+              </Modal>}
+            </Card>
+          )
+        })}
+        {modal==='order'&&<Modal onClose={()=>setModal(null)} title="New Commercial Order">
+          <Inp label="Client Name *" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/>
+          <Inp label="Mobile" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))}/>
+          <Inp label="Type" value={form.type||'Mehndi'} onChange={v=>setForm(x=>({...x,type:v}))} opts={ORDER_TYPES}/>
+          <Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/>
+          <Inp label="Charge (₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+          <Inp label="Paid (₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
+          <Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))}/>
+          <ExpRow/>
+          <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.teal} onClick={saveOrder} full disabled={busy}>{busy?'…':'Add Order'}</Btn></Row>
+        </Modal>}
+      </>}
+
+      {/* Shared: lead form modal */}
+      {modal==='lead'&&(
+        <Modal onClose={()=>setModal(null)} title={<><Ic n="portfolio" color={C.purple}/> {form.id?'Edit':'New'} Lead / Booking</>}>
           <Inp label="Client Name *" value={form.client} onChange={v=>setForm(x=>({...x,client:v}))}/>
           <Inp label="Mobile *" value={form.mobile} onChange={v=>setForm(x=>({...x,mobile:v}))} type="tel"/>
           <Inp label="Email" value={form.email} onChange={v=>setForm(x=>({...x,email:v}))} type="email"/>
-          <Inp label="Address / Area in Pune" value={form.address} onChange={v=>setForm(x=>({...x,address:v}))} placeholder="e.g. Baner, Kothrud, Hadapsar"/>
+          <Inp label="Area / Location in Pune" value={form.address} onChange={v=>setForm(x=>({...x,address:v}))} placeholder="e.g. Baner, Kothrud, Hadapsar, Wakad"/>
           <Inp label="Service Type" value={form.type||'Mehndi'} onChange={v=>setForm(x=>({...x,type:v}))} opts={['Mehndi','Makeup','Ariwork','Combined']}/>
           <Inp label="Event Type" value={form.event_type} onChange={v=>setForm(x=>({...x,event_type:v}))} placeholder="e.g. Bridal, Engagement, Birthday, Sangeet"/>
           <Inp label="Event Date" value={form.event_date} onChange={v=>setForm(x=>({...x,event_date:v}))} type="date"/>
           <Inp label="Quotation (₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
           <Inp label="Advance Received (₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
           <Inp label="Status" value={form.status||'Enquiry'} onChange={v=>setForm(x=>({...x,status:v}))} opts={['Enquiry','Follow-up','Confirmed','Completed','Cancelled']}/>
-          <Inp label="Notes" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))} rows={3} placeholder="Special requirements, venue details, etc."/>
-          <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'Saving…':'Save Lead'}</Btn></Row>
+          <Inp label="Notes / Requirements" value={form.notes} onChange={v=>setForm(x=>({...x,notes:v}))} rows={3}/>
+          <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={saveLead} full disabled={busy}>{busy?'Saving…':'Save Lead'}</Btn></Row>
         </Modal>
       )}
+
       {del&&<DelConfirm item={del.client} onConfirm={async()=>{await dbDelete('orders',del.id);setData(d=>({...d,orders:d.orders.filter(o=>o.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
+
 
 /* ═══════════════════════════════════════════════════════════════════
    CERTIFICATE TAB — generate & dispatch certificates per batch
@@ -2299,80 +1991,106 @@ function CertificateTab({data,toast}) {
   const students= batch ? data.students.filter(s=>(batch.student_ids||[]).includes(s.id)) : []
   const targetStudents = selStudent==='all' ? students : students.filter(s=>s.id===selStudent)
 
-  // Generate certificate SVG for a student
+  // Certificate — landscape A4 (297x210mm = 1.414:1), matches reference design
   const CertSVG = ({student}) => {
-    const courseEmoji = course?.type==='Mehndi'?'🌿':course?.type==='Makeup'?'💄':'🎨'
+    const courseType = course?.type||'Mehndi'
+    const courseEmoji = courseType==='Mehndi'?'🌿':courseType==='Makeup'?'💄':'🎨'
     return (
-      <div id={'cert_'+student.id} ref={certRef} style={{
-        width:'100%',maxWidth:700,margin:'0 auto',
-        background:'linear-gradient(135deg,#fff9fc 0%,#fff 50%,#f0fdf4 100%)',
-        border:'8px solid transparent',
-        backgroundClip:'padding-box',
-        position:'relative',
-        borderRadius:8,
-        fontFamily:"'Georgia',serif",
-        aspectRatio:'1.41', // A4 landscape ratio
-        display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
-        padding:'5%',
-        boxShadow:'0 8px 40px rgba(233,30,140,0.15)',
-        overflow:'hidden',
+      <div id={'cert_'+student.id} style={{
+        /* Landscape A4 ratio: 297/210 = 1.414 */
+        width:'100%', aspectRatio:'1.414',
+        background:'#ffffff',
+        position:'relative', overflow:'hidden',
+        fontFamily:"Georgia,'Times New Roman',serif",
+        boxShadow:'0 8px 40px rgba(0,0,0,0.18)',
+        borderRadius:6,
+        display:'flex',
       }}>
-        {/* Decorative borders */}
-        <div style={{position:'absolute',inset:12,border:`3px solid ${C.pink}`,borderRadius:4,pointerEvents:'none'}}/>
-        <div style={{position:'absolute',inset:18,border:`1px solid ${C.green}`,borderRadius:4,pointerEvents:'none',opacity:.5}}/>
-
-        {/* Corner decorations */}
-        {[{top:8,left:8},{top:8,right:8},{bottom:8,left:8},{bottom:8,right:8}].map((pos,i)=>(
-          <div key={i} style={{position:'absolute',...pos,width:32,height:32,fontSize:22,lineHeight:1}}>
-            {courseEmoji}
+        {/* ── LEFT CONTENT PANEL (white, ~65% width) ── */}
+        <div style={{flex:'0 0 64%',padding:'5% 5% 5% 6%',display:'flex',flexDirection:'column',justifyContent:'space-between',zIndex:2,background:'#fff'}}>
+          {/* Top: Logo + Studio name */}
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
+            <KMSLogo size={40} light={false}/>
+            <div>
+              <div style={{fontSize:11,fontWeight:900,color:C.pink,letterSpacing:1}}>KAJOL MAKEOVER STUDIOZ</div>
+              <div style={{fontSize:8,color:C.grey,letterSpacing:2,textTransform:'uppercase'}}>Pune · Maharashtra</div>
+            </div>
           </div>
-        ))}
 
-        {/* Logo area */}
-        <div style={{textAlign:'center',marginBottom:10}}>
-          <div style={{fontSize:28}}>💄🌿🎨</div>
-          <div style={{fontSize:16,fontWeight:900,color:C.pink,letterSpacing:1,marginTop:4}}>KAJOL MAKEOVER STUDIOZ</div>
-          <div style={{fontSize:9,color:C.grey,letterSpacing:3,textTransform:'uppercase',marginTop:2}}>Pune · Maharashtra</div>
-        </div>
-
-        {/* Certificate title */}
-        <div style={{fontSize:11,color:C.grey,letterSpacing:4,textTransform:'uppercase',marginBottom:8}}>Certificate of Completion</div>
-        <div style={{width:120,height:2,background:`linear-gradient(90deg,transparent,${C.pink},transparent)`,marginBottom:16}}/>
-
-        {/* Main content */}
-        <div style={{fontSize:11,color:C.grey,textAlign:'center',marginBottom:6}}>This is to certify that</div>
-        <div style={{fontSize:22,fontWeight:900,color:C.dark,textAlign:'center',marginBottom:6,letterSpacing:.5}}>
-          {student.name}
-        </div>
-        <div style={{fontSize:11,color:C.grey,textAlign:'center',marginBottom:10}}>has successfully completed the</div>
-        <div style={{fontSize:16,fontWeight:800,color:C.pink,textAlign:'center',marginBottom:4}}>
-          {courseEmoji} {course?.name || batch?.name} {courseEmoji}
-        </div>
-        <div style={{fontSize:10,color:C.grey,textAlign:'center',marginBottom:16}}>
-          conducted at Kajol Makeover Studioz, Pune
-        </div>
-
-        {/* Divider */}
-        <div style={{width:'60%',height:1,background:`linear-gradient(90deg,transparent,${C.pinkPale},transparent)`,marginBottom:16}}/>
-
-        {/* Date + Signature row */}
-        <div style={{display:'flex',justifyContent:'space-between',width:'80%',alignItems:'flex-end'}}>
-          <div style={{textAlign:'center'}}>
-            <div style={{fontSize:11,fontWeight:700,color:C.dark}}>{fmtDate(certDate)}</div>
-            <div style={{width:100,height:1,background:C.grey,margin:'4px auto'}}/>
-            <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DATE</div>
+          {/* Big title — matches reference layout */}
+          <div>
+            <div style={{fontSize:8,color:C.grey,letterSpacing:4,textTransform:'uppercase',marginBottom:6}}>Certificate of Completion</div>
+            <div style={{fontSize:28,fontWeight:900,color:C.pink,lineHeight:1.1,marginBottom:10,fontFamily:"Georgia,serif"}}>Certificate<br/>of Completion</div>
           </div>
-          <div style={{textAlign:'center'}}>
-            <div style={{fontFamily:"'Dancing Script',Georgia,serif",fontSize:19,color:C.pink,fontWeight:700,letterSpacing:.5,marginBottom:4}}>{directorName}</div>
-            <div style={{width:130,height:1,background:C.grey,margin:'4px auto'}}/>
-            <div style={{fontSize:9,color:C.grey,letterSpacing:1}}>DIRECTOR & INSTRUCTOR</div>
+
+          {/* Description line */}
+          <div style={{fontSize:10,color:C.grey,lineHeight:1.6,marginBottom:6}}>
+            For successfully completing the course on<br/>
+            <span style={{fontWeight:700,color:C.dark}}>{courseEmoji} {course?.name||batch?.name}</span><br/>
+            conducted at Kajol Makeover Studioz, Pune.
           </div>
+
+          {/* Student name — cursive large */}
+          <div>
+            <div style={{fontFamily:"Georgia,'Dancing Script',serif",fontSize:22,color:C.dark,fontStyle:'italic',fontWeight:700,marginBottom:2,letterSpacing:.5,borderBottom:`1.5px solid ${C.grey}`,paddingBottom:4,display:'inline-block',minWidth:200}}>
+              {student.name}
+            </div>
+            <div style={{fontSize:7,color:C.grey,letterSpacing:2,textTransform:'uppercase',marginTop:4}}>Presented To</div>
+          </div>
+
+          {/* Date + Signature row */}
+          <div style={{display:'flex',gap:32,alignItems:'flex-end',marginTop:8}}>
+            <div>
+              <div style={{fontSize:11,fontWeight:700,color:C.dark,marginBottom:2}}>{fmtDate(certDate)}</div>
+              <div style={{width:90,height:1,background:C.grey,marginBottom:3}}/>
+              <div style={{fontSize:7,color:C.grey,letterSpacing:1.5,textTransform:'uppercase'}}>Date</div>
+            </div>
+            <div>
+              {/* Kajol J Kamble signature */}
+              <div style={{fontFamily:"Georgia,serif",fontSize:16,color:C.pink,fontStyle:'italic',fontWeight:700,marginBottom:2,letterSpacing:.3}}>Kajol J Kamble</div>
+              <div style={{width:110,height:1,background:C.grey,marginBottom:3}}/>
+              <div style={{fontSize:7,color:C.grey,letterSpacing:1.5,textTransform:'uppercase'}}>Signature</div>
+            </div>
+          </div>
+
+          {/* Bottom: website */}
+          <div style={{fontSize:7,color:C.grey,marginTop:6,letterSpacing:.5}}>kajol-makeover-studioz.vercel.app · Batch: {batch?.name}</div>
         </div>
 
-        {/* Batch info */}
-        <div style={{position:'absolute',bottom:28,left:'50%',transform:'translateX(-50%)',fontSize:8,color:C.grey,letterSpacing:.5,textAlign:'center',whiteSpace:'nowrap'}}>
-          Batch: {batch?.name} | {batch?.timing} | kajol-makeover-studioz.vercel.app
+        {/* ── RIGHT DECORATIVE PANEL (~36% width) ── */}
+        <div style={{flex:'0 0 36%',position:'relative',overflow:'hidden',background:'#fff'}}>
+          {/* Woman silhouette — SVG, matches reference style */}
+          <svg viewBox="0 0 200 300" style={{position:'absolute',inset:0,width:'100%',height:'100%'}} preserveAspectRatio="xMaxYMin slice">
+            {/* Background fill */}
+            <rect width="200" height="300" fill={C.pink} opacity="0.08"/>
+            {/* Large decorative silhouette shape — woman face/hair profile */}
+            <path d="M200 0 L200 300 L60 300 Q40 250 50 200 Q55 170 70 155 Q85 140 90 120 Q95 100 88 80 Q80 55 85 35 Q90 15 110 5 Q140 -5 170 5 Q195 15 200 0Z"
+              fill={C.pink} opacity="0.18"/>
+            <path d="M200 0 L200 300 L80 300 Q60 260 68 215 Q72 185 84 168 Q96 150 100 128 Q105 105 97 83 Q89 58 93 38 Q97 18 118 8 Q148 -2 178 8 Q200 18 200 0Z"
+              fill={C.pink} opacity="0.3"/>
+            <path d="M200 0 L200 300 L100 300 Q82 270 88 228 Q92 200 104 182 Q116 163 120 140 Q124 115 115 92 Q107 66 112 46 Q117 25 138 16 Q163 5 190 12 L200 0Z"
+              fill={C.pink} opacity="0.55"/>
+            {/* Hair flow — large sweeping curve at bottom */}
+            <path d="M110 300 Q90 270 88 240 Q86 220 98 205 Q110 190 115 170 Q120 148 112 124 Q104 98 108 76 Q113 52 132 42 Q155 30 180 38 Q200 46 200 60 L200 300Z"
+              fill={C.pinkD} opacity="0.7"/>
+            {/* Decorative flowers like reference */}
+            <circle cx="155" cy="200" r="8" fill={C.pink} opacity="0.5"/>
+            <circle cx="168" cy="190" r="5" fill={C.pink} opacity="0.4"/>
+            <circle cx="143" cy="210" r="4" fill={C.pink} opacity="0.35"/>
+            {/* Small mehndi dots */}
+            {[0,1,2,3].map(i=>(
+              <circle key={i} cx={148+i*7} cy={230} r="2.5" fill={C.pink} opacity="0.3"/>
+            ))}
+            {/* Spiral at bottom like reference */}
+            <path d="M130 280 Q120 265 128 255 Q136 245 145 252 Q152 258 148 268 Q144 276 136 275" stroke={C.pink} strokeWidth="2" fill="none" opacity="0.4"/>
+          </svg>
+          {/* Pink border overlay on left edge */}
+          <div style={{position:'absolute',left:0,top:0,bottom:0,width:3,background:`linear-gradient(to bottom,${C.pink},${C.pinkD})`}}/>
         </div>
+
+        {/* ── OUTER DECORATIVE BORDER ── */}
+        <div style={{position:'absolute',inset:4,border:`2px solid ${C.pink}`,borderRadius:4,pointerEvents:'none',opacity:.25,zIndex:10}}/>
+        <div style={{position:'absolute',inset:8,border:`1px solid ${C.green}`,borderRadius:3,pointerEvents:'none',opacity:.15,zIndex:10}}/>
       </div>
     )
   }
@@ -2537,12 +2255,11 @@ const TABS=[
   {id:'finance',  label:'Finance',   icon:'chart'},
   {id:'reports',  label:'Reports',   icon:'report'},
   {id:'broadcast',label:'Broadcast', icon:'broadcast'},
-  {id:'leads',    label:'Leads',     icon:'portfolio'},
   {id:'certificate',label:'Certs',  icon:'certificate'},
   {id:'website',  label:'Website',   icon:'globe'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
-const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',orders:'Individual Orders',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Individual Orders & Leads',certificate:'Certificates',website:'Website Editor',settings:'Settings & Admin'}
+const TITLES={home:'Dashboard',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Leads & Orders (Pune)',certificate:'Certificates',website:'Website Editor',settings:'Settings & Admin'}
 const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2652,11 +2369,10 @@ function AdminApp() {
                 {tab==='courses'  &&<CoursesTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='batches'  &&<BatchesTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='payments' &&<PaymentsTab   data={data} setData={setData} toast={toast}/>}
-                {tab==='orders'   &&<OrdersTab     data={data} setData={setData} toast={toast}/>}
                 {tab==='finance'  &&<FinanceTab    data={data} setData={setData} toast={toast}/>}
                 {tab==='reports'  &&<ReportsTab    data={data}/>}
                 {tab==='broadcast'&&<BroadcastTab  data={data} toast={toast}/>}
-                {tab==='leads'    &&<PortfolioTab    data={data} setData={setData} toast={toast}/>}
+                {tab==='leads'    &&<LeadsOrdersTab data={data} setData={setData} toast={toast}/>}
                 {tab==='certificate'&&<CertificateTab  data={data} toast={toast}/>}
                 {tab==='website'  &&<WebsiteEditorTab toast={toast}/>}
                 {tab==='settings' &&<SettingsTab   data={data} setData={setData} onLogout={()=>setLoggedIn(false)} toast={toast}/>}
@@ -2685,10 +2401,13 @@ function AdminApp() {
 }
 
 export default function AppDashboard() {
-  const isEnroll = window.location.pathname.startsWith('/enroll')
+  // Robust enroll detection — works with React Router, Vercel, and direct URLs
+  const path = typeof window !== 'undefined' ? window.location.pathname : ''
+  const search = typeof window !== 'undefined' ? window.location.search : ''
+  const isEnroll = path === '/enroll' || path.startsWith('/enroll/') || path.startsWith('/enroll?') || search.includes('enroll')
   if(isEnroll) return (
     <div>
-      <style>{`*{box-sizing:border-box;margin:0;padding:0;}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Nunito','Segoe UI',sans-serif;}`}</style>
       <EnrollForm/>
     </div>
   )
