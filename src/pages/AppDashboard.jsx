@@ -340,7 +340,6 @@ function KMSLogo({size=48,light=false}) {
     </svg>
   )
 }
-
 function KMSLogoMark({size=40,light=false}) {
   const textColor = light ? '#fff' : '#1A1A2E'
   const subColor  = light ? 'rgba(255,255,255,0.7)' : '#757575'
