@@ -208,7 +208,7 @@ function KMSLogo({ size = 48, light = false }) {
   const bg   = light ? 'rgba(255,255,255,0.12)' : '#FCE4EC'
   const h    = size * 1.2
   return (
-    <svg width={size} height={h} viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <svg width={size} height={h} viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="120" rx="16" fill={bg} opacity="0.5"/>
       <rect x="16" y="6" width="9" height="40" rx="4.5" fill={bru} transform="rotate(-20 20 26)"/>
       <ellipse cx="13" cy="9" rx="7" ry="11" fill={bh} transform="rotate(-20 13 9)"/>
