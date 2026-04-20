@@ -39,7 +39,7 @@ const PHONE1          = '8390695155'
 const PHONE2          = '7030825125'
 const EMAIL_KAJOL     = 'kajoljkambale@gmail.com'
 const UPI_ID          = 'kajalkambaleaxis@yesg'
-const UPI_NAME        = 'Kajal Jivan Kamble'  // Kajol Makeover Studioz playlist
+const UPI_NAME        = 'Kajol Makeover Studioz'  // Kajol Makeover Studioz playlist
 const ADMIN_URL       = '/app'
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -153,6 +153,52 @@ function SEOHead() {
    For now this SVG logo is used automatically.
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
+  const nail = light ? 'rgba(255,180,190,0.95)' : '#E91E8C'
+  const hand = light ? 'rgba(255,255,255,0.93)' : '#FAEAE0'
+  const hsk  = light ? 'rgba(255,255,255,0.45)' : '#2D1008'
+  const bru  = light ? 'rgba(255,255,255,0.9)'  : '#3D2218'
+  const bh   = light ? 'rgba(255,255,255,0.65)' : '#7A5040'
+  const bhl  = light ? 'rgba(255,255,255,0.4)'  : '#A07868'
+  const bg   = light ? 'rgba(255,255,255,0.1)'  : '#FCE4EC'
+  return (
+    <svg width={size} height={size*1.28} viewBox="0 0 100 128" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+      <rect width="100" height="128" rx="14" fill={bg} opacity="0.45"/>
+      <rect x="5" y="2" width="11" height="45" rx="5.5" fill={bru} transform="rotate(-30 10 24)"/>
+      <ellipse cx="4"  cy="5"  rx="8"   ry="12.5" fill={bh}  transform="rotate(-30 4 5)"/>
+      <ellipse cx="4"  cy="4"  rx="5"   ry="8.5"  fill={bhl} transform="rotate(-30 4 4)" opacity="0.7"/>
+      <line x1="8"  y1="48" x2="5"  y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      <rect x="27" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(-12 32 23)"/>
+      <ellipse cx="26" cy="4"  rx="7.5" ry="12"   fill={bh}  transform="rotate(-12 26 4)"/>
+      <ellipse cx="26" cy="3"  rx="4.5" ry="8"    fill={bhl} transform="rotate(-12 26 3)" opacity="0.7"/>
+      <line x1="32" y1="48" x2="30" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      <rect x="55" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(8 60 23)"/>
+      <ellipse cx="62" cy="3"  rx="7.5" ry="12"   fill={bh}  transform="rotate(8 62 3)"/>
+      <ellipse cx="62" cy="2"  rx="4.5" ry="8"    fill={bhl} transform="rotate(8 62 2)" opacity="0.7"/>
+      <line x1="62" y1="48" x2="64" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
+      <rect x="77" y="3" width="10" height="43" rx="5"   fill={bru} transform="rotate(26 82 24)"/>
+      <ellipse cx="85" cy="6"  rx="7"   ry="11"   fill={bh}  transform="rotate(26 85 6)"/>
+      <ellipse cx="85" cy="5"  rx="4"   ry="7.5"  fill={bhl} transform="rotate(26 85 5)" opacity="0.7"/>
+      <line x1="83" y1="46" x2="86" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
+      <path d="M16 62 Q12 74 14 90 Q14 103 30 107 Q50 112 70 107 Q86 103 86 90 L85 62 Q78 57 70 60 Q62 55 54 60 Q45 55 36 60 Q26 56 16 62Z"
+        fill={hand} stroke={hsk} strokeWidth="2.8"/>
+      <path d="M20 70 Q26 65 32 70" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M38 66 Q45 61 52 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M58 66 Q64 61 70 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
+      <path d="M74 69 Q79 64 83 69" stroke={hsk} strokeWidth="1.1" fill="none" opacity="0.28"/>
+      <ellipse cx="26"   cy="64" rx="6.5" ry="4.5" fill={nail}/>
+      <ellipse cx="45"   cy="61" rx="6.5" ry="4.2" fill={nail}/>
+      <ellipse cx="64"   cy="61" rx="6"   ry="4"   fill={nail}/>
+      <ellipse cx="80"   cy="63" rx="5.5" ry="3.8" fill={nail}/>
+      <ellipse cx="24.5" cy="62.5" rx="2.5" ry="1.5" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="43.5" cy="59.5" rx="2.5" ry="1.4" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="62.5" cy="59.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="78.5" cy="61.5" rx="2"   ry="1.2" fill="rgba(255,255,255,0.55)"/>
+      {[0,1,2,3,4,5].map(ix=>(
+        <circle key={ix} cx={26+ix*9} cy={100} r="2.2" fill={nail} opacity="0.38"/>
+      ))}
+    </svg>
+  )
+}) {
   const pk   = light ? '#fff'                   : '#E91E8C'
   const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
   const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
@@ -239,6 +285,7 @@ const CSS = `
   .logo-spin{ animation: spinSlow 18s linear infinite; }
   .shimmer  { animation: shimmer 2.5s ease-in-out infinite; }
   ::-webkit-scrollbar { width:4px; }
+  @media print { body>*:not(#cert-print-area){display:none!important;} #cert-print-area{display:block!important;} }
   ::-webkit-scrollbar-thumb { background:#FCE4EC; border-radius:4px; }
   .embedsocial-hashtag { margin:0 auto; }
   .gallery-img { transition:transform .25s,box-shadow .25s; }
@@ -774,7 +821,7 @@ export default function Website() {
           ))}
         </div>
         <div style={{background:C.white,borderRadius:20,padding:24,boxShadow:'0 4px 20px rgba(233,30,140,0.09)',border:`1px solid ${C.pinkPale}`,maxWidth:540,margin:'0 auto',textAlign:'center'}}>
-          <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
+          <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving all Pune areas: Baner · Kothrud · Hadapsar · Wakad · Hinjewadi · Viman Nagar · Aundh · Koregaon Park · Deccan · Pimpri-Chinchwad · Katraj · Sinhagad Road & nearby</div>
           <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
           <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
             <a href={`https://wa.me/918390695155?text=${encodeURIComponent("Hi Kajol Maam! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.")}`}
@@ -954,7 +1001,7 @@ export default function Website() {
             <div style={{background:'#fff',borderRadius:16,padding:16,marginBottom:16,display:'inline-block',boxShadow:'0 2px 12px rgba(0,0,0,0.1)'}}>
               <img
                 src="/upi-qr.jpg"
-                alt="UPI QR Code — Kajal Jivan Kamble"
+                alt="UPI QR Code — Kajol Makeover Studioz"
                 style={{width:200,height:200,display:'block',borderRadius:8}}
                 onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex'}}
               />
@@ -965,7 +1012,7 @@ export default function Website() {
               </div>
             </div>
             <div style={{marginBottom:6}}>
-              <div style={{fontSize:18,fontWeight:900,color:C.dark}}>KAJAL JIVAN KAMBLE</div>
+              <div style={{fontSize:18,fontWeight:900,color:C.dark}}>KAJOL MAKEOVER STUDIOZ</div>
               <div style={{fontSize:13,color:C.grey,marginTop:4}}>UPI ID: <b style={{color:C.dark,userSelect:'all'}}>kajalkambaleaxis@yesg</b></div>
             </div>
             <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:14,flexWrap:'wrap'}}>
@@ -976,7 +1023,7 @@ export default function Website() {
             <div style={{marginTop:16,background:C.white,borderRadius:12,padding:'12px 16px',fontSize:12,color:C.grey,lineHeight:1.7}}>
               📌 After payment, please send a screenshot on WhatsApp to confirm your enrollment.
             </div>
-            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Maam! I have made the payment for the course. Please find the screenshot attached. Name: [Your Name]')}`}
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent(`Hi Kajol Maam! I have made the payment for the course. Please find the screenshot attached. Name: [Your Name]`)}`}
               target="_blank" rel="noopener noreferrer"
               style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginTop:14,padding:'12px 20px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',boxShadow:`0 4px 16px ${C.wa}44`}}>
               💬 Send Payment Screenshot on WhatsApp
