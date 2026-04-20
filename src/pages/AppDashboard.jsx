@@ -1091,10 +1091,10 @@ function BroadcastTab({data,toast}) {
   const batchMsg = type => {
     if(!batch) return ''
     const cl=nextClass
-    if(type==='classReminder') return `🌸 *Class Reminder — ${batch.name}*\n\n${cl?`Day ${cl.day}: *${cl.topic}*\n📅 Date: ${cl.date}\n`:''}⏰ Time: ${batch.timing||'As scheduled'}\n🎥 Zoom: ${cl?.zoom_link||batch.zoom_link||'Link in group'}\n\n${cl?.homework?'📝 Homework: '+cl.homework+'\n\n':''}Please join on time! 🙏\n— Kajol Ma'am 💄`
+    if(type==='classReminder') return '🌸 *Class Reminder — '+batch.name+'*\n\n'+(cl?'Day '+cl.day+': *'+cl.topic+'*\n📅 Date: '+cl.date+'\n':'')+'⏰ Time: '+(batch.timing||'As scheduled')+'\n🎥 Zoom: '+(cl?.zoom_link||batch.zoom_link||'Link in group')+'\n\n'+(cl?.homework?'📝 Homework: '+cl.homework+'\n\n':'')+'Please join on time! 🙏\n— Kajol Maam 💄'
     if(type==='zoomLink')      return `🎥 *${batch.name} — Zoom Link*\n\nMeeting Link: ${batch.zoom_link||'To be shared'}\nMeeting ID: ${batch.zoom_id||'—'}\n⏰ Time: ${batch.timing||'As scheduled'}\n\n— Kajol Ma'am 💄`
-    if(type==='ytReady')       return `🎬 *Recording is Ready!*\n\n${cl?`Day ${cl.day}: *${cl.topic}*\n▶ ${cl.youtube_link||'Link coming soon'}\n`:''}Watch anytime:\nhttps://youtube.com/@kajolmakeoverstudioz\n\n— Kajol Ma'am 💄`
-    if(type==='homework')      return `📝 *Homework Reminder — ${batch.name}*\n\n${cl?`Day ${cl.day} HW: *${cl.homework||'Check previous class'}*\n`:''}Please share your practice photos in this group. ✅\n— Kajol Ma'am 💄`
+    if(type==='ytReady')       return '🎬 *Recording is Ready!*\n\n'+(cl?'Day '+cl.day+': *'+cl.topic+'*\n▶ '+(cl.youtube_link||'Link coming soon')+'\n':'')+'Watch anytime:\nhttps://youtube.com/@kajolmakeoverstudioz\n\n— Kajol Maam 💄'
+    if(type==='homework')      return '📝 *Homework Reminder — '+batch.name+'*\n\n'+(cl?'Day '+cl.day+' HW: *'+(cl.homework||'Check previous class')+'*\n':'')+'Please share your practice photos in this group. ✅\n— Kajol Maam 💄'
     if(type==='payReminder')   return `💳 *Fee Reminder — ${batch.name}*\n\nDear Students,\n\nKindly complete your pending fee payment at your earliest convenience. 🙏\n\nThank you!\n— Kajol Ma'am 💄`
     return ''
   }
@@ -1103,7 +1103,7 @@ function BroadcastTab({data,toast}) {
   const communityMsg = type => {
     if(type==='newBatch') {
       const active=data.batches.filter(b=>b.status==='Active'||b.status==='Upcoming')
-      return `✨ *New Batch Announcement!*\n\n💄 Kajol Makeover Studioz\n\n${active.map(b=>`📚 *${b.name}*\n⏰ ${b.timing||'TBD'} · ${b.schedule||''}\n💰 Fee: ${fmt(b.fee||0)}`).join('\n\n')}\n\n🎯 Limited seats — Enroll now!\n🔗 ${ENROLL_URL}\n\n— Kajol Ma'am 💄\n📸 ${INSTAGRAM}`
+      return '✨ *New Batch Announcement!*\n\n💄 Kajol Makeover Studioz\n\n'+active.map(b=>'📚 *'+b.name+'*\n⏰ '+(b.timing||'TBD')+' · '+(b.schedule||'')+'\n💰 Fee: '+fmt(b.fee||0)).join('\n\n')+'\n\n🎯 Limited seats — Enroll now!\n🔗 '+ENROLL_URL+'\n\n— Kajol Maam 💄\n📸 '+INSTAGRAM
     }
     if(type==='enrollLink') return `🌸 *Enroll in Our Online Courses!*\n\nMehndi • Makeup • Ariwork\n\n📲 Fill your enrollment form:\n🔗 ${ENROLL_URL}\n\n💄 Online classes via Zoom\n📹 Recorded classes on YouTube\n\n— Kajol Ma'am 💄\n📸 ${INSTAGRAM}`
     if(type==='youtube')    return `🎬 *Watch Our Latest Classes on YouTube!* 🌸\n\n▶ Subscribe & Watch: ${YOUTUBE}\n\n💄 Kajol Makeover Studioz\n📸 ${INSTAGRAM}`
@@ -1737,7 +1737,7 @@ function SettingsTab({data,setData,onLogout,toast}) {
       <div style={{fontSize:12,color:C.grey,marginTop:2}}>Kajal Jivan Kamble</div>
       <div style={{fontSize:11,color:C.grey}}>UPI ID: kajalkambaleaxis@yesg</div>
     </div>
-    <Row gap={8}><Btn small color={C.wa} onClick={()=>{const m='💳 *Fee Payment — Kajol Makeover Studioz*\n\nPlease pay your course fee via UPI:\n📱 *8390695155* (Google Pay / PhonePe / Paytm)\nUPI ID: kajalkambaleaxis@yesg\nName: Kajal Jivan Kamble\n\nPlease share payment screenshot after payment. 🙏\n— Kajol Ma'am';navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Payment info copied!'))}}>Share UPI Details</Btn>
+    <Row gap={8}><Btn small color={C.wa} onClick={()=>{const m='💳 *Fee Payment — Kajol Makeover Studioz*\n\nPlease pay your course fee via UPI:\n📱 *8390695155* (Google Pay / PhonePe / Paytm)\nUPI ID: kajalkambaleaxis@yesg\nName: Kajal Jivan Kamble\n\nPlease share payment screenshot after payment. 🙏\n— Kajol Maam';navigator.share?navigator.share({text:m}):(navigator.clipboard?.writeText(m),toast('Payment info copied!'))}}>Share UPI Details</Btn>
       <Btn small color={C.blue} onClick={()=>{navigator.clipboard?.writeText('kajalkambaleaxis@yesg');toast('UPI ID copied!')}}>Copy UPI ID</Btn>
     </Row>
     <div style={{marginTop:10,textAlign:'center'}}>
