@@ -250,11 +250,10 @@ function ExportModal({data,onClose}) {
     </div>
   )
 }
-
 ═══════════════════════════════════════════════════════════════════
-   KMS LOGO — hand holding brushes + mehndi cone
-   Used in: enrollment form header, admin header, settings
-═══════════════════════════════════════════════════════════════════ */
+  /*KMS LOGO — hand holding brushes + mehndi cone
+   Used in: enrollment form header, admin header, settings*/
+═══════════════════════════════════════════════════════════════════ 
 function KMSLogo({size=48,light=false}) {
   /* Exact match to reference image: hand with 4 brushes, orange-red nails
      Colors match brand: pink E91E8C, green 2E7D32, dark handle 3D2218 */
