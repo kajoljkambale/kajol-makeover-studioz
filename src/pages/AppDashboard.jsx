@@ -250,10 +250,11 @@ function ExportModal({data,onClose}) {
     </div>
   )
 }
-═══════════════════════════════════════════════════════════════════
-  /*KMS LOGO — hand holding brushes + mehndi cone
-   Used in: enrollment form header, admin header, settings*/
-═══════════════════════════════════════════════════════════════════ 
+
+/* ═══════════════════════════════════════════════════════════════════
+   KMS LOGO — hand holding brushes + mehndi cone
+   Used in: enrollment form header, admin header, settings
+═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({size=48,light=false}) {
   /* Exact match to reference image: hand with 4 brushes, orange-red nails
      Colors match brand: pink E91E8C, green 2E7D32, dark handle 3D2218 */
@@ -311,55 +312,6 @@ function KMSLogo({size=48,light=false}) {
       {/* Mehndi wrist dots */}
       {[0,1,2,3,4,5].map(ix=>(
         <circle key={ix} cx={26+ix*9} cy={100} r="2.2" fill={nail} opacity="0.38"/>
-      ))}
-    </svg>
-  )
-}
-  const pk   = light ? '#fff'                   : '#E91E8C'
-  const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
-  const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
-  const hsk  = light ? 'rgba(255,255,255,0.55)' : '#3D1A1A'
-  const bru  = light ? 'rgba(255,255,255,0.88)' : '#4A2C2A'
-  const bh   = light ? 'rgba(255,255,255,0.6)'  : '#8B6B60'
-  const bg   = light ? 'rgba(255,255,255,0.12)' : '#FCE4EC'
-  const h = size * 1.2
-  return (
-    <svg width={size} height={h} viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="120" rx="16" fill={bg} opacity="0.5"/>
-      {/* === BRUSH 1 — left, angled left === */}
-      <rect x="16" y="6" width="9" height="40" rx="4.5" fill={bru} transform="rotate(-20 20 26)"/>
-      <ellipse cx="13" cy="9" rx="7" ry="11" fill={bh} transform="rotate(-20 13 9)"/>
-      <ellipse cx="13" cy="8" rx="4.5" ry="7.5" fill={bru} opacity="0.5" transform="rotate(-20 13 8)"/>
-      <line x1="18" y1="46" x2="16" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
-      {/* === BRUSH 2 — center, nearly upright === */}
-      <rect x="44" y="4" width="10" height="42" rx="5" fill={bru} transform="rotate(-3 49 25)"/>
-      <ellipse cx="46" cy="7" rx="6" ry="10" fill={bh} transform="rotate(-3 46 7)"/>
-      <ellipse cx="46" cy="6" rx="3.8" ry="7" fill={bru} opacity="0.5" transform="rotate(-3 46 6)"/>
-      <line x1="50" y1="46" x2="50" y2="54" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
-      {/* === BRUSH 3 — right, angled right === */}
-      <rect x="70" y="7" width="9" height="38" rx="4.5" fill={bru} transform="rotate(18 74 26)"/>
-      <ellipse cx="76" cy="9" rx="6.5" ry="10" fill={bh} transform="rotate(18 76 9)"/>
-      <ellipse cx="76" cy="8" rx="4" ry="7" fill={bru} opacity="0.5" transform="rotate(18 76 8)"/>
-      <line x1="76" y1="45" x2="77" y2="53" stroke={pk} strokeWidth="3.5" strokeLinecap="round"/>
-      {/* === HAND / PALM holding brushes === */}
-      <path d="M26 55 Q23 66 24 82 Q24 93 36 95 Q50 99 64 95 Q76 93 76 82 L75 55 Q69 51 63 53 Q56 49 50 53 Q44 49 38 53 Q32 49 26 55Z"
-        fill={hand} stroke={hsk} strokeWidth="2.5"/>
-      {/* Finger/knuckle lines */}
-      <path d="M31 62 Q35 58 39 62" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
-      <path d="M46 59 Q50 55 54 59" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
-      <path d="M61 60 Q64 56 67 60" stroke={hsk} strokeWidth="1.2" fill="none" opacity="0.35"/>
-      {/* === NAILS — brand pink matching image === */}
-      <ellipse cx="30"   cy="57" rx="5.5" ry="4"   fill={nail}/>
-      <ellipse cx="50"   cy="54" rx="5.5" ry="3.8" fill={nail}/>
-      <ellipse cx="64.5" cy="55" rx="5" ry="3.5" fill={nail}/>
-      <ellipse cx="75"   cy="58" rx="4.5" ry="3.2" fill={nail}/>
-      {/* Nail highlights */}
-      <ellipse cx="28.5" cy="55.5" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
-      <ellipse cx="48.5" cy="52.8" rx="2" ry="1.2" fill="rgba(255,255,255,0.45)"/>
-      <ellipse cx="63"   cy="53.8" rx="1.8" ry="1" fill="rgba(255,255,255,0.45)"/>
-      {/* === Mehndi dot accent on wrist === */}
-      {[0,1,2,3,4].map(i=>(
-        <circle key={i} cx={33+i*8} cy={88} r="1.8" fill={pk} opacity="0.4"/>
       ))}
     </svg>
   )
