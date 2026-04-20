@@ -240,6 +240,7 @@ function KMSLogo({ size = 48, light = false }) {
     </svg>
   )
 }
+
 function LogoMark({ dark: isDark = true }) {
   return (
     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
