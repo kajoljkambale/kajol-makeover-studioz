@@ -153,76 +153,6 @@ function SEOHead() {
    For now this SVG logo is used automatically.
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
-  /* Based on reference image: hand holding 4 makeup brushes, pink/orange nails */
-  const nail = light ? 'rgba(255,160,180,0.95)' : '#E91E8C'   // brand pink nails
-  const hand = light ? 'rgba(255,255,255,0.92)'  : '#FFF4F0'   // pale skin
-  const hsk  = light ? 'rgba(255,255,255,0.5)'   : '#2D1010'   // hand outline
-  const bru  = light ? 'rgba(255,255,255,0.85)'  : '#3D2218'   // brush handle dark
-  const bh   = light ? 'rgba(255,255,255,0.6)'   : '#7A5548'   // brush head mid
-  const bl   = light ? 'rgba(255,255,255,0.4)'   : '#A0877C'   // brush highlight
-  const bg   = light ? 'rgba(255,255,255,0.1)'   : '#FCE4EC'
-  const h = size * 1.3
-  return (
-    <svg width={size} height={h} viewBox="0 0 100 130" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
-      {/* ── background subtle circle ── */}
-      <circle cx="50" cy="65" r="54" fill={bg} opacity="0.45"/>
-
-      {/* ══ BRUSH 1 — far left, most angled left ══ */}
-      <rect x="8"  y="4"  width="10" height="44" rx="5" fill={bru} transform="rotate(-28 13 26)"/>
-      <ellipse cx="7"  cy="7"  rx="7.5" ry="12" fill={bh}  transform="rotate(-28 7 7)"/>
-      <ellipse cx="7"  cy="6"  rx="4.5" ry="8"  fill={bl}  transform="rotate(-28 7 6)" opacity="0.7"/>
-      <rect    x="6"  y="4"  width="3"  height="5"  rx="1.5" fill={bru} transform="rotate(-28 7 6)" opacity="0.5"/>
-      <line x1="12" y1="48" x2="10" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-
-      {/* ══ BRUSH 2 — left-center, slight left tilt ══ */}
-      <rect x="27" y="2"  width="10" height="46" rx="5" fill={bru} transform="rotate(-12 32 25)"/>
-      <ellipse cx="26" cy="5"  rx="7"   ry="11" fill={bh}  transform="rotate(-12 26 5)"/>
-      <ellipse cx="26" cy="4"  rx="4.2" ry="7.5" fill={bl} transform="rotate(-12 26 4)" opacity="0.7"/>
-      <rect    x="25" y="2"  width="3"  height="5"  rx="1.5" fill={bru} transform="rotate(-12 26 4)" opacity="0.5"/>
-      <line x1="32" y1="48" x2="31" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-
-      {/* ══ BRUSH 3 — right-center, slight right tilt ══ */}
-      <rect x="52" y="2"  width="10" height="46" rx="5" fill={bru} transform="rotate(8 57 25)"/>
-      <ellipse cx="58" cy="4"  rx="7"   ry="11" fill={bh}  transform="rotate(8 58 4)"/>
-      <ellipse cx="58" cy="3"  rx="4.2" ry="7.5" fill={bl} transform="rotate(8 58 3)" opacity="0.7"/>
-      <rect    x="56" y="2"  width="3"  height="5"  rx="1.5" fill={bru} transform="rotate(8 57 4)" opacity="0.5"/>
-      <line x1="60" y1="48" x2="61" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-
-      {/* ══ BRUSH 4 — far right, most angled right ══ */}
-      <rect x="74" y="4"  width="9"  height="42" rx="4.5" fill={bru} transform="rotate(24 78 25)"/>
-      <ellipse cx="82" cy="6"  rx="7"   ry="10.5" fill={bh}  transform="rotate(24 82 6)"/>
-      <ellipse cx="82" cy="5"  rx="4"   ry="7"   fill={bl}  transform="rotate(24 82 5)" opacity="0.7"/>
-      <line x1="80" y1="46" x2="82" y2="56" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-
-      {/* ══ HAND — fist gripping brushes ══ */}
-      <path d="M18 58 Q14 68 15 85 Q15 97 28 100 Q50 105 72 100 Q85 97 85 85 L84 58 Q78 53 71 56 Q63 51 55 56 Q46 51 38 56 Q28 51 18 58Z"
-        fill={hand} stroke={hsk} strokeWidth="2.8"/>
-      {/* Knuckle / finger lines */}
-      <path d="M22 68 Q27 63 32 68" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.3"/>
-      <path d="M38 64 Q44 59 50 64" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.3"/>
-      <path d="M56 64 Q61 59 66 64" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.3"/>
-      <path d="M71 66 Q75 62 79 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.3"/>
-      {/* Side of hand */}
-      <path d="M15 85 Q14 95 18 100" stroke={hsk} strokeWidth="1.5" fill="none" opacity="0.2"/>
-
-      {/* ══ NAILS — brand pink, matching reference image ══ */}
-      <ellipse cx="25"   cy="60" rx="6"   ry="4.5" fill={nail}/>
-      <ellipse cx="44"   cy="57" rx="6"   ry="4.2" fill={nail}/>
-      <ellipse cx="61"   cy="57" rx="5.5" ry="4"   fill={nail}/>
-      <ellipse cx="77.5" cy="60" rx="5"   ry="3.8" fill={nail}/>
-      {/* Nail shine streaks */}
-      <ellipse cx="23.5" cy="58.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.5)"/>
-      <ellipse cx="42.5" cy="55.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.5)"/>
-      <ellipse cx="59.5" cy="55.5" rx="2"   ry="1.2" fill="rgba(255,255,255,0.5)"/>
-      <ellipse cx="76"   cy="58.5" rx="1.8" ry="1.1" fill="rgba(255,255,255,0.5)"/>
-
-      {/* ══ Mehndi dot accent on wrist / bottom ══ */}
-      {[0,1,2,3,4,5].map(ix=>(
-        <circle key={ix} cx={28+ix*8} cy={96} r="2" fill={nail} opacity="0.35"/>
-      ))}
-    </svg>
-  )
-}) {
   const pk   = light ? '#fff'                   : '#E91E8C'
   const nail = light ? 'rgba(255,200,220,0.9)'  : '#E91E8C'
   const hand = light ? 'rgba(255,255,255,0.92)' : '#FFF0F5'
@@ -261,50 +191,6 @@ function KMSLogo({ size = 48, light = false }) {
       {[0,1,2,3,4].map(i=>(
         <circle key={i} cx={33+i*8} cy={88} r="1.8" fill={pk} opacity="0.4"/>
       ))}
-    </svg>
-  )
-}) {
-  const pk  = light ? '#fff'                : C.pink
-  const pkD = light ? 'rgba(255,255,255,0.8)': C.pinkD
-  const gn  = light ? 'rgba(255,255,255,0.7)': C.green
-  const dk  = light ? 'rgba(255,255,255,0.9)': C.dark
-  const bg  = light ? 'rgba(255,255,255,0.15)': C.pinkPale
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* ── background circle ── */}
-      <circle cx="50" cy="50" r="48" fill={bg}/>
-      {/* ── Hand / palm ── */}
-      <path d="M34 78 Q32 62 34 50 Q35 44 40 42 L40 28 Q40 24 43.5 24 Q47 24 47 28 L47 42 Q49 40 52 40 Q55 40 55 44 Q57 42 60 42 Q63 42 63 46 Q65 45 67 46 Q70 47 70 52 L70 67 Q70 74 64 78 Q58 82 48 82 L37 82 Q34 82 34 78Z"
-        fill={pk} opacity="0.22" stroke={pk} strokeWidth="2.5"/>
-      {/* ── Fingers ── */}
-      <line x1="40" y1="42" x2="40" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="47" y1="44" x2="47" y2="28" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="55" y1="45" x2="55" y2="32" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="63" y1="47" x2="63" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      {/* ── Makeup brush 1 (angled up-right) ── */}
-      <line x1="50" y1="28" x2="68" y2="10" stroke={dk} strokeWidth="2.5" strokeLinecap="round"/>
-      <ellipse cx="50" cy="27" rx="4.5" ry="8" fill={pk} opacity="0.9" transform="rotate(-40 50 27)"/>
-      <path d="M67 11 Q73 6 71 14 Q69 12 67 11Z" fill={pkD}/>
-      {/* ── Makeup brush 2 (angled up-left) ── */}
-      <line x1="42" y1="28" x2="26" y2="12" stroke={dk} strokeWidth="2" strokeLinecap="round"/>
-      <ellipse cx="42" cy="28" rx="3.5" ry="7" fill={gn} opacity="0.9" transform="rotate(40 42 28)"/>
-      <path d="M27 13 Q21 8 23 15 Q25 13 27 13Z" fill={gn} opacity="0.85"/>
-      {/* ── Mehndi cone in hand ── */}
-      <path d="M25 40 L21 74 Q21 78 25 78 Q29 78 29 74 L25 40Z" fill={gn}/>
-      <path d="M22 40 L28 40 Q31 37 28 32 L25 25 L22 32 Q19 37 22 40Z" fill={gn}/>
-      <line x1="25" y1="78" x2="25" y2="85" stroke={pkD} strokeWidth="1.5" strokeLinecap="round"/>
-      {/* ── Mehndi dots on cone ── */}
-      <circle cx="25" cy="50" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      <circle cx="25" cy="60" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      <circle cx="25" cy="70" r="1.8" fill="rgba(255,255,255,0.7)"/>
-      {/* ── Tiny mehndi flower top-right ── */}
-      {[0,60,120,180,240,300].map((d,i)=>{
-        const rad=(d*Math.PI)/180
-        const x=78+7*Math.cos(rad), y=22+7*Math.sin(rad)
-        return <circle key={i} cx={x} cy={y} r="2.8" fill={pk} opacity="0.55"/>
-      })}
-      <circle cx="78" cy="22" r="3.5" fill={pk} opacity="0.9"/>
-      <circle cx="78" cy="22" r="1.5" fill="#fff" opacity="0.8"/>
     </svg>
   )
 }
@@ -891,7 +777,7 @@ export default function Website() {
           <div style={{fontSize:13,color:C.grey,marginBottom:8}}>📍 Serving Pune, Pimpri-Chinchwad, Hadapsar, Baner, Kothrud & surrounding areas</div>
           <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:16}}>Get a personalised quote for your event</div>
           <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
-            <a href={`https://wa.me/918390695155?text=${encodeURIComponent(`Hi Kajol Ma'am! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.`)}`}
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent("Hi Kajol Maam! 🌸 I would like to book your services for my event in Pune. Please share your availability and charges.")}`}
               target="_blank" rel="noopener noreferrer"
               style={{padding:'12px 22px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',display:'flex',alignItems:'center',gap:8}}>
               💬 WhatsApp to Book
@@ -1079,8 +965,8 @@ export default function Website() {
               </div>
             </div>
             <div style={{marginBottom:6}}>
-              <div style={{fontSize:18,fontWeight:900,color:C.dark}}>KAJOL J KAMBLE</div>
-              <div style={{fontSize:13,color:C.grey,marginTop:4}}>UPI / Mobile: <b style={{color:C.dark,userSelect:'all',fontSize:16}}>8390695155</b></div><div style={{fontSize:11,color:C.grey,marginTop:2}}>Google Pay · PhonePe · Paytm · BHIM</div>
+              <div style={{fontSize:18,fontWeight:900,color:C.dark}}>KAJAL JIVAN KAMBLE</div>
+              <div style={{fontSize:13,color:C.grey,marginTop:4}}>UPI ID: <b style={{color:C.dark,userSelect:'all'}}>kajalkambaleaxis@yesg</b></div>
             </div>
             <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:14,flexWrap:'wrap'}}>
               {['Google Pay','PhonePe','Paytm','BHIM'].map(app=>(
@@ -1090,7 +976,7 @@ export default function Website() {
             <div style={{marginTop:16,background:C.white,borderRadius:12,padding:'12px 16px',fontSize:12,color:C.grey,lineHeight:1.7}}>
               📌 After payment, please send a screenshot on WhatsApp to confirm your enrollment.
             </div>
-            <a href={`https://wa.me/918390695155?text=${encodeURIComponent(`Hi Kajol Ma'am! I have made the payment for the course. Please find the screenshot attached. Name: [Your Name]`)}`}
+            <a href={`https://wa.me/918390695155?text=${encodeURIComponent('Hi Kajol Maam! I have made the payment for the course. Please find the screenshot attached. Name: [Your Name]')}`}
               target="_blank" rel="noopener noreferrer"
               style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginTop:14,padding:'12px 20px',borderRadius:14,background:C.wa,color:'#fff',fontWeight:700,fontSize:14,textDecoration:'none',boxShadow:`0 4px 16px ${C.wa}44`}}>
               💬 Send Payment Screenshot on WhatsApp
