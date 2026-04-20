@@ -305,41 +305,7 @@ function KMSLogo({size=48,light=false}) {
     </svg>
   )
 }
-  const pk = light ? '#fff' : '#E91E8C'
-  const gn = light ? 'rgba(255,255,255,0.7)' : '#2E7D32'
-  const dk = light ? 'rgba(255,255,255,0.9)' : '#1A1A2E'
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* ── Hand silhouette ── */}
-      <path d="M30 75 Q28 60 30 50 Q31 44 36 42 L36 30 Q36 26 39 26 Q42 26 42 30 L42 42 Q44 40 47 40 Q50 40 50 44 Q52 42 55 42 Q58 42 58 46 Q60 45 62 46 Q65 47 65 52 L65 65 Q65 72 60 76 Q55 80 47 80 L35 80 Q30 80 30 75Z" fill={pk} opacity="0.18"/>
-      <path d="M30 75 Q28 60 30 50 Q31 44 36 42 L36 30 Q36 26 39 26 Q42 26 42 30 L42 42 Q44 40 47 40 Q50 40 50 44 Q52 42 55 42 Q58 42 58 46 Q60 45 62 46 Q65 47 65 52 L65 65 Q65 72 60 76 Q55 80 47 80 L35 80 Q30 80 30 75Z" stroke={pk} strokeWidth="2.5" fill="none"/>
-      {/* ── Fingers ── */}
-      <line x1="36" y1="42" x2="36" y2="30" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="42" y1="44" x2="42" y2="30" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="50" y1="45" x2="50" y2="33" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="58" y1="47" x2="58" y2="36" stroke={pk} strokeWidth="2.5" strokeLinecap="round"/>
-      {/* ── Makeup brush in hand ── */}
-      <line x1="54" y1="20" x2="68" y2="8" stroke={dk} strokeWidth="3" strokeLinecap="round"/>
-      <ellipse cx="54" cy="22" rx="4" ry="7" fill={pk} transform="rotate(-40 54 22)"/>
-      <path d="M67 9 Q72 5 70 12 Q68 10 67 9Z" fill={gn}/>
-      {/* ── Mehndi cone ── */}
-      <path d="M22 35 L18 72 Q18 76 22 76 Q26 76 26 72 L22 35Z" fill={gn} opacity="0.9"/>
-      <path d="M19 35 L25 35 Q28 32 25 28 L22 22 L19 28 Q16 32 19 35Z" fill={gn}/>
-      <line x1="22" y1="76" x2="22" y2="82" stroke={dk} strokeWidth="1.5" strokeLinecap="round"/>
-      {/* ── Mehndi dot pattern on cone ── */}
-      <circle cx="22" cy="45" r="1.5" fill="rgba(255,255,255,0.6)"/>
-      <circle cx="22" cy="55" r="1.5" fill="rgba(255,255,255,0.6)"/>
-      <circle cx="22" cy="65" r="1.5" fill="rgba(255,255,255,0.6)"/>
-      {/* ── Mini mehndi flower floating ── */}
-      <circle cx="78" cy="30" r="5" fill={pk} opacity="0.15"/>
-      {[0,60,120,180,240,300].map((d,i)=>{
-        const r2=(d*Math.PI)/180; const x2=78+8*Math.cos(r2); const y2=30+8*Math.sin(r2)
-        return <circle key={i} cx={x2} cy={y2} r="2.5" fill={pk} opacity="0.55"/>
-      })}
-      <circle cx="78" cy="30" r="2.5" fill={pk} opacity="0.9"/>
-    </svg>
-  )
-}
+
 function KMSLogoMark({size=40,light=false}) {
   const textColor = light ? '#fff' : '#1A1A2E'
   const subColor  = light ? 'rgba(255,255,255,0.7)' : '#757575'
