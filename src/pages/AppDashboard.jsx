@@ -304,7 +304,7 @@ function KMSLogo({size=48,light=false}) {
       ))}
     </svg>
   )
-}) {
+}
   const pk = light ? '#fff' : '#E91E8C'
   const gn = light ? 'rgba(255,255,255,0.7)' : '#2E7D32'
   const dk = light ? 'rgba(255,255,255,0.9)' : '#1A1A2E'
