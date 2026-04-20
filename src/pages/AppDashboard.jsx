@@ -2355,7 +2355,7 @@ export default function AppDashboard() {
   // Robust enroll detection — works with React Router, Vercel, and direct URLs
   const path = typeof window !== 'undefined' ? window.location.pathname : ''
   const search = typeof window !== 'undefined' ? window.location.search : ''
-  const isEnroll = path === '/enroll' || path.startsWith('/enroll/') || path.startsWith('/enroll?') || search.includes('enroll')
+  const isEnroll = path === '/enroll' || path.startsWith('/enroll/') || path.startsWith('/enroll/') || search.includes('enroll')
   if(isEnroll) return (
     <div>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Nunito','Segoe UI',sans-serif;}`}</style>
