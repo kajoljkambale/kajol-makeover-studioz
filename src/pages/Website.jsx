@@ -28,7 +28,7 @@ const C = {
   wa:'#25D366', yt:'#FF0000', ig:'#E91E63',
 }
 
-const ENROLL_URL      = 'https://kajol-makeover-studioz.vercel.app/enroll'
+const ENROLL_URL      = typeof window!=='undefined'?(window.location.origin+'/enroll'):'https://kajol-makeover-studioz.vercel.app/enroll'
 const WA_COMMUNITY    = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
 const INSTAGRAM       = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a3h2ZWIzbmM3M3Y3'
 const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
@@ -153,49 +153,50 @@ function SEOHead() {
    For now this SVG logo is used automatically.
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
-  const nail = light ? 'rgba(255,180,190,0.95)' : '#E91E8C'
-  const hand = light ? 'rgba(255,255,255,0.93)' : '#FAEAE0'
-  const hsk  = light ? 'rgba(255,255,255,0.45)' : '#2D1008'
-  const bru  = light ? 'rgba(255,255,255,0.9)'  : '#3D2218'
-  const bh   = light ? 'rgba(255,255,255,0.65)' : '#7A5040'
-  const bhl  = light ? 'rgba(255,255,255,0.4)'  : '#A07868'
-  const bg   = light ? 'rgba(255,255,255,0.1)'  : '#FCE4EC'
+  /* Artistic circular logo: mehndi cone + makeup brush + ariwork palette */
+  const pk   = light ? '#FFB3D9' : '#E91E8C'
+  const pkD  = light ? '#FF80C0' : '#C2185B'
+  const gr   = light ? '#A5D6A7' : '#2E7D32'
+  const pur  = light ? '#CE93D8' : '#6A1B9A'
+  const bg   = light ? 'rgba(255,255,255,0.18)' : '#FFF0F6'
+  const ring = light ? 'rgba(255,255,255,0.55)' : '#E91E8C'
+  const txt  = light ? 'rgba(255,255,255,0.9)' : '#C2185B'
+  const s    = size
   return (
-    <svg width={size} height={size*1.28} viewBox="0 0 100 128" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
-      <rect width="100" height="128" rx="14" fill={bg} opacity="0.45"/>
-      <rect x="5" y="2" width="11" height="45" rx="5.5" fill={bru} transform="rotate(-30 10 24)"/>
-      <ellipse cx="4"  cy="5"  rx="8"   ry="12.5" fill={bh}  transform="rotate(-30 4 5)"/>
-      <ellipse cx="4"  cy="4"  rx="5"   ry="8.5"  fill={bhl} transform="rotate(-30 4 4)" opacity="0.7"/>
-      <line x1="8"  y1="48" x2="5"  y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      <rect x="27" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(-12 32 23)"/>
-      <ellipse cx="26" cy="4"  rx="7.5" ry="12"   fill={bh}  transform="rotate(-12 26 4)"/>
-      <ellipse cx="26" cy="3"  rx="4.5" ry="8"    fill={bhl} transform="rotate(-12 26 3)" opacity="0.7"/>
-      <line x1="32" y1="48" x2="30" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      <rect x="55" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(8 60 23)"/>
-      <ellipse cx="62" cy="3"  rx="7.5" ry="12"   fill={bh}  transform="rotate(8 62 3)"/>
-      <ellipse cx="62" cy="2"  rx="4.5" ry="8"    fill={bhl} transform="rotate(8 62 2)" opacity="0.7"/>
-      <line x1="62" y1="48" x2="64" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      <rect x="77" y="3" width="10" height="43" rx="5"   fill={bru} transform="rotate(26 82 24)"/>
-      <ellipse cx="85" cy="6"  rx="7"   ry="11"   fill={bh}  transform="rotate(26 85 6)"/>
-      <ellipse cx="85" cy="5"  rx="4"   ry="7.5"  fill={bhl} transform="rotate(26 85 5)" opacity="0.7"/>
-      <line x1="83" y1="46" x2="86" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-      <path d="M16 62 Q12 74 14 90 Q14 103 30 107 Q50 112 70 107 Q86 103 86 90 L85 62 Q78 57 70 60 Q62 55 54 60 Q45 55 36 60 Q26 56 16 62Z"
-        fill={hand} stroke={hsk} strokeWidth="2.8"/>
-      <path d="M20 70 Q26 65 32 70" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M38 66 Q45 61 52 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M58 66 Q64 61 70 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M74 69 Q79 64 83 69" stroke={hsk} strokeWidth="1.1" fill="none" opacity="0.28"/>
-      <ellipse cx="26"   cy="64" rx="6.5" ry="4.5" fill={nail}/>
-      <ellipse cx="45"   cy="61" rx="6.5" ry="4.2" fill={nail}/>
-      <ellipse cx="64"   cy="61" rx="6"   ry="4"   fill={nail}/>
-      <ellipse cx="80"   cy="63" rx="5.5" ry="3.8" fill={nail}/>
-      <ellipse cx="24.5" cy="62.5" rx="2.5" ry="1.5" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="43.5" cy="59.5" rx="2.5" ry="1.4" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="62.5" cy="59.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="78.5" cy="61.5" rx="2"   ry="1.2" fill="rgba(255,255,255,0.55)"/>
-      {[0,1,2,3,4,5].map(ix=>(
-        <circle key={ix} cx={26+ix*9} cy={100} r="2.2" fill={nail} opacity="0.38"/>
-      ))}
+    <svg width={s} height={s} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+      <circle cx="60" cy="60" r="57" fill={bg} stroke={ring} strokeWidth="2.5" strokeDasharray="6 3" opacity="0.7"/>
+      <circle cx="60" cy="60" r="48" fill={light?'rgba(255,255,255,0.12)':bg} stroke={ring} strokeWidth="1.2" opacity="0.5"/>
+      <path d="M30 28 L42 72 L48 72 L38 28 Z" fill={gr}/>
+      <path d="M42 72 L45 85 L48 72 Z" fill={pkD}/>
+      <ellipse cx="34" cy="28" rx="7" ry="4" fill={gr} opacity="0.85"/>
+      <ellipse cx="34" cy="27" rx="5" ry="2.5" fill="rgba(255,255,255,0.3)"/>
+      <circle cx="44" cy="89" r="2.5" fill={pk} opacity="0.9"/>
+      <circle cx="43" cy="95" r="1.8" fill={pk} opacity="0.65"/>
+      <circle cx="44.5" cy="100" r="1.2" fill={pk} opacity="0.4"/>
+      <rect x="31" y="36" width="12" height="4" rx="2" fill="rgba(255,255,255,0.3)" transform="rotate(-5 37 38)"/>
+      <rect x="57" y="22" width="6" height="52" rx="3" fill="#8D5524"/>
+      <rect x="58" y="22" width="2.5" height="52" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+      <rect x="56.5" y="65" width="7" height="7" rx="1.5" fill="#B0BEC5"/>
+      <ellipse cx="60" cy="20" rx="8" ry="12" fill={pk}/>
+      <ellipse cx="60" cy="17" rx="5.5" ry="8" fill={pkD} opacity="0.7"/>
+      <ellipse cx="60" cy="14" rx="3.5" ry="5" fill={pk} opacity="0.9"/>
+      <path d="M56 10 Q60 6 64 10" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="none"/>
+      <ellipse cx="60" cy="73" rx="3.5" ry="2" fill="#6D4C41"/>
+      <path d="M76 35 Q95 30 100 50 Q105 68 90 80 Q82 86 76 78 Q70 70 72 58 Q68 48 76 35Z" fill={pur} opacity="0.85"/>
+      <ellipse cx="83" cy="73" rx="5" ry="4" fill={bg} opacity="0.9"/>
+      <circle cx="85" cy="42" r="4.5" fill={pk}/>
+      <circle cx="93" cy="52" r="4" fill={gr}/>
+      <circle cx="94" cy="63" r="4" fill="#FF9800"/>
+      <circle cx="88" cy="71" r="3.5" fill="#2196F3"/>
+      <circle cx="80" cy="67" r="3.5" fill={pkD}/>
+      <circle cx="79" cy="55" r="3" fill="#FFEB3B"/>
+      <path d="M80 37 Q88 35 94 42" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">KMS</text>
+      {[0,60,120,180,240,300].map((deg,i)=>{
+        const rad=deg*Math.PI/180
+        const cx=60+50*Math.cos(rad), cy=60+50*Math.sin(rad)
+        return <circle key={i} cx={cx} cy={cy} r="2.5" fill={i%2===0?pk:gr} opacity="0.45"/>
+      })}
     </svg>
   )
 }
@@ -218,8 +219,11 @@ function LogoMark({ dark: isDark = true }) {
 
 function HeroLogo() {
   return (
-    <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:8 }}>
-      <KMSLogo size={96} light={true}/>
+    <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:12 }}>
+      <div style={{position:'relative'}}>
+        <div style={{position:'absolute',inset:-6,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',animation:'spinSlow 18s linear infinite'}}/>
+        <KMSLogo size={100} light={true}/>
+      </div>
       <div style={{ fontSize:32, fontWeight:900, color:'#fff', fontFamily:"'Playfair Display',serif", textShadow:'0 2px 18px rgba(0,0,0,0.32)', letterSpacing:1 }}>
         Kajol Makeover<br/>
         <span style={{ fontSize:19, letterSpacing:5, opacity:.88 }}>S T U D I O Z</span>
