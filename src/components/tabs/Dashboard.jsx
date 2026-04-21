@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { C, fmt, fmtDate, Ic, Card, Row, SectionTitle, StatBox, Badge, Btn, Divider } from '../../lib/ui.jsx'
+import { C, today, fmt, fmtDate, Ic, Card, Row, SectionTitle, StatBox, Badge, Btn, Divider } from '../../lib/ui.jsx'
 function KMSLogo({size=48,light=false}) {
   /* Artistic logo: circular badge with mehndi cone, makeup brush, ariwork palette
      Three art forms united — Kajol J Kamble, professional artist & teacher */
@@ -148,7 +148,7 @@ export default function Dashboard({data,setTab}) {
         <StatBox label="New Requests" value={pendingReq} color={pendingReq>0?C.pink:C.grey} icon="enroll" onClick={()=>setTab('enroll')}/>
       </div>
       {pend.length>0&&<Card accent={C.amber}>
-        <STitle><Ic n="alert" size={15} color={C.amber}/> Pending Activities ({pend.length})</STitle>
+        <SectionTitle><Ic n="alert" size={15} color={C.amber}/> Pending Activities ({pend.length})</SectionTitle>
         {pend.map((p,i)=>(
           <div key={i} onClick={()=>setTab(p.tab)} style={{display:'flex',alignItems:'center',gap:10,padding:'9px 0',borderBottom:`1px solid ${C.pinkPale}`,cursor:'pointer'}}>
             <div style={{background:p.color+'18',borderRadius:8,padding:6,flexShrink:0}}><Ic n={p.icon} size={15} color={p.color}/></div>
@@ -158,7 +158,7 @@ export default function Dashboard({data,setTab}) {
         ))}
       </Card>}
       {todayClasses.length>0&&<Card accent={C.blue}>
-        <STitle><Ic n="zoom" size={15} color={C.blue}/> Today's Classes</STitle>
+        <SectionTitle><Ic n="zoom" size={15} color={C.blue}/> Today's Classes</SectionTitle>
         {todayClasses.map(cl=>{const b=data.batches.find(x=>x.id===cl.batch_id); return(
           <div key={cl.id} style={{padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
             <div style={{fontWeight:700,fontSize:13}}>{b?.name||'?'} — Day {cl.day}: {cl.topic}</div>
@@ -168,7 +168,7 @@ export default function Dashboard({data,setTab}) {
         )})}
       </Card>}
       {partialStudents.length>0&&<Card accent={C.amber}>
-        <STitle><Ic n="bell" size={15} color={C.amber}/> Payment Reminders</STitle>
+        <SectionTitle><Ic n="bell" size={15} color={C.amber}/> Payment Reminders</SectionTitle>
         {partialStudents.slice(0,4).map((s,i)=>(
           <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
             <div><div style={{fontWeight:700,fontSize:13}}>{s.name}</div><div style={{fontSize:11,color:C.grey}}>{s.batch}</div></div>
@@ -182,7 +182,7 @@ export default function Dashboard({data,setTab}) {
         ))}
       </Card>}
       <Card>
-        <STitle><Ic n="link" size={15} color={C.pink}/> Quick Links</STitle>
+        <SectionTitle><Ic n="link" size={15} color={C.pink}/> Quick Links</SectionTitle>
         {[{label:'WhatsApp Community',url:WA_COMMUNITY,icon:'wa',color:C.wa},{label:'Instagram',url:INSTAGRAM,icon:'ig',color:C.ig},{label:'YouTube Channel',url:YOUTUBE,icon:'yt',color:C.yt}].map(l=>(
           <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,padding:'8px 0',textDecoration:'none',color:C.dark,borderBottom:`1px solid ${C.pinkPale}`}}>
             <div style={{background:l.color+'18',borderRadius:9,padding:7,flexShrink:0}}><Ic n={l.icon} size={15} color={l.color}/></div>
