@@ -69,7 +69,7 @@ function KMSLogo({size=48,light=false}) {
       <path d="M80 37 Q88 35 94 42" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
 
       {/* ── Central monogram "KMS" ── */}
-      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">KMS</text>
+      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">{"KMS"}</text>
 
       {/* Decorative mehndi petals around edge */}
       {[0,60,120,180,240,300].map((deg,i)=>{
