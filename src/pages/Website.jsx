@@ -252,7 +252,6 @@ function KMSLogo({ size = 48, light = false }) {
       })}
     </svg>
   )
-}
 
 function LogoMark({ dark: isDark = true }) {
   return (
