@@ -205,7 +205,7 @@ function KMSLogo({ size = 48, light = false }) {
       })}
     </svg>
   )
-}) {
+}
   /* Artistic circular logo: mehndi cone + makeup brush + ariwork palette */
   const pk   = light ? '#FFB3D9' : '#E91E8C'
   const pkD  = light ? '#FF80C0' : '#C2185B'
