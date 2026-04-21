@@ -1,25 +1,10 @@
-/**
- * Website.jsx  — Kajol Makeover Studioz  v4.0
- *
- * Changes in this version:
- *  1. Instagram widget moved → between Hero & About sections
- *  2. YouTube playlist widget added → below Instagram strip
- *  3. "Our Work" gallery → shows real uploaded photos from Supabase (admin can upload URLs)
- *  4. "What Students Say" → supports photo, WhatsApp screenshot, video feedback cards
- *  5. New SVG logo — mehndi/embroidery/makeup inspired, fully custom
- *
- * Route: /   (served via App.jsx router)
- */
-
 import React, { useState, useEffect, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
-/* ── Supabase ── */
 const SB_URL = import.meta.env.VITE_SUPABASE_URL  || 'https://zlzrdpagpwlrbljfmxzy.supabase.co'
 const SB_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_6_AujeG9DfoPxMELnkGCeQ_08K3XEF4'
 const sb = createClient(SB_URL, SB_KEY)
 
-/* ── Brand ── */
 const C = {
   pink:'#E91E8C', pinkD:'#C2185B', pinkPale:'#FCE4EC',
   green:'#2E7D32', greenL:'#4CAF50', greenPale:'#E8F5E9',
@@ -32,33 +17,23 @@ const ENROLL_URL      = typeof window!=='undefined'?(window.location.origin+'/en
 const WA_COMMUNITY    = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
 const INSTAGRAM       = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a3h2ZWIzbmM3M3Y3'
 const YOUTUBE         = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
-// ★ Replace PLAYLIST_ID with your actual YouTube playlist ID
-// How to find it: Go to YouTube → Your Channel → Playlists → Click playlist → copy ID from URL after "list="
 const YT_PLAYLIST_ID  = 'PLZDAEN7wCknjKSw6QrdoF9M-NHbkInkw7'
 const PHONE1          = '8390695155'
 const PHONE2          = '7030825125'
 const EMAIL_KAJOL     = 'kajoljkambale@gmail.com'
 const UPI_ID          = 'kajalkambaleaxis@yesg'
-const UPI_NAME        = 'Kajol Makeover Studioz'  // Kajol Makeover Studioz playlist
+const UPI_NAME        = 'Kajol Makeover Studioz'
 const ADMIN_URL       = '/app'
 
-/* ═══════════════════════════════════════════════════════════════════
-   SEO HEAD — injects meta tags, Open Graph, structured data
-   Improves Google ranking for Kajol Makeover Studioz, Pune
-═══════════════════════════════════════════════════════════════════ */
 function SEOHead() {
   useEffect(()=>{
-    // Page title
     document.title = 'Kajol Makeover Studioz | Mehndi, Makeup & Ariwork Classes Online | Pune'
-
     const setMeta = (name,content,prop=false) => {
       const attr = prop ? 'property' : 'name'
       let el = document.querySelector(`meta[${attr}="${name}"]`)
       if(!el){ el=document.createElement('meta'); el.setAttribute(attr,name); document.head.appendChild(el) }
       el.setAttribute('content',content)
     }
-
-    // Core SEO meta
     setMeta('description','Learn Mehndi, Makeup & Ariwork online from Kajol J Kamble — professional artist & teacher based in Pune. Live Zoom classes + YouTube recordings. Enroll now!')
     setMeta('keywords','mehndi classes online, makeup course Pune, ariwork classes, mehndi design course, bridal makeup training, online beauty courses India, Kajol Makeover Studioz, mehndi teacher Pune')
     setMeta('author','Kajol J Kamble — Kajol Makeover Studioz')
@@ -66,8 +41,6 @@ function SEOHead() {
     setMeta('language','en-IN')
     setMeta('geo.region','IN-MH')
     setMeta('geo.placename','Pune, Maharashtra, India')
-
-    // Open Graph (Facebook, WhatsApp preview)
     setMeta('og:title','Kajol Makeover Studioz | Online Mehndi, Makeup & Ariwork Classes',true)
     setMeta('og:description','Professional Mehndi, Makeup & Ariwork courses by Kajol J Kamble, Pune. Live Zoom classes + YouTube recordings. Enroll free today!',true)
     setMeta('og:url','https://kajol-makeover-studioz.vercel.app',true)
@@ -75,19 +48,15 @@ function SEOHead() {
     setMeta('og:image','https://kajol-makeover-studioz.vercel.app/og-image.jpg',true)
     setMeta('og:site_name','Kajol Makeover Studioz',true)
     setMeta('og:locale','en_IN',true)
-
-    // Twitter Card
     setMeta('twitter:card','summary_large_image')
     setMeta('twitter:title','Kajol Makeover Studioz | Online Beauty Courses Pune')
     setMeta('twitter:description','Learn Mehndi, Makeup & Ariwork online. Professional courses by Kajol J Kamble, Pune. Join 200+ students!')
     setMeta('twitter:image','https://kajol-makeover-studioz.vercel.app/og-image.jpg')
 
-    // Canonical URL
     let canonical = document.querySelector('link[rel="canonical"]')
     if(!canonical){ canonical=document.createElement('link'); canonical.rel='canonical'; document.head.appendChild(canonical) }
     canonical.href = 'https://kajol-makeover-studioz.vercel.app'
 
-    // Structured Data — LocalBusiness + EducationalOrganization
     const structuredData = {
       "@context": "https://schema.org",
       "@graph": [
@@ -142,16 +111,6 @@ function SEOHead() {
   return null
 }
 
-
-
-/* ═══════════════════════════════════════════════════════════════════
-   LOGO — hand holding makeup brushes + mehndi cone
-   NOTE: To use your own logo image, place the file as:
-         /public/kms-logo.png  (in your GitHub project root/public/)
-   Then replace <KMSLogo/> with:
-         <img src="/kms-logo.png" alt="KMS Logo" style={{width:size,height:size}}/>
-   For now this SVG logo is used automatically.
-═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({ size = 48, light = false }) {
   const pk   = light ? '#FFB3D9' : '#E91E8C'
   const pkD  = light ? '#FF80C0' : '#C2185B'
@@ -159,12 +118,12 @@ function KMSLogo({ size = 48, light = false }) {
   const pur  = light ? '#CE93D8' : '#6A1B9A'
   const bg   = light ? 'rgba(255,255,255,0.18)' : '#FFF0F6'
   const ring = light ? 'rgba(255,255,255,0.55)' : '#E91E8C'
-  const txt  = light ? 'rgba(255,255,255,0.9)'  : '#C2185B'
+  const txt  = light ? 'rgba(255,255,255,0.9)' : '#C2185B'
+  const s    = size
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+    <svg width={s} height={s} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
       <circle cx="60" cy="60" r="57" fill={bg} stroke={ring} strokeWidth="2.5" strokeDasharray="6 3" opacity="0.7"/>
       <circle cx="60" cy="60" r="48" fill={light?'rgba(255,255,255,0.12)':bg} stroke={ring} strokeWidth="1.2" opacity="0.5"/>
-      {/* Mehndi cone */}
       <path d="M30 28 L42 72 L48 72 L38 28 Z" fill={gr}/>
       <path d="M42 72 L45 85 L48 72 Z" fill={pkD}/>
       <ellipse cx="34" cy="28" rx="7" ry="4" fill={gr} opacity="0.85"/>
@@ -173,19 +132,14 @@ function KMSLogo({ size = 48, light = false }) {
       <circle cx="43" cy="95" r="1.8" fill={pk} opacity="0.65"/>
       <circle cx="44.5" cy="100" r="1.2" fill={pk} opacity="0.4"/>
       <rect x="31" y="36" width="12" height="4" rx="2" fill="rgba(255,255,255,0.3)" transform="rotate(-5 37 38)"/>
-      <ellipse cx="35" cy="55" rx="2.5" ry="3.5" fill="rgba(255,255,255,0.22)" transform="rotate(-5 35 55)"/>
-      {/* Makeup brush */}
       <rect x="57" y="22" width="6" height="52" rx="3" fill="#8D5524"/>
       <rect x="58" y="22" width="2.5" height="52" rx="1.5" fill="rgba(255,255,255,0.22)"/>
       <rect x="56.5" y="65" width="7" height="7" rx="1.5" fill="#B0BEC5"/>
-      <rect x="57.5" y="66" width="5" height="1.5" rx="1" fill="rgba(255,255,255,0.35)"/>
       <ellipse cx="60" cy="20" rx="8" ry="12" fill={pk}/>
       <ellipse cx="60" cy="17" rx="5.5" ry="8" fill={pkD} opacity="0.7"/>
       <ellipse cx="60" cy="14" rx="3.5" ry="5" fill={pk} opacity="0.9"/>
       <path d="M56 10 Q60 6 64 10" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="none"/>
-      <path d="M57 13 Q60 10 63 13" stroke="rgba(255,255,255,0.4)" strokeWidth="0.9" fill="none"/>
       <ellipse cx="60" cy="73" rx="3.5" ry="2" fill="#6D4C41"/>
-      {/* Ariwork palette */}
       <path d="M76 35 Q95 30 100 50 Q105 68 90 80 Q82 86 76 78 Q70 70 72 58 Q68 48 76 35Z" fill={pur} opacity="0.85"/>
       <ellipse cx="83" cy="73" rx="5" ry="4" fill={bg} opacity="0.9"/>
       <circle cx="85" cy="42" r="4.5" fill={pk}/>
@@ -195,9 +149,7 @@ function KMSLogo({ size = 48, light = false }) {
       <circle cx="80" cy="67" r="3.5" fill={pkD}/>
       <circle cx="79" cy="55" r="3" fill="#FFEB3B"/>
       <path d="M80 37 Q88 35 94 42" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-      {/* KMS monogram */}
-      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">{"KMS"}</text>
-      {/* Mehndi petals */}
+      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">KMS</text>
       {[0,60,120,180,240,300].map((deg,i)=>{
         const rad=deg*Math.PI/180
         const cx=60+50*Math.cos(rad), cy=60+50*Math.sin(rad)
@@ -206,7 +158,6 @@ function KMSLogo({ size = 48, light = false }) {
     </svg>
   )
 }
-
 
 function LogoMark({ dark: isDark = true }) {
   return (
@@ -239,7 +190,6 @@ function HeroLogo() {
   )
 }
 
-/* ── Global CSS ── */
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -274,7 +224,6 @@ const CSS = `
   }
 `
 
-/* ── Section ── */
 function Section({ id, children, bg='#FFF8FB', style:sx }) {
   return (
     <section id={id} style={{ background:bg, padding:'64px 16px', ...sx }}>
@@ -299,7 +248,6 @@ function SectionTitle({ emoji, title, subtitle, light, accent }) {
   )
 }
 
-/* ── Course card ── */
 function CourseCard({ emoji, title, desc, color, items }) {
   return (
     <div style={{
@@ -318,7 +266,6 @@ function CourseCard({ emoji, title, desc, color, items }) {
   )
 }
 
-/* ── Stat ── */
 function Stat({ value, label }) {
   return (
     <div style={{ textAlign:'center' }}>
@@ -328,7 +275,6 @@ function Stat({ value, label }) {
   )
 }
 
-/* ── Instagram EmbedSocial widget ── */
 function InstagramWidget() {
   useEffect(()=>{
     if(!document.getElementById('EmbedSocialHashtagScript')){
@@ -352,7 +298,6 @@ function InstagramWidget() {
   )
 }
 
-/* ── YouTube Playlist Widget — player left + playlist list right ── */
 const PLAYLIST_ITEMS = [
   { title:'Introduction to Mehndi Art', duration:'~18 min', cat:'Mehndi' },
   { title:'Basic Patterns & Strokes', duration:'~24 min', cat:'Mehndi' },
@@ -377,7 +322,6 @@ function YouTubePlaylistWidget({ playlistId }) {
       boxShadow:'0 12px 48px rgba(0,0,0,0.4)', background:'#0f0f0f',
       flexWrap:'wrap', minHeight:320,
     }}>
-      {/* ── Video player ── */}
       <div style={{ flex:'1 1 58%', minWidth:260, position:'relative', background:'#000' }}>
         <div style={{ position:'relative', paddingBottom:'56.25%', height:0 }}>
           <iframe
@@ -389,7 +333,6 @@ function YouTubePlaylistWidget({ playlistId }) {
             allowFullScreen
           />
         </div>
-        {/* Now playing label */}
         <div style={{ padding:'10px 14px', background:'#111' }}>
           <div style={{ fontSize:12, color:'#aaa', marginBottom:2, textTransform:'uppercase', letterSpacing:.8 }}>Now Playing</div>
           <div style={{ fontSize:14, color:'#fff', fontWeight:700, lineHeight:1.4 }}>
@@ -398,16 +341,13 @@ function YouTubePlaylistWidget({ playlistId }) {
         </div>
       </div>
 
-      {/* ── Playlist sidebar ── */}
       <div style={{ flex:'0 1 260px', minWidth:200, background:'#1a1a1a', maxHeight:380, overflowY:'auto', display:'flex', flexDirection:'column' }}>
-        {/* Header */}
         <div style={{ padding:'12px 14px', borderBottom:'1px solid #2d2d2d', position:'sticky', top:0, background:'#111', zIndex:1 }}>
           <div style={{ fontSize:11, fontWeight:700, color:'#fff', letterSpacing:1, textTransform:'uppercase' }}>
             📋 Class Playlist
           </div>
           <div style={{ fontSize:10, color:'#888', marginTop:3 }}>{PLAYLIST_ITEMS.length} videos</div>
         </div>
-        {/* Video list */}
         {PLAYLIST_ITEMS.map((v, i) => {
           const isActive = i === activeIdx
           const catC = CAT_COLOR[v.cat] || C.pink
@@ -419,7 +359,6 @@ function YouTubePlaylistWidget({ playlistId }) {
               borderLeft: isActive ? `3px solid ${C.pink}` : '3px solid transparent',
               transition:'all .12s',
             }}>
-              {/* Number / play indicator */}
               <div style={{
                 width:30, height:30, borderRadius:'50%', flexShrink:0,
                 background: isActive ? C.pink : '#2d2d2d',
@@ -445,7 +384,6 @@ function YouTubePlaylistWidget({ playlistId }) {
             </div>
           )
         })}
-        {/* Open in YouTube */}
         <a href={`https://www.youtube.com/playlist?list=${playlistId}`} target="_blank" rel="noopener noreferrer"
           style={{ margin:'10px 12px', padding:'9px 12px', borderRadius:10, background:C.yt, color:'#fff', textDecoration:'none', fontSize:12, fontWeight:700, textAlign:'center', display:'block' }}>
           ▶ Open Full Channel
@@ -455,11 +393,9 @@ function YouTubePlaylistWidget({ playlistId }) {
   )
 }
 
-/* ── Media Review Card (supports text / image / video / whatsapp screenshot) ── */
 function ReviewCard({ item }) {
   const [lightbox, setLightbox] = useState(false)
-  const type = item.type || 'text'   // text | image | video | whatsapp
-
+  const type = item.type || 'text'
   const borderColor = item.color || C.pink
 
   return (
@@ -469,7 +405,6 @@ function ReviewCard({ item }) {
         boxShadow:'0 4px 16px rgba(233,30,140,0.07)',
         border:`1px solid ${C.pinkPale}`,
       }}>
-        {/* image / whatsapp screenshot */}
         {(type==='image'||type==='whatsapp') && item.media_url && (
           <div onClick={()=>setLightbox(true)} style={{ cursor:'zoom-in', overflow:'hidden', maxHeight:260, position:'relative' }}>
             <img src={item.media_url} alt={item.name||'student work'} style={{ width:'100%', objectFit:'cover', display:'block', transition:'transform .3s' }}
@@ -482,7 +417,6 @@ function ReviewCard({ item }) {
             )}
           </div>
         )}
-        {/* video embed */}
         {type==='video' && item.media_url && (
           <div style={{ position:'relative', paddingBottom:'56.25%', background:C.dark }}>
             {item.media_url.includes('youtube.com')||item.media_url.includes('youtu.be') ? (
@@ -494,7 +428,6 @@ function ReviewCard({ item }) {
             )}
           </div>
         )}
-        {/* text body */}
         <div style={{ padding:'18px 20px' }}>
           {type==='text' && (
             <div style={{ fontSize:28, color:borderColor, fontWeight:900, lineHeight:1, marginBottom:8 }}>"</div>
@@ -518,7 +451,6 @@ function ReviewCard({ item }) {
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightbox && (
         <div onClick={()=>setLightbox(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.88)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16 }}>
           <img src={item.media_url} alt="" style={{ maxWidth:'100%', maxHeight:'90vh', borderRadius:16, boxShadow:'0 24px 80px rgba(0,0,0,0.6)' }}/>
@@ -529,8 +461,6 @@ function ReviewCard({ item }) {
   )
 }
 
-
-/* ── FAQ Item (collapsible, used for SEO rich snippets) ── */
 function FAQItem({q,a}) {
   const [open,setOpen]=useState(false)
   return (
@@ -548,9 +478,6 @@ function FAQItem({q,a}) {
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   MAIN EXPORT
-═══════════════════════════════════════════════════════════════════ */
 export default function Website() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [siteContent, setSiteContent] = useState({})
@@ -558,15 +485,12 @@ export default function Website() {
   const [reviewItems, setReviewItems] = useState([])
 
   useEffect(()=>{
-    // Load site_content key/value
     sb.from('site_content').select('*').then(({data})=>{
       if(data){ const m={}; data.forEach(r=>{m[r.key]=r.value}); setSiteContent(m) }
     })
-    // Load gallery photos from site_content as JSON
     sb.from('site_content').select('value').eq('key','gallery_photos').maybeSingle().then(({data})=>{
       try { if(data?.value) setGalleryItems(JSON.parse(data.value)) } catch{}
     })
-    // Load rich review items from site_content as JSON
     sb.from('site_content').select('value').eq('key','reviews_rich').maybeSingle().then(({data})=>{
       try { if(data?.value) setReviewItems(JSON.parse(data.value)) } catch{}
     })
@@ -574,7 +498,6 @@ export default function Website() {
 
   const sc = (key, fallback) => siteContent[key] || fallback
 
-  /* Default gallery placeholder items */
   const defaultGallery = [
     {url:null, label:'Bridal Mehndi', emoji:'🌿', cat:'Mehndi'},
     {url:null, label:'Makeup Look',   emoji:'💄', cat:'Makeup'},
@@ -588,7 +511,6 @@ export default function Website() {
   ]
   const gallery = galleryItems.length > 0 ? galleryItems : defaultGallery
 
-  /* Default reviews */
   const defaultReviews = [
     { type:'text', name:'Priya Sharma',   role:'Homemaker · Mehndi Student',           initial:'P', color:C.pink,
       text:"Kajol Ma'am is such a patient and detailed teacher. I could never draw a proper cone before, and now I do full bridal hands!" },
@@ -616,7 +538,6 @@ export default function Website() {
       <SEOHead/>
       <style>{CSS}</style>
 
-      {/* ══════════════ NAVBAR ══════════════ */}
       <header style={{
         position:'sticky', top:0, zIndex:500,
         background:'rgba(255,248,251,0.96)', backdropFilter:'blur(14px)',
@@ -658,12 +579,10 @@ export default function Website() {
         )}
       </header>
 
-      {/* ══════════════ HERO ══════════════ */}
       <section style={{
         background:`linear-gradient(145deg,${C.pink} 0%,${C.pinkD} 38%,#4A148C 72%,${C.green} 100%)`,
         padding:'80px 16px 90px', textAlign:'center', position:'relative', overflow:'hidden',
       }}>
-        {/* decorative mehndi-inspired arcs */}
         {[200,320,440].map((s,i)=>(
           <div key={i} style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:s, height:s, borderRadius:'50%', border:'1px solid rgba(255,255,255,0.08)', pointerEvents:'none' }}/>
         ))}
@@ -689,7 +608,6 @@ export default function Website() {
         </div>
       </section>
 
-      {/* ══════════════ STATS STRIP ══════════════ */}
       <div style={{ background:`linear-gradient(90deg,${C.pinkD},#7B1FA2,${C.green})`, padding:'26px 16px' }}>
         <div className="stats-grid" style={{ maxWidth:760, margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
           <Stat value={sc('stat_students','200+')} label="Students Trained"/>
@@ -699,7 +617,6 @@ export default function Website() {
         </div>
       </div>
 
-      {/* ══════════════ INSTAGRAM STRIP  (between Hero & About) ══════════════ */}
       <section style={{ background:'#fff', padding:'48px 16px 36px', borderBottom:`1px solid ${C.pinkPale}` }}>
         <div style={{ maxWidth:960, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:24 }}>
@@ -718,11 +635,9 @@ export default function Website() {
         </div>
       </section>
 
-      {/* ══════════════ ABOUT ══════════════ */}
       <Section id="about">
         <div className="about-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:40, alignItems:'center' }}>
           <div style={{ textAlign:'center' }}>
-            {/* Large decorative logo in about */}
             <div style={{ display:'flex', justifyContent:'center', marginBottom:20 }}>
               <div style={{ position:'relative' }}>
                 <div className="logo-spin" style={{ position:'absolute', inset:-8, borderRadius:'50%', border:`2px dashed ${C.pink}50` }}/>
@@ -758,7 +673,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ YOUTUBE PLAYLIST ══════════════ */}
       <Section bg={C.dark} style={{ padding:'60px 16px' }}>
         <SectionTitle emoji="▶" title="Watch Our Classes" light
           subtitle="Browse our full library of Mehndi, Makeup & Ariwork video classes on YouTube"/>
@@ -771,8 +685,6 @@ export default function Website() {
         </div>
       </Section>
 
-
-      {/* ══════════════ INDIVIDUAL ARTIST — Pune Bookings ══════════════ */}
       <Section id="book" style={{background:`linear-gradient(135deg,${C.pinkPale} 0%,#fff 50%,${C.greenPale} 100%)`}}>
         <SectionTitle emoji="🌸" title="Book Kajol for Your Event" accent
           subtitle="Individual artist services in Pune — Bridal Mehndi, Makeup & Ariwork for your special day"/>
@@ -807,7 +719,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ COURSES ══════════════ */}
       <Section id="courses" bg={C.greyL}>
         <SectionTitle emoji="📚" title="Our Courses" accent
           subtitle={sc('courses_subtitle','Professional-level training from the comfort of your home. Live Zoom + YouTube recordings.')}/>
@@ -827,7 +738,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ HOW IT WORKS ══════════════ */}
       <Section id="how">
         <SectionTitle emoji="✅" title="How It Works" subtitle="Getting started is easy — just 3 simple steps."/>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:22 }}>
@@ -851,7 +761,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ OUR WORK GALLERY ══════════════ */}
       <Section id="gallery" bg={C.pinkPale}>
         <SectionTitle emoji="🖼️" title="Our Work" accent
           subtitle={sc('gallery_subtitle',"A glimpse of the beautiful art our students and Kajol Ma'am create — photos, designs & more!")}/>
@@ -887,7 +796,6 @@ export default function Website() {
         </p>
       </Section>
 
-      {/* ══════════════ STUDENT REVIEWS ══════════════ */}
       <Section id="reviews">
         <SectionTitle emoji="⭐" title="What Students Say"
           subtitle={sc('reviews_subtitle','Real words from real learners — text, photos, WhatsApp messages & video feedback.')}/>
@@ -896,7 +804,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ COMMUNITY ══════════════ */}
       <Section bg={`linear-gradient(135deg,${C.green},#1B5E20)`} style={{ padding:'60px 16px' }}>
         <SectionTitle emoji="🌐" title="Join Our Community" light subtitle={null}/>
         <p style={{ textAlign:'center', fontSize:14, color:'rgba(255,255,255,0.82)', lineHeight:1.8, maxWidth:500, margin:'0 auto 32px' }}>
@@ -916,7 +823,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ CONTACT / CTA ══════════════ */}
       <Section id="contact" bg={C.offWhite}>
         <div style={{ background:`linear-gradient(135deg,${C.pink},${C.pinkD})`, borderRadius:28, padding:'48px 28px', textAlign:'center', boxShadow:`0 18px 56px ${C.pink}44` }}>
           <div style={{ marginBottom:18, display:'flex', justifyContent:'center' }}>
@@ -939,8 +845,6 @@ export default function Website() {
         </div>
       </Section>
 
-
-      {/* ══════════════ FAQ — Google Rich Snippets + SEO ══════════════ */}
       <Section bg={C.greyL}>
         <SectionTitle emoji="❓" title="Frequently Asked Questions" accent
           subtitle="Everything you need to know before enrolling"/>
@@ -960,14 +864,11 @@ export default function Website() {
         </div>
       </Section>
 
-
-      {/* ══════════════ UPI PAYMENT ══════════════ */}
       <Section id="pay" bg={C.white} style={{padding:'48px 16px'}}>
         <SectionTitle emoji="💳" title="Pay Course Fee" accent
           subtitle="Secure UPI payment — scan QR or send to UPI ID"/>
         <div style={{maxWidth:480,margin:'0 auto'}}>
           <div style={{background:`linear-gradient(135deg,${C.pinkPale},${C.greenPale})`,borderRadius:24,padding:28,textAlign:'center',boxShadow:'0 4px 24px rgba(233,30,140,0.1)',border:`1px solid ${C.pinkPale}`}}>
-            {/* QR Code — hosted image */}
             <div style={{background:'#fff',borderRadius:16,padding:16,marginBottom:16,display:'inline-block',boxShadow:'0 2px 12px rgba(0,0,0,0.1)'}}>
               <img
                 src="/upi-qr.jpg"
@@ -975,7 +876,6 @@ export default function Website() {
                 style={{width:200,height:200,display:'block',borderRadius:8}}
                 onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex'}}
               />
-              {/* Fallback if image not uploaded yet */}
               <div style={{width:200,height:200,display:'none',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:8,borderRadius:8,background:C.greyL}}>
                 <div style={{fontSize:48}}>📱</div>
                 <div style={{fontSize:12,color:C.grey,textAlign:'center'}}>QR Code<br/>coming soon</div>
@@ -1002,7 +902,6 @@ export default function Website() {
         </div>
       </Section>
 
-      {/* ══════════════ FOOTER ══════════════ */}
       <footer style={{ background:C.dark, color:'#fff', padding:'40px 16px 28px' }}>
         <div style={{ maxWidth:900, margin:'0 auto' }}>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:30, marginBottom:30 }}>
