@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { C, ADMIN_PWD, uid, Ic, Btn, Card, Row, Inp, SectionTitle, DelConfirm } from '../lib/ui.jsx'
-import { clearAllData } from '../lib/supabase.js'
+import { C, ADMIN_PWD, uid, Ic, Btn, Card, Row, Inp, SectionTitle, DelConfirm } from '../../lib/ui.jsx'
+import { clearAllData } from '../../lib/supabase.js'
 
 const ENROLL_URL   = (typeof window !== 'undefined' ? window.location.origin : 'https://kajol-makeover-studioz.vercel.app') + '/enroll'
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
