@@ -1,161 +1,176 @@
-# 💄 Kajol Makeover Studioz — Studio Management App
+# Kajol Makeover Studioz — Studio Management App
 
-Complete cloud-based studio management system for Makeup, Mehndi & ArtWork classes and individual orders.
-
----
-
-## ✅ Features
-- Student management with enrollment to multiple batches/courses
-- Course & syllabus management with WhatsApp share
-- Batch management with class progress, homework compliance, attendance
-- Zoom link management per batch & class
-- YouTube upload tracker (Pending / Processing / Uploaded)
-- WhatsApp reminders for classes, payments, batch groups
-- Individual orders (Mehndi / Makeup / ArtWork) with per-order expenses
-- Finance tracking: income vs expenses, batch-wise, monthly reports
-- Broadcast messaging: class reminders, payment reminders, festival wishes, birthday wishes
-- Full reports: monthly, batch-wise, student-wise, orders
-- Desktop + Mobile responsive design
-- Cloud data via Supabase (accessible from any device/browser)
-- Admin password protected
+A full-stack studio management web app for managing students, batches, courses, payments, orders, and the public website. Built with React + Vite + Supabase + Vercel.
 
 ---
 
-## 🚀 COMPLETE SETUP GUIDE
-
-### STEP 1 — Set up Supabase Database
-
-1. Go to **https://supabase.com** and log in
-2. Open your project (or create one)
-3. Click **SQL Editor** in the left sidebar
-4. Click **New Query**
-5. **Copy the entire contents** of `supabase_schema.sql` and paste it
-6. Click **Run** (▶ button)
-7. You should see "Success. No rows returned" — database is ready!
-
----
-
-### STEP 2 — Push Code to GitHub
-
-1. Go to **https://github.com** → New Repository
-2. Name it: `kajol-makeover-studioz`
-3. Keep it **Private**
-4. Click **Create repository**
-
-Then on your computer (or use GitHub web upload):
-
-**Option A — Upload files directly on GitHub website:**
-- Click "uploading an existing file"
-- Drag and drop ALL files and folders from this project
-- Click "Commit changes"
-
-**Option B — Using Git (if you have it installed):**
-```bash
-cd kajol-app
-git init
-git add .
-git commit -m "Initial commit - Kajol Makeover Studioz"
-git remote add origin https://github.com/YOUR_USERNAME/kajol-makeover-studioz.git
-git push -u origin main
-```
-
----
-
-### STEP 3 — Deploy on Vercel
-
-1. Go to **https://vercel.com** → Log in with GitHub
-2. Click **"Add New Project"**
-3. Click **"Import"** next to `kajol-makeover-studioz`
-4. On the Configure page:
-   - Framework: **Vite** (auto-detected)
-   - Root Directory: leave as `/`
-5. Click **"Environment Variables"** and add:
-   ```
-   VITE_SUPABASE_URL = https://zlzrdpagpwlrbljfmxzy.supabase.co
-   VITE_SUPABASE_ANON_KEY = sb_publishable_6_AujeG9DfoPxMELnkGCeQ_08K3XEF4
-   ```
-6. Click **Deploy**
-7. Wait ~2 minutes — your app is live! 🎉
-
-Vercel gives you a URL like: `https://kajol-makeover-studioz.vercel.app`
-
----
-
-### STEP 4 — Install on Android as App
-
-1. Open Chrome on your Android phone
-2. Go to your Vercel URL
-3. Tap the **3-dot menu** (⋮) → **"Add to Home Screen"**
-4. Name it "KMS Studio" → Tap **Add**
-5. It will appear as an app icon on your home screen! 📱
-
----
-
-## 🔐 Admin Login
-
-**Password:** `kajol2024`
-
-> To change the password: Open `src/App.jsx`, find `ADMIN_PWD = 'kajol2024'` and change it.
-
----
-
-## 📁 Project File Structure
+## 📁 Project Structure
 
 ```
-kajol-app/
-├── index.html              ← Main HTML entry point
-├── vite.config.js          ← Vite build config
-├── package.json            ← Dependencies
-├── vercel.json             ← Vercel deployment config
-├── .env                    ← Supabase credentials (DO NOT push to public repo)
-├── .gitignore              ← Ignores .env, node_modules
-├── supabase_schema.sql     ← Run this in Supabase SQL Editor
+kajol-makeover-studioz/
+├── index.html                        ← App entry point (do not edit)
+├── vite.config.js                    ← Build config (do not edit)
+├── vercel.json                       ← Routing rules for Vercel (do not edit)
+├── package.json                      ← Dependencies (do not edit)
 ├── public/
-│   ├── manifest.json       ← PWA manifest for mobile install
-│   └── favicon.svg         ← App icon
+│   ├── favicon.svg                   ← App icon
+│   ├── manifest.json                 ← PWA config
+│   └── upi-qr.jpg                    ← UPI QR code image for payments page
 └── src/
-    ├── main.jsx            ← React entry point
-    ├── App.jsx             ← Main app + all core tabs
-    ├── index.css           ← Global styles (desktop + mobile)
+    ├── main.jsx                      ← ReactDOM entry (do not edit)
+    ├── App.jsx                       ← URL router: / → Website, /app → Admin, /enroll → Form
+    ├── index.css                     ← Global styles (animations, scrollbar)
     ├── lib/
-    │   ├── supabase.js     ← Supabase client + CRUD helpers
-    │   └── ui.jsx          ← Shared UI components
+    │   ├── supabase.js               ← ALL database functions (dbLoad, dbUpsert, dbDelete etc.)
+    │   └── ui.jsx                    ← ALL shared UI components + constants + colors
+    ├── pages/
+    │   ├── Website.jsx               ← Public homepage (hero, courses, gallery, reviews, FAQ)
+    │   ├── AppDashboard.jsx          ← Admin app shell (navigation, layout, tab routing)
+    │   └── EnrollForm.jsx            ← Public enrollment form (/enroll route)
     └── components/
-        ├── Dashboard.jsx   ← Dashboard with pending activities
-        ├── CoursesTab.jsx  ← Course & syllabus management
-        ├── BroadcastTab.jsx← Bulk WhatsApp messaging
-        └── SettingsTab.jsx ← Settings + clear data
+        └── tabs/
+            ├── Login.jsx             ← Admin login screen
+            ├── Dashboard.jsx         ← Admin home dashboard (stats, alerts)
+            ├── EnrollmentTab.jsx     ← Review & approve enrollment requests
+            ├── StudentsTab.jsx       ← Add, edit, search students
+            ├── CoursesTab.jsx        ← Create and manage courses + syllabus
+            ├── BatchesTab.jsx        ← Manage batches, classes, attendance, homework
+            ├── PaymentsTab.jsx       ← Track student fee payments
+            ├── LeadsOrdersTab.jsx    ← Bookings, leads and commercial orders
+            ├── FinanceTab.jsx        ← Expenses, income, monthly P&L
+            ├── ReportsTab.jsx        ← Analytics: batch stats, student reports
+            ├── BroadcastTab.jsx      ← WhatsApp message templates & broadcast
+            ├── CertificateTab.jsx    ← Generate and send certificates
+            ├── WebsiteEditorTab.jsx  ← Edit website content from admin panel
+            └── SettingsTab.jsx       ← Admin settings, data management
 ```
 
 ---
 
-## 🔄 Making Updates
+## 🚀 Deployment (Vercel + GitHub)
 
-After initial setup, to update your app:
-1. Edit the files locally
-2. Push to GitHub (`git push`)
-3. Vercel auto-deploys within 1 minute ✅
-
----
-
-## 🆘 Troubleshooting
-
-**"Failed to load data":**
-- Check Supabase URL and key in Vercel environment variables
-- Make sure you ran the SQL schema in Supabase
-
-**"RLS policy error":**
-- Re-run the SQL schema — the RLS policies allow access
-
-**App not updating on phone:**
-- Hard refresh: hold Ctrl+Shift+R (browser) or clear cache
+1. Push to GitHub
+2. Vercel auto-deploys on every push
+3. Set these Environment Variables in Vercel Dashboard → Settings → Environment Variables:
+   - `VITE_SUPABASE_URL` = your Supabase project URL
+   - `VITE_SUPABASE_ANON_KEY` = your Supabase anon key
 
 ---
 
-## 📞 Support
+## 🗄️ Database Setup
 
-For help with this app, contact your developer.
+Run `supabase_schema.sql` once in Supabase → SQL Editor → New Query → Run.
+
+Tables used:
+- `students` — student profiles
+- `courses` — course definitions
+- `batches` — batch info (timing, zoom, whatsapp)
+- `classes` — individual class sessions per batch
+- `homework_compliance` — homework tracking
+- `payments` — fee payment records
+- `orders` — client bookings & commercial orders
+- `expenses` — studio expenses
+- `enrollment_requests` — public form submissions
+- `site_content` — website editable content (key/value)
 
 ---
 
-*Kajol Makeover Studioz © 2025 — All rights reserved*
+## 🌐 URL Routes
+
+| URL | What it shows |
+|-----|---------------|
+| `/` | Public website (Website.jsx) |
+| `/enroll` | Public enrollment form (EnrollForm.jsx) |
+| `/app` | Admin dashboard (AppDashboard.jsx) — password: kajol2024 |
+
+---
+
+## 🔑 Admin Login
+
+Password: **kajol2024**
+
+To change: edit `ADMIN_PWD` in `src/lib/ui.jsx` line ~20.
+
+---
+
+## 📞 Contact Info in App
+
+All contact details are in `src/components/tabs/Dashboard.jsx` and `src/pages/Website.jsx`:
+- Phone: 8390695155 / 7030825125
+- Email: kajoljkambale@gmail.com
+- UPI: kajalkambaleaxis@yesg
+
+---
+
+## 💡 How to Ask Claude for Modifications
+
+### When you need to change something, upload ONLY the relevant file:
+
+| What you want to change | Upload this file |
+|------------------------|-----------------|
+| Batch management (classes, attendance, zoom) | `src/components/tabs/BatchesTab.jsx` |
+| Student management | `src/components/tabs/StudentsTab.jsx` |
+| Finance / expenses | `src/components/tabs/FinanceTab.jsx` |
+| Orders / leads / bookings | `src/components/tabs/LeadsOrdersTab.jsx` |
+| Payments | `src/components/tabs/PaymentsTab.jsx` |
+| Course & syllabus | `src/components/tabs/CoursesTab.jsx` |
+| Reports & analytics | `src/components/tabs/ReportsTab.jsx` |
+| WhatsApp broadcast | `src/components/tabs/BroadcastTab.jsx` |
+| Certificates | `src/components/tabs/CertificateTab.jsx` |
+| Website homepage | `src/pages/Website.jsx` |
+| Enrollment form | `src/pages/EnrollForm.jsx` |
+| Website text editor (admin) | `src/components/tabs/WebsiteEditorTab.jsx` |
+| Admin settings / clear data | `src/components/tabs/SettingsTab.jsx` |
+| Dashboard home screen | `src/components/tabs/Dashboard.jsx` |
+| Login screen | `src/components/tabs/Login.jsx` |
+| Enrollment requests | `src/components/tabs/EnrollmentTab.jsx` |
+| Colors, fonts, shared components | `src/lib/ui.jsx` |
+| Database functions | `src/lib/supabase.js` |
+| Add a new URL route | `src/App.jsx` |
+| Navigation tabs in admin | `src/pages/AppDashboard.jsx` |
+
+### Example request format that gets best results:
+> *"Here is my BatchesTab.jsx. When I click Save Batch, show a success toast and refresh the batch list. Keep everything else the same."*
+
+### Never upload:
+- The full zip (too large, wastes your free messages)
+- Multiple files at once (unless truly needed)
+- Files you haven't changed
+
+---
+
+## 🔧 Common Fixes
+
+### "Enroll Now" shows blank page
+Check `vercel.json` exists at repo root with rewrites. Already included.
+
+### Data not saving to Supabase
+- Check browser console for error messages
+- Run `supabase_schema.sql` again in Supabase SQL editor
+- Verify env vars are set in Vercel dashboard
+
+### Build fails on Vercel
+- The error message shows the file and line number
+- Upload that specific file to Claude with the error message
+- Say: "Fix this syntax error: [paste error]"
+
+---
+
+## 📊 Free Plan Usage Tips
+
+Claude free plan = ~10-15 messages per session.
+
+**Max value per message:**
+- Upload 1 small file (one tab = ~150 lines = fast to process)
+- State the exact change needed
+- Say "keep everything else unchanged"
+- One task per message
+
+**Avoid:**
+- Uploading the old 3000-line AppDashboard.jsx
+- Asking multiple unrelated changes in one message
+- Re-uploading files that haven't changed
+
+---
+
+*© 2025 Kajol Makeover Studioz by Kajol J Kamble, Pune*
