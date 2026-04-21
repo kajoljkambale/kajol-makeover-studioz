@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { C, fmt, fmtDate, Ic, Card, Row, SectionTitle, StatBox, Badge, Btn, Divider } from '../lib/ui.jsx'
+import { C, fmt, fmtDate, Ic, Card, Row, SectionTitle, StatBox, Badge, Btn, Divider } from 'src/lib/ui.jsx'
 function KMSLogo({size=48,light=false}) {
   /* Artistic logo: circular badge with mehndi cone, makeup brush, ariwork palette
      Three art forms united — Kajol J Kamble, professional artist & teacher */
