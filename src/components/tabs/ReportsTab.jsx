@@ -2,163 +2,72 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { C, uid, today, fmt, fmtDate, monthKey, monthLabel, ADMIN_PWD,
          COURSE_TYPES, ORDER_TYPES, SCHEDULE_OPTS, DURATION_OPTS, EXP_CATS,
          Ic, Modal, Inp, Btn, Badge, Card, Row, Divider, SectionTitle, StatBox,
-         Toggle, Spinner, DelConfirm } from '../lib/ui.jsx'
-import { supabase as sb, dbUpsert, dbDelete } from '../lib/supabase.js'
+         Toggle, Spinner, DelConfirm } from '../../lib/ui.jsx'
+import { supabase as sb, dbUpsert, dbDelete } from '../../lib/supabase.js'
 
 const ENROLL_URL   = (typeof window !== 'undefined' ? window.location.origin : 'https://kajol-makeover-studioz.vercel.app') + '/enroll'
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
 const INSTAGRAM    = 'https://www.instagram.com/kajol_makeover_studioz?igsh=a3h2ZWIzbmM3M3Y3'
 const YOUTUBE      = 'https://youtube.com/@kajolmakeoverstudioz?si=IsWwx4ScqJ33ZAqp'
-export default function ReportsTab({data}) {
-  const [view,setView]=useState('summary')
-
-  const totalIncome = data.payments.reduce((s,p)=>s+Number(p.paid),0)+data.orders.reduce((s,o)=>s+Number(o.paid),0)
-  const totalExp    = data.expenses.reduce((s,e)=>s+Number(e.amount),0)+data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,x)=>a+Number(x.amt),0),0)
-  const totalDues   = data.payments.reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)
-
-  const topStudents = useMemo(()=>{
-    const m={}
-    data.payments.forEach(p=>{
-      const s=data.students.find(x=>x.id===p.student_id)
-      if(s) m[s.id]={name:s.name,mobile:s.mobile,paid:(m[s.id]?.paid||0)+Number(p.paid)}
-    })
-    return Object.values(m).sort((a,b)=>b.paid-a.paid).slice(0,5)
-  },[data])
-
-  const batchStats = useMemo(()=>data.batches.map(b=>{
-    const course=data.courses.find(c=>c.id===b.course_id)
-    const students=(b.student_ids||[]).length
-    const classes=data.classes.filter(c=>c.batch_id===b.id).length
-    const income=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+Number(p.paid),0)
-    const dues=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)
-    const ytDone=data.classes.filter(c=>c.batch_id===b.id&&c.youtube_status==='Uploaded').length
-    const attendance=data.classes.filter(c=>c.batch_id===b.id).reduce((s,c)=>s+(c.attendees||[]).length,0)
-    const avgAtt=classes>0&&students>0?Math.round(attendance/(classes*students)*100):0
-    return {name:b.name,course:course?.name||'—',status:b.status,students,classes,income,dues,ytDone,avgAtt}
-  }),[data])
-
+export default function PaymentsTab({data,setData,toast}) {
+  const [modal,setModal]=useState(null); const [del,setDel]=useState(null)
+  const [form,setForm]=useState({}); const [busy,setBusy]=useState(false)
+  const [fb,setFb]=useState('all'); const [fs,setFs]=useState('all')
+  const filtered=data.payments.filter(p=>(fb==='all'||p.batch_id===fb)&&(fs==='all'||p.student_id===fs))
+  const save=async()=>{if(!form.amount||!form.paid)return alert('Amount required.');setBusy(true);const row={id:form.id||uid(),student_id:form.student_id||data.students[0]?.id,batch_id:form.batch_id||data.batches[0]?.id,amount:Number(form.amount),paid:Number(form.paid),type:form.type||'Full',date:form.date||today(),note:form.note||'',created_at:form.created_at||new Date().toISOString()};await dbUpsert('payments',row);setData(d=>({...d,payments:form.id?d.payments.map(p=>p.id===form.id?{...p,...row}:p):[...d.payments,row]}));setBusy(false);setModal(null);toast('Payment saved!')}
   return (
     <div>
-      <div style={{display:'flex',gap:6,marginBottom:14,overflowX:'auto',paddingBottom:2}}>
-        {[['summary','📊 Summary'],['batches','🎓 Batches'],['students','👥 Students']].map(([v,l])=>(
-          <div key={v} onClick={()=>setView(v)} style={{flexShrink:0,padding:'8px 14px',borderRadius:12,background:view===v?C.pink:C.greyL,color:view===v?C.white:C.grey,fontSize:12,fontWeight:view===v?700:500,cursor:'pointer'}}>{l}</div>
-        ))}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
+        <StatBox label="Received" value={fmt(filtered.reduce((s,p)=>s+Number(p.paid),0))} color={C.green} icon="rupee"/>
+        <StatBox label="Pending" value={fmt(filtered.reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0))} color={C.amber} icon="alert"/>
       </div>
-
-      {view==='summary'&&<>
-        <div style={{background:`linear-gradient(135deg,${C.pink},${C.green})`,borderRadius:18,padding:18,marginBottom:14,color:'#fff'}}>
-          <div style={{fontSize:13,opacity:.85}}>Studio at a Glance</div>
-          <div style={{fontSize:20,fontWeight:900,marginTop:2}}>Kajol Makeover Studioz 💄</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginTop:12}}>
-            {[['Students',data.students.length],['Batches',data.batches.length],['Orders',data.orders.length]].map(([l,v])=>(
-              <div key={l} style={{background:'rgba(255,255,255,0.15)',borderRadius:10,padding:'8px 10px',textAlign:'center'}}>
-                <div style={{fontSize:20,fontWeight:900}}>{v}</div>
-                <div style={{fontSize:10,opacity:.85}}>{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
-          <StatBox label="Total Income" value={fmt(totalIncome)} color={C.green} icon="rupee"/>
-          <StatBox label="Total Expenses" value={fmt(totalExp)} color={C.amber} icon="expenses"/>
-          <StatBox label="Net Profit" value={fmt(totalIncome-totalExp)} color={totalIncome-totalExp>=0?C.green:C.red} icon="trend"/>
-          <StatBox label="Pending Dues" value={fmt(totalDues)} color={C.amber} icon="alert"/>
-        </div>
-
-        <Card accent={C.purple}>
-          <STitle><Ic n="batch" size={15} color={C.purple}/> Batch Overview</STitle>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8}}>
-            {[['Active',data.batches.filter(b=>b.status==='Active').length,C.green],['Completed',data.batches.filter(b=>b.status==='Completed').length,C.grey],['Total',data.batches.length,C.purple]].map(([l,v,c])=>(
-              <div key={l} style={{background:c+'12',borderRadius:10,padding:'8px 10px',textAlign:'center'}}>
-                <div style={{fontSize:20,fontWeight:800,color:c}}>{v}</div>
-                <div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div>
-              </div>
-            ))}
-          </div>
+      <Row gap={8} style={{marginBottom:12}}>
+        <select value={fb} onChange={e=>setFb(e.target.value)} style={{flex:1,padding:'8px 10px',borderRadius:9,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark}}>
+          <option value="all">All Batches</option>{data.batches.map(b=><option key={b.id} value={b.id}>{b.name}</option>)}
+        </select>
+        <select value={fs} onChange={e=>setFs(e.target.value)} style={{flex:1,padding:'8px 10px',borderRadius:9,border:`1.5px solid ${C.pinkPale}`,fontSize:12,fontFamily:'inherit',outline:'none',color:C.dark}}>
+          <option value="all">All Students</option>{data.students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}
+        </select>
+        <Btn small onClick={()=>{setForm({student_id:data.students[0]?.id||'',batch_id:data.batches[0]?.id||'',amount:'',paid:'',type:'Full',date:today(),note:''});setModal('add')}}><Ic n="add" size={14} color={C.white}/></Btn>
+      </Row>
+      {filtered.map(p=>{const s=data.students.find(x=>x.id===p.student_id);const b=data.batches.find(x=>x.id===p.batch_id);const due=Number(p.amount)-Number(p.paid);return(
+        <Card key={p.id} accent={due>0?C.amber:C.green}>
+          <Row style={{justifyContent:'space-between',marginBottom:6}}><div><div style={{fontWeight:700,fontSize:14}}>{s?.name||'Unknown'}</div><div style={{fontSize:12,color:C.grey}}>{b?.name}</div></div><Badge color={p.type==='Full'?C.green:C.amber}>{p.type}</Badge></Row>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,marginBottom:8}}>{[['Fee',fmt(p.amount),C.dark],['Paid',fmt(p.paid),C.green],['Due',fmt(due),due>0?C.amber:C.green]].map(([l,v,c])=><div key={l} style={{background:c+'10',borderRadius:8,padding:'6px 8px',textAlign:'center'}}><div style={{fontSize:10,color:c}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:c}}>{v}</div></div>)}</div>
+          <div style={{fontSize:11,color:C.grey,marginBottom:6}}>📅 {p.date}{p.note&&` · ${p.note}`}</div>
+          {due>0&&s&&<a href={`https://wa.me/91${s.mobile}?text=${encodeURIComponent('Hi '+s.name+'! Gentle reminder: payment of '+fmt(due)+' pending for '+(b?.name||'your course')+'. — Kajol Maam 💄')}`} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.wa,display:'flex',alignItems:'center',gap:5,marginBottom:8,textDecoration:'none'}}><Ic n="wa" size={13} color={C.wa}/> Send Payment Reminder</a>}
+          <Row gap={7}><Btn small outline onClick={()=>{setForm({...p});setModal('edit_'+p.id)}}>✏️</Btn><Btn small color={C.red} onClick={()=>setDel(p)}>🗑️</Btn></Row>
+          {modal===('edit_'+p.id)&&<Modal onClose={()=>setModal(null)} title="Edit Payment">
+            <Inp label="Amount(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+            <Inp label="Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
+            <Inp label="Type" value={form.type} onChange={v=>setForm(x=>({...x,type:v}))} opts={['Full','Partial']}/>
+            <Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/>
+            <Inp label="Note" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/>
+            <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row>
+          </Modal>}
         </Card>
-
-        <Card accent={C.blue}>
-          <STitle><Ic n="report" size={15} color={C.blue}/> Classes & YouTube</STitle>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-            <div style={{background:C.blue+'12',borderRadius:10,padding:'10px 12px',textAlign:'center'}}>
-              <div style={{fontSize:20,fontWeight:800,color:C.blue}}>{data.classes.length}</div>
-              <div style={{fontSize:10,color:C.blue,fontWeight:700}}>Total Classes</div>
-            </div>
-            <div style={{background:C.yt+'12',borderRadius:10,padding:'10px 12px',textAlign:'center'}}>
-              <div style={{fontSize:20,fontWeight:800,color:C.yt}}>{data.classes.filter(c=>c.youtube_status==='Uploaded').length}</div>
-              <div style={{fontSize:10,color:C.yt,fontWeight:700}}>YT Uploaded</div>
-            </div>
-          </div>
-          {data.classes.filter(c=>c.youtube_status!=='Uploaded').length>0&&(
-            <div style={{marginTop:8,fontSize:12,color:C.amber}}>⚠️ {data.classes.filter(c=>c.youtube_status!=='Uploaded').length} classes pending YouTube upload</div>
-          )}
-        </Card>
-      </>}
-
-      {view==='batches'&&<>
-        {batchStats.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32,background:C.white,borderRadius:16}}>No batches yet.</div>}
-        {batchStats.map((b,i)=>(
-          <Card key={i} accent={b.status==='Active'?C.green:C.grey}>
-            <Row style={{justifyContent:'space-between',marginBottom:8}}>
-              <div>
-                <div style={{fontWeight:700,fontSize:14,color:C.dark}}>{b.name}</div>
-                <div style={{fontSize:12,color:C.grey}}>{b.course} · <Badge color={b.status==='Active'?C.green:C.grey}>{b.status}</Badge></div>
-              </div>
-            </Row>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:6}}>
-              {[['Students',b.students,C.blue],['Classes',b.classes,C.purple],['Avg Att.',b.avgAtt+'%',C.teal],['Income',fmt(b.income),C.green],['Dues',fmt(b.dues),C.amber],['YT Done',b.ytDone,C.yt]].map(([l,v,c])=>(
-                <div key={l} style={{background:c+'10',borderRadius:8,padding:'5px 8px',textAlign:'center'}}>
-                  <div style={{fontSize:9,color:c,fontWeight:700,textTransform:'uppercase'}}>{l}</div>
-                  <div style={{fontSize:12,fontWeight:700,color:c}}>{v}</div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        ))}
-      </>}
-
-      {view==='students'&&<>
-        <Card accent={C.pink}>
-          <STitle><Ic n="star" size={15} color={C.pink}/> Top Students by Payment</STitle>
-          {topStudents.length===0&&<div style={{fontSize:13,color:C.grey,textAlign:'center',padding:12}}>No payment data yet.</div>}
-          {topStudents.map((s,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <div style={{width:28,height:28,borderRadius:'50%',background:`linear-gradient(135deg,${C.pink},${C.green})`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:700,fontSize:12,flexShrink:0}}>{i+1}</div>
-                <div>
-                  <div style={{fontWeight:700,fontSize:13}}>{s.name}</div>
-                  <div style={{fontSize:11,color:C.grey}}>{s.mobile}</div>
-                </div>
-              </div>
-              <div style={{fontSize:13,fontWeight:700,color:C.green}}>{fmt(s.paid)}</div>
-            </div>
-          ))}
-        </Card>
-
-        <Card accent={C.amber}>
-          <STitle><Ic n="alert" size={15} color={C.amber}/> Pending Dues by Student</STitle>
-          {data.payments.filter(p=>Number(p.amount)>Number(p.paid)).length===0&&<div style={{fontSize:13,color:C.green,textAlign:'center',padding:12}}>✅ All dues cleared!</div>}
-          {data.payments.filter(p=>Number(p.amount)>Number(p.paid)).map(p=>{
-            const s=data.students.find(x=>x.id===p.student_id)
-            const b=data.batches.find(x=>x.id===p.batch_id)
-            const due=Number(p.amount)-Number(p.paid)
-            return (
-              <div key={p.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
-                <div>
-                  <div style={{fontWeight:600,fontSize:13}}>{s?.name||'Unknown'}</div>
-                  <div style={{fontSize:11,color:C.grey}}>{b?.name||''}</div>
-                </div>
-                <div style={{fontSize:13,fontWeight:700,color:C.amber}}>{fmt(due)}</div>
-              </div>
-            )
-          })}
-        </Card>
-      </>}
+      )})}
+      {modal==='add'&&<Modal onClose={()=>setModal(null)} title="Add Payment">
+        <Inp label="Student" value={form.student_id} onChange={v=>setForm(x=>({...x,student_id:v}))} opts={data.students.map(s=>({v:s.id,l:s.name}))}/>
+        <Inp label="Batch" value={form.batch_id} onChange={v=>setForm(x=>({...x,batch_id:v}))} opts={data.batches.map(b=>({v:b.id,l:b.name}))}/>
+        <Inp label="Total Fee(₹)" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+        <Inp label="Amount Paid(₹)" value={form.paid} onChange={v=>setForm(x=>({...x,paid:v}))} type="number"/>
+        <Inp label="Type" value={form.type||'Full'} onChange={v=>setForm(x=>({...x,type:v}))} opts={['Full','Partial']}/>
+        <Inp label="Date" value={form.date||today()} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/>
+        <Inp label="Note" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/>
+        <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn color={C.green} onClick={save} full disabled={busy}>{busy?'…':'Save'}</Btn></Row>
+      </Modal>}
+      {del&&<DelConfirm item="this payment" onConfirm={async()=>{await dbDelete('payments',del.id);setData(d=>({...d,payments:d.payments.filter(p=>p.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
     </div>
   )
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   WEBSITE EDITOR TAB  — Edit site_content key/values for website
+   ORDERS TAB
+═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   LEADS & ORDERS TAB — merged: individual artist bookings (Pune)
+   + commercial orders with expense tracking
+   All stored in "orders" table; portfolio_lead flag separates them
 ═══════════════════════════════════════════════════════════════════ */
