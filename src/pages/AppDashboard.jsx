@@ -2232,7 +2232,7 @@ https://kajol-makeover-studioz.vercel.app`
               if(!printWin) return
               const certEl=document.getElementById('cert_'+student.id)
               if(certEl){
-                printWin.document.write('<html><head><title>Certificate — '+student.name+'</title><style>@import url(https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap);body{margin:0;padding:20px;font-family:Georgia,serif;background:#fff;}@media print{body{padding:0;}}</style></head><body>'+certEl.innerHTML+'</body></html>')
+                const html='<html><head><title>Certificate</title></head><body style="margin:0;padding:20px;">'+certEl.innerHTML+'</body></html>';printWin.document.write(html)
                 printWin.document.close()
                 printWin.focus()
                 setTimeout(()=>{printWin.print();},500)
