@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { C, Ic, Btn, Card, SectionTitle, Spinner } from '../lib/ui.jsx'
-import { supabase as sb } from '../lib/supabase.js'
+import { C, Ic, Btn, Card, SectionTitle, Spinner } from '../../lib/ui.jsx'
+import { supabase as sb } from '../../lib/supabase.js'
 export default function WebsiteEditorTab({toast}) {
   const [content,setContent]=useState({})
   const [busy,setBusy]=useState(false)
