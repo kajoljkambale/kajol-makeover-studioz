@@ -1,3 +1,4 @@
+import React from 'react'
 // ══════════════════════════════════════════
 //  CONSTANTS & HELPERS
 // ══════════════════════════════════════════
@@ -8,6 +9,7 @@ export const C = {
   white:'#FFFFFF', offWhite:'#FFF8FB', grey:'#757575', greyL:'#F5F5F5',
   dark:'#1A1A2E', amber:'#FF6F00', amberL:'#FFA000', red:'#D32F2F',
   blue:'#1565C0', blueL:'#42A5F5', teal:'#00695C', purple:'#6A1B9A',
+  wa:'#25D366', ig:'#E1306C', yt:'#FF0000',
 }
 
 export const uid = () => crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2)
@@ -203,6 +205,11 @@ export function Spinner() {
   )
 }
 
+export function Toast({msg}) {
+  if (!msg) return null
+  return <div className="toast">{msg}</div>
+}
+
 export function DelConfirm({item, onConfirm, onClose}) {
   const [pwd,setPwd] = React.useState('')
   const [err,setErr] = React.useState('')
@@ -223,5 +230,3 @@ export function DelConfirm({item, onConfirm, onClose}) {
   )
 }
 
-// Need React for DelConfirm
-import React from 'react'
