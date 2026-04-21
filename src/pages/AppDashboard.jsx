@@ -2744,33 +2744,6 @@ function SettingsTab({data,setData,onLogout,toast}) {
   )
 }
 
-              if(certEl){
-                printWin.document.write('<html><head><title>Certificate — '+student.name+'</title><style>@import url(https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap);body{margin:0;padding:20px;font-family:Georgia,serif;background:#fff;}@media print{body{padding:0;}}</style></head><body>'+certEl.innerHTML+'</body></html>')
-                printWin.document.close()
-                printWin.focus()
-                setTimeout(()=>{printWin.print();},500)
-              }else{window.print()}
-            }}>
-              📄 Save as PDF / Print
-            </Btn>
-            <Btn small color={C.wa} onClick={()=>sendWhatsApp(student)}>
-              <Ic n="wa" size={12} color={C.white}/> WhatsApp
-            </Btn>
-            <Btn small color={C.blue} onClick={()=>sendEmail(student)}>
-              <Ic n="mailsend" size={12} color={C.white}/> Email
-            </Btn>
-            <div style={{fontSize:11,color:C.grey,alignSelf:'center',padding:'0 4px'}}>
-              {student.address?`📬 ${student.address}`:'⚠️ No address — add in Students tab for postal dispatch'}
-            </div>
-          </Row>
-        </Card>
-      ))}
-
-      {/* Print styles */}
-      <style>{`@media print{body>*:not(.print-area){display:none!important;}.print-area{display:block!important;}}`}</style>
-    </div>
-  )
-}
 
 /* ═══════════════════════════════════════════════════════════════════
    NAVIGATION CONFIG
