@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { C, ADMIN_PWD, Ic, Spinner, Toast } from '../lib/ui.jsx'
 import { supabase as sb, loadAllData } from '../lib/supabase.js'
 
-import LoginTab            from '../components/tabs/LoginTab.jsx'
+import LoginTab from '../components/tabs/LoginTab.jsx'
 import Dashboard        from '../components/tabs/Dashboard.jsx'
 import EnrollmentTab    from '../components/tabs/EnrollmentTab.jsx'
 import StudentsTab      from '../components/tabs/StudentsTab.jsx'
@@ -96,7 +96,7 @@ function AdminApp() {
     }
   `
 
-  if(!loggedIn) return <div><style>{CSS}</style><Login onLogin={login}/></div>
+  if(!loggedIn) return <div><style>{CSS}</style><LoginTab onLogin={login}/></div>
 
   const pendingReq=(data.enrollmentRequests||[]).filter(r=>r.status==='pending').length
 
