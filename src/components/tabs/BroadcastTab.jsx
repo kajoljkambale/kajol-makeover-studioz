@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { C, uid, today, fmt, fmtDate, monthKey, monthLabel, ADMIN_PWD,
          COURSE_TYPES, ORDER_TYPES, SCHEDULE_OPTS, DURATION_OPTS, EXP_CATS,
          Ic, Modal, Inp, Btn, Badge, Card, Row, Divider, SectionTitle, StatBox,
-         Toggle, Spinner, DelConfirm } from '../lib/ui.jsx'
-import { supabase as sb, dbUpsert, dbDelete } from '../lib/supabase.js'
+         Toggle, Spinner, DelConfirm } from '../../lib/ui.jsx'
+import { supabase as sb, dbUpsert, dbDelete } from '../../lib/supabase.js'
 
 const ENROLL_URL   = (typeof window !== 'undefined' ? window.location.origin : 'https://kajol-makeover-studioz.vercel.app') + '/enroll'
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
