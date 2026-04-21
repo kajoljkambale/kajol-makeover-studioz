@@ -30,8 +30,9 @@ const dbLoad   = async t => {
   return data||[] 
 }
 const dbUpsert = async (t,d) => {
-  const { error } = await sb.from(t).upsert(d,{onConflict:'id'});
-  if(error) console.error("Upsert error:", error.message);
+  const { error } = await sb.from(t).upsert(d,{onConflict:'id'})
+  if(error){ console.error("Upsert error on",t,":",error.message); alert("Save error ("+t+"): "+error.message) }
+  return !error
 }
 const dbSave   = async (t,d) => { 
   const { error } = await sb.from(t).upsert(d); 
@@ -62,7 +63,7 @@ async function clearAll() {
    CONSTANTS & HELPERS
 ═══════════════════════════════════════════════════════════════════ */
 const ADMIN_PWD    = 'kajol2024'
-const ENROLL_URL   = 'https://kajol-makeover-studioz.vercel.app/enroll'
+const ENROLL_URL   = typeof window!=='undefined'?(window.location.origin+'/enroll'):'https://kajol-makeover-studioz.vercel.app/enroll'
 const PHONE1       = '8390695155'
 const PHONE2       = '7030825125'
 const EMAIL_KAJOL  = 'kajoljkambale@gmail.com'
@@ -256,63 +257,82 @@ function ExportModal({data,onClose}) {
    Used in: enrollment form header, admin header, settings
 ═══════════════════════════════════════════════════════════════════ */
 function KMSLogo({size=48,light=false}) {
-  /* Exact match to reference image: hand with 4 brushes, orange-red nails
-     Colors match brand: pink E91E8C, green 2E7D32, dark handle 3D2218 */
-  const nail = light ? 'rgba(255,180,190,0.95)' : '#E91E8C'
-  const hand = light ? 'rgba(255,255,255,0.93)' : '#FAEAE0'
-  const hsk  = light ? 'rgba(255,255,255,0.45)' : '#2D1008'
-  const bru  = light ? 'rgba(255,255,255,0.9)'  : '#3D2218'
-  const bh   = light ? 'rgba(255,255,255,0.65)' : '#7A5040'
-  const bhl  = light ? 'rgba(255,255,255,0.4)'  : '#A07868'
-  const bg   = light ? 'rgba(255,255,255,0.1)'  : '#FCE4EC'
+  /* Artistic logo: circular badge with mehndi cone, makeup brush, ariwork palette
+     Three art forms united — Kajol J Kamble, professional artist & teacher */
+  const pk   = light ? '#FFB3D9' : '#E91E8C'
+  const pkD  = light ? '#FF80C0' : '#C2185B'
+  const gr   = light ? '#A5D6A7' : '#2E7D32'
+  const pur  = light ? '#CE93D8' : '#6A1B9A'
+  const bg   = light ? 'rgba(255,255,255,0.18)' : '#FFF0F6'
+  const ring = light ? 'rgba(255,255,255,0.55)' : '#E91E8C'
+  const txt  = light ? 'rgba(255,255,255,0.9)' : '#C2185B'
+  const s    = size
   return (
-    <svg width={size} height={size*1.28} viewBox="0 0 100 128" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
-      <rect width="100" height="128" rx="14" fill={bg} opacity="0.45"/>
-      {/* BRUSH 1 — far left, strong left angle */}
-      <rect x="5" y="2" width="11" height="45" rx="5.5" fill={bru} transform="rotate(-30 10 24)"/>
-      <ellipse cx="4"  cy="5"  rx="8" ry="12.5" fill={bh}  transform="rotate(-30 4 5)"/>
-      <ellipse cx="4"  cy="4"  rx="5" ry="8.5"  fill={bhl} transform="rotate(-30 4 4)" opacity="0.7"/>
-      <rect    x="2"  y="1"   width="4" height="6" rx="2" fill={bru} transform="rotate(-30 4 4)" opacity="0.5"/>
-      <line x1="8"  y1="48" x2="5"  y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      {/* BRUSH 2 — left-center, mild left tilt */}
-      <rect x="27" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(-12 32 23)"/>
-      <ellipse cx="26" cy="4"  rx="7.5" ry="12" fill={bh}  transform="rotate(-12 26 4)"/>
-      <ellipse cx="26" cy="3"  rx="4.5" ry="8"  fill={bhl} transform="rotate(-12 26 3)" opacity="0.7"/>
-      <rect    x="24" y="1"   width="4" height="6" rx="2" fill={bru} transform="rotate(-12 26 4)" opacity="0.5"/>
-      <line x1="32" y1="48" x2="30" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      {/* BRUSH 3 — right-center, mild right tilt */}
-      <rect x="55" y="0" width="11" height="47" rx="5.5" fill={bru} transform="rotate(8 60 23)"/>
-      <ellipse cx="62" cy="3"  rx="7.5" ry="12" fill={bh}  transform="rotate(8 62 3)"/>
-      <ellipse cx="62" cy="2"  rx="4.5" ry="8"  fill={bhl} transform="rotate(8 62 2)" opacity="0.7"/>
-      <rect    x="59" y="0"   width="4" height="6" rx="2" fill={bru} transform="rotate(8 61 3)" opacity="0.5"/>
-      <line x1="62" y1="48" x2="64" y2="60" stroke={nail} strokeWidth="4.5" strokeLinecap="round"/>
-      {/* BRUSH 4 — far right, strong right angle */}
-      <rect x="77" y="3" width="10" height="43" rx="5" fill={bru} transform="rotate(26 82 24)"/>
-      <ellipse cx="85" cy="6"  rx="7" ry="11" fill={bh}  transform="rotate(26 85 6)"/>
-      <ellipse cx="85" cy="5"  rx="4" ry="7.5" fill={bhl} transform="rotate(26 85 5)" opacity="0.7"/>
-      <line x1="83" y1="46" x2="86" y2="58" stroke={nail} strokeWidth="4" strokeLinecap="round"/>
-      {/* HAND — clenched fist from below holding brushes */}
-      <path d="M16 62 Q12 74 14 90 Q14 103 30 107 Q50 112 70 107 Q86 103 86 90 L85 62 Q78 57 70 60 Q62 55 54 60 Q45 55 36 60 Q26 56 16 62Z"
-        fill={hand} stroke={hsk} strokeWidth="2.8"/>
-      {/* Knuckle crease lines */}
-      <path d="M20 70 Q26 65 32 70" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M38 66 Q45 61 52 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M58 66 Q64 61 70 66" stroke={hsk} strokeWidth="1.3" fill="none" opacity="0.28"/>
-      <path d="M74 69 Q79 64 83 69" stroke={hsk} strokeWidth="1.1" fill="none" opacity="0.28"/>
-      {/* NAILS — brand pink, wide at top of fist */}
-      <ellipse cx="26"   cy="64" rx="6.5" ry="4.5" fill={nail}/>
-      <ellipse cx="45"   cy="61" rx="6.5" ry="4.2" fill={nail}/>
-      <ellipse cx="64"   cy="61" rx="6"   ry="4"   fill={nail}/>
-      <ellipse cx="80"   cy="63" rx="5.5" ry="3.8" fill={nail}/>
-      {/* Nail highlight shine */}
-      <ellipse cx="24.5" cy="62.5" rx="2.5" ry="1.5" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="43.5" cy="59.5" rx="2.5" ry="1.4" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="62.5" cy="59.5" rx="2.2" ry="1.3" fill="rgba(255,255,255,0.55)"/>
-      <ellipse cx="78.5" cy="61.5" rx="2"   ry="1.2" fill="rgba(255,255,255,0.55)"/>
-      {/* Mehndi wrist dots */}
-      {[0,1,2,3,4,5].map(ix=>(
-        <circle key={ix} cx={26+ix*9} cy={100} r="2.2" fill={nail} opacity="0.38"/>
-      ))}
+    <svg width={s} height={s} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+      {/* Outer decorative ring */}
+      <circle cx="60" cy="60" r="57" fill={bg} stroke={ring} strokeWidth="2.5" strokeDasharray="6 3" opacity="0.7"/>
+      {/* Inner circle */}
+      <circle cx="60" cy="60" r="48" fill={light?'rgba(255,255,255,0.12)':bg} stroke={ring} strokeWidth="1.2" opacity="0.5"/>
+
+      {/* ── MEHNDI CONE (left, tilted) ── */}
+      {/* Cone body */}
+      <path d="M30 28 L42 72 L48 72 L38 28 Z" fill={gr} rx="3"/>
+      {/* Cone tip */}
+      <path d="M42 72 L45 85 L48 72 Z" fill={pkD}/>
+      {/* Cone opening (top oval) */}
+      <ellipse cx="34" cy="28" rx="7" ry="4" fill={gr} opacity="0.85"/>
+      <ellipse cx="34" cy="27" rx="5" ry="2.5" fill="rgba(255,255,255,0.3)"/>
+      {/* Mehndi flow from tip — decorative dots */}
+      <circle cx="44" cy="89" r="2.5" fill={pk} opacity="0.9"/>
+      <circle cx="43" cy="95" r="1.8" fill={pk} opacity="0.65"/>
+      <circle cx="44.5" cy="100" r="1.2" fill={pk} opacity="0.4"/>
+      {/* Mehndi cone cap band */}
+      <rect x="31" y="36" width="12" height="4" rx="2" fill="rgba(255,255,255,0.3)" transform="rotate(-5 37 38)"/>
+      {/* Mehndi pattern on cone */}
+      <ellipse cx="35" cy="55" rx="2.5" ry="3.5" fill="rgba(255,255,255,0.22)" transform="rotate(-5 35 55)"/>
+
+      {/* ── MAKEUP BRUSH (center, upright) ── */}
+      {/* Handle */}
+      <rect x="57" y="22" width="6" height="52" rx="3" fill="#8D5524"/>
+      <rect x="58" y="22" width="2.5" height="52" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+      {/* Metal ferrule */}
+      <rect x="56.5" y="65" width="7" height="7" rx="1.5" fill="#B0BEC5"/>
+      <rect x="57.5" y="66" width="5" height="1.5" rx="1" fill="rgba(255,255,255,0.35)"/>
+      {/* Brush head — soft bristles */}
+      <ellipse cx="60" cy="20" rx="8" ry="12" fill={pk}/>
+      <ellipse cx="60" cy="17" rx="5.5" ry="8" fill={pkD} opacity="0.7"/>
+      <ellipse cx="60" cy="14" rx="3.5" ry="5" fill={pk} opacity="0.9"/>
+      {/* Bristle highlights */}
+      <path d="M56 10 Q60 6 64 10" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="none"/>
+      <path d="M57 13 Q60 10 63 13" stroke="rgba(255,255,255,0.4)" strokeWidth="0.9" fill="none"/>
+      {/* Handle bottom cap */}
+      <ellipse cx="60" cy="73" rx="3.5" ry="2" fill="#6D4C41"/>
+
+      {/* ── ARIWORK PALETTE (right) ── */}
+      {/* Palette body */}
+      <path d="M76 35 Q95 30 100 50 Q105 68 90 80 Q82 86 76 78 Q70 70 72 58 Q68 48 76 35Z" fill={pur} opacity="0.85"/>
+      <path d="M78 38 Q94 34 98 52 Q102 67 89 77 Q82 82 78 75 Q73 68 75 57 Q72 49 78 38Z" fill={light?'rgba(255,255,255,0.15)':pur} opacity="0.4"/>
+      {/* Thumb hole */}
+      <ellipse cx="83" cy="73" rx="5" ry="4" fill={bg} opacity="0.9"/>
+      {/* Paint dots on palette */}
+      <circle cx="85" cy="42" r="4.5" fill={pk}/>
+      <circle cx="93" cy="52" r="4" fill={gr}/>
+      <circle cx="94" cy="63" r="4" fill="#FF9800"/>
+      <circle cx="88" cy="71" r="3.5" fill="#2196F3"/>
+      <circle cx="80" cy="67" r="3.5" fill={pkD}/>
+      <circle cx="79" cy="55" r="3" fill="#FFEB3B"/>
+      {/* Palette shine */}
+      <path d="M80 37 Q88 35 94 42" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+
+      {/* ── Central monogram "KMS" ── */}
+      <text x="60" y="108" textAnchor="middle" fontSize="9" fontWeight="800" fill={txt} fontFamily="serif" letterSpacing="2" opacity="0.9">KMS</text>
+
+      {/* Decorative mehndi petals around edge */}
+      {[0,60,120,180,240,300].map((deg,i)=>{
+        const rad=deg*Math.PI/180
+        const cx=60+50*Math.cos(rad), cy=60+50*Math.sin(rad)
+        return <circle key={i} cx={cx} cy={cy} r="2.5" fill={i%2===0?pk:gr} opacity="0.45"/>
+      })}
     </svg>
   )
 }
@@ -1386,8 +1406,55 @@ function BatchesTab({data,setData,toast}) {
   const bClasses=batch?data.classes.filter(c=>c.batch_id===sel).sort((a,b)=>a.day-b.day):[]
   const course=batch?data.courses.find(c=>c.id===batch.course_id):null
 
-  const saveBatch=async()=>{if(!form.name)return alert('Name required.');setBusy(true);const row={id:form.id||uid(),name:form.name,course_id:form.course_id||'',schedule:form.schedule||'Daily',duration:form.duration||'10 Days',start_date:form.start_date||today(),end_date:form.end_date||'',timing:form.timing||'',status:form.status||'Active',fee:Number(form.fee||0),zoom_link:form.zoom_link||'',zoom_id:form.zoom_id||'',wa_group:form.wa_group||'',student_ids:form.student_ids||[],created_at:form.created_at||new Date().toISOString()};await dbUpsert('batches',row);setData(d=>({...d,batches:form.id?d.batches.map(b=>b.id===form.id?{...b,...row}:b):[...d.batches,row]}));if(!form.id)setSel(row.id);setBusy(false);setModal(null);toast('Batch saved!')}
-  const saveClass=async()=>{if(!cf.topic)return alert('Topic required.');setBusy(true);const row={id:cf.id||uid(),batch_id:sel,day:Number(cf.day||1),topic:cf.topic,date:cf.date||today(),zoom_link:cf.zoom_link||'',youtube_link:cf.youtube_link||'',youtube_status:cf.youtube_status||'Pending',homework:cf.homework||'',notes:cf.notes||'',attendees:cf.attendees||[]};await dbUpsert('classes',row);setData(d=>({...d,classes:cf.id?d.classes.map(c=>c.id===cf.id?{...c,...row}:c):[...d.classes,row]}));setBusy(false);setModal(null);toast('Class saved!')}
+  const saveBatch=async()=>{
+    if(!form.name)return alert('Name required.')
+    setBusy(true)
+    const row={
+      id:form.id||uid(),
+      name:form.name.trim(),
+      course_id:form.course_id||'',
+      schedule:form.schedule||'Daily',
+      duration:form.duration||'10 Days',
+      start_date:form.start_date||today(),
+      end_date:form.end_date||'',
+      timing:form.timing||'',
+      status:form.status||'Active',
+      fee:Number(form.fee||0),
+      zoom_link:form.zoom_link||'',
+      zoom_id:form.zoom_id||'',
+      wa_group:form.wa_group||'',
+      student_ids:form.student_ids||[],
+      created_at:form.created_at||new Date().toISOString()
+    }
+    const ok = await dbUpsert('batches',row)
+    if(ok){
+      setData(d=>({...d,batches:form.id?d.batches.map(b=>b.id===form.id?{...b,...row}:b):[...d.batches,row]}))
+      if(!form.id)setSel(row.id)
+      toast('Batch saved!')
+    }
+    setBusy(false); setModal(null)
+  }
+  const saveClass=async()=>{
+    if(!cf.topic)return alert('Topic required.')
+    setBusy(true)
+    const row={
+      id:cf.id||uid(),
+      batch_id:sel,
+      day:Number(cf.day||1),
+      topic:cf.topic.trim(),
+      date:cf.date||today(),
+      zoom_link:cf.zoom_link||'',
+      youtube_link:cf.youtube_link||'',
+      youtube_status:cf.youtube_status||'Pending',
+      homework:cf.homework||'',
+      notes:cf.notes||'',
+      attendees:cf.attendees||[],
+      created_at:cf.created_at||new Date().toISOString()
+    }
+    const ok = await dbUpsert('classes',row)
+    if(ok) setData(d=>({...d,classes:cf.id?d.classes.map(c=>c.id===cf.id?{...c,...row}:c):[...d.classes,row]}))
+    setBusy(false); setModal(null); toast('Class saved!')
+  }
   const toggleHW=async(classId,studentId,cur)=>{const ex=data.homeworkCompliance.find(h=>h.class_id===classId&&h.student_id===studentId);if(ex){const u={...ex,submitted:!cur,date:today()};await dbUpsert('homework_compliance',u);setData(d=>({...d,homeworkCompliance:d.homeworkCompliance.map(h=>h.id===ex.id?u:h)}))}else{const row={id:uid(),class_id:classId,student_id:studentId,submitted:true,note:'',date:today()};await dbUpsert('homework_compliance',row);setData(d=>({...d,homeworkCompliance:[...d.homeworkCompliance,row]}))}}
 
   const SUBS=['overview','classes','zoom_yt','whatsapp','reminders']
@@ -2164,6 +2231,519 @@ https://kajol-makeover-studioz.vercel.app`
               const printWin=window.open('','_blank','width=800,height=600')
               if(!printWin) return
               const certEl=document.getElementById('cert_'+student.id)
+              if(certEl){
+                printWin.document.write('<html><head><title>Certificate — '+student.name+'</title><style>@import url(https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap);body{margin:0;padding:20px;font-family:Georgia,serif;background:#fff;}@media print{body{padding:0;}}</style></head><body>'+certEl.innerHTML+'</body></html>')
+                printWin.document.close()
+                printWin.focus()
+                setTimeout(()=>{printWin.print();},500)
+              }else{window.print()}
+            }}>
+              📄 Save as PDF / Print
+            </Btn>
+            <Btn small color={C.wa} onClick={()=>sendWhatsApp(student)}>
+              <Ic n="wa" size={12} color={C.white}/> WhatsApp
+            </Btn>
+            <Btn small color={C.blue} onClick={()=>sendEmail(student)}>
+              <Ic n="mailsend" size={12} color={C.white}/> Email
+            </Btn>
+            <div style={{fontSize:11,color:C.grey,alignSelf:'center',padding:'0 4px'}}>
+              {student.address?`📬 ${student.address}`:'⚠️ No address — add in Students tab for postal dispatch'}
+            </div>
+          </Row>
+        </Card>
+      ))}
+
+      {/* Print styles */}
+      <style>{`@media print{body>*:not(.print-area){display:none!important;}.print-area{display:block!important;}}`}</style>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   NAVIGATION CONFIG
+═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   FINANCE TAB  — Income, Expenses, Month-wise P&L
+═══════════════════════════════════════════════════════════════════ */
+function FinanceTab({data,setData,toast}) {
+  const [modal,setModal]=useState(null)
+  const [del,setDel]=useState(null)
+  const [form,setForm]=useState({})
+  const [busy,setBusy]=useState(false)
+  const [view,setView]=useState('overview')   // overview | expenses | monthly
+
+  const totalIncome = useMemo(()=>
+    data.payments.reduce((s,p)=>s+Number(p.paid),0)+
+    data.orders.reduce((s,o)=>s+Number(o.paid),0)
+  ,[data])
+
+  const totalExpenses = useMemo(()=>
+    data.expenses.reduce((s,e)=>s+Number(e.amount),0)+
+    data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,x)=>a+Number(x.amt),0),0)
+  ,[data])
+
+  const netProfit = totalIncome - totalExpenses
+  const pendingDues = data.payments.reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)
+
+  /* Month-wise breakdown */
+  const monthData = useMemo(()=>{
+    const mp={}
+    data.payments.forEach(p=>{
+      const mk=mKey(p.date); if(!mk)return
+      if(!mp[mk])mp[mk]={income:0,expenses:0,dues:0}
+      mp[mk].income+=Number(p.paid)
+      mp[mk].dues+=Number(p.amount)-Number(p.paid)
+    })
+    data.orders.forEach(o=>{
+      const mk=mKey(o.date); if(!mk)return
+      if(!mp[mk])mp[mk]={income:0,expenses:0,dues:0}
+      mp[mk].income+=Number(o.paid)
+      ;(o.order_expenses||[]).forEach(e=>{mp[mk].expenses+=Number(e.amt)})
+    })
+    data.expenses.forEach(e=>{
+      const mk=mKey(e.date); if(!mk)return
+      if(!mp[mk])mp[mk]={income:0,expenses:0,dues:0}
+      mp[mk].expenses+=Number(e.amount)
+    })
+    return Object.entries(mp).sort(([a],[b])=>b.localeCompare(a)).map(([k,v])=>({month:k,label:mLabel(k),...v,profit:v.income-v.expenses}))
+  },[data])
+
+  /* Category-wise expenses */
+  const catTotals = useMemo(()=>{
+    const m={}
+    data.expenses.forEach(e=>{
+      const c=e.category||'Other'
+      m[c]=(m[c]||0)+Number(e.amount)
+    })
+    return Object.entries(m).sort(([,a],[,b])=>b-a)
+  },[data])
+
+  const saveExpense=async()=>{
+    if(!form.amount||!form.category)return alert('Category and amount required.')
+    setBusy(true)
+    const row={id:form.id||uid(),category:form.category,amount:Number(form.amount),date:form.date||today(),note:form.note||'',linked_to:form.linked_to||'',created_at:form.created_at||new Date().toISOString()}
+    await dbUpsert('expenses',row)
+    setData(d=>({...d,expenses:form.id?d.expenses.map(e=>e.id===form.id?{...e,...row}:e):[...d.expenses,row]}))
+    setBusy(false); setModal(null); toast('Expense saved!')
+  }
+
+  return (
+    <div>
+      {/* Overview stats */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
+        <StatBox label="Total Income" value={fmt(totalIncome)} color={C.green} icon="rupee"/>
+        <StatBox label="Total Expenses" value={fmt(totalExpenses)} color={C.amber} icon="expenses"/>
+        <StatBox label="Net Profit" value={fmt(netProfit)} color={netProfit>=0?C.green:C.red} icon="trend"/>
+        <StatBox label="Pending Dues" value={fmt(pendingDues)} color={C.amber} icon="alert"/>
+      </div>
+
+      {/* View tabs */}
+      <div style={{display:'flex',gap:6,marginBottom:14,overflowX:'auto',paddingBottom:2}}>
+        {[['overview','📊 Overview'],['expenses','💸 Expenses'],['monthly','📅 Monthly P&L']].map(([v,l])=>(
+          <div key={v} onClick={()=>setView(v)} style={{flexShrink:0,padding:'8px 14px',borderRadius:12,background:view===v?C.pink:C.greyL,color:view===v?C.white:C.grey,fontSize:12,fontWeight:view===v?700:500,cursor:'pointer'}}>{l}</div>
+        ))}
+      </div>
+
+      {view==='overview'&&<>
+        <Card accent={C.green}>
+          <STitle><Ic n="rupee" size={15} color={C.green}/> Income Breakdown</STitle>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            <div style={{background:C.greenPale,borderRadius:10,padding:'10px 12px'}}>
+              <div style={{fontSize:10,color:C.green,fontWeight:700,textTransform:'uppercase',letterSpacing:.5}}>Course Fees</div>
+              <div style={{fontSize:17,fontWeight:800,color:C.green}}>{fmt(data.payments.reduce((s,p)=>s+Number(p.paid),0))}</div>
+            </div>
+            <div style={{background:C.greenPale,borderRadius:10,padding:'10px 12px'}}>
+              <div style={{fontSize:10,color:C.green,fontWeight:700,textTransform:'uppercase',letterSpacing:.5}}>Order Revenue</div>
+              <div style={{fontSize:17,fontWeight:800,color:C.green}}>{fmt(data.orders.reduce((s,o)=>s+Number(o.paid),0))}</div>
+            </div>
+          </div>
+        </Card>
+
+        <Card accent={C.amber}>
+          <STitle><Ic n="expenses" size={15} color={C.amber}/> Expense Breakdown by Category</STitle>
+          {catTotals.length===0&&<div style={{fontSize:13,color:C.grey,textAlign:'center',padding:16}}>No expenses recorded yet.</div>}
+          {catTotals.map(([cat,amt])=>(
+            <div key={cat} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'7px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+              <div style={{fontSize:13,color:C.dark}}>{cat}</div>
+              <div style={{fontSize:13,fontWeight:700,color:C.amber}}>{fmt(amt)}</div>
+            </div>
+          ))}
+          {data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0)>0&&(
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'7px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+              <div style={{fontSize:13,color:C.dark}}>Order Expenses</div>
+              <div style={{fontSize:13,fontWeight:700,color:C.amber}}>{fmt(data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,e)=>a+Number(e.amt),0),0))}</div>
+            </div>
+          )}
+        </Card>
+      </>}
+
+      {view==='expenses'&&<>
+        <Row style={{justifyContent:'space-between',marginBottom:12}}>
+          <STitle><Ic n="expenses" size={15} color={C.amber}/> All Expenses</STitle>
+          <Btn small onClick={()=>{setForm({category:'Advertising',date:today(),amount:'',note:''});setModal('expense')}}>
+            <Ic n="add" size={13} color={C.white}/>Add
+          </Btn>
+        </Row>
+
+        {data.expenses.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32,background:C.white,borderRadius:16}}>
+          <div style={{fontSize:36,marginBottom:8}}>💸</div>
+          <div style={{fontWeight:700}}>No expenses recorded yet</div>
+        </div>}
+
+        {[...data.expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(e=>(
+          <Card key={e.id} accent={C.amber}>
+            <Row style={{justifyContent:'space-between'}}>
+              <div>
+                <Badge color={C.amber}>{e.category}</Badge>
+                <div style={{fontWeight:700,fontSize:14,marginTop:4,color:C.dark}}>{fmt(e.amount)}</div>
+                <div style={{fontSize:12,color:C.grey}}>{fmtDate(e.date)}{e.note?` · ${e.note}`:''}</div>
+              </div>
+              <Row gap={6}>
+                <Btn small outline onClick={()=>{setForm({...e});setModal('expense')}}>✏️</Btn>
+                <Btn small color={C.red} onClick={()=>setDel(e)}>🗑️</Btn>
+              </Row>
+            </Row>
+          </Card>
+        ))}
+
+        {modal==='expense'&&<Modal onClose={()=>setModal(null)} title={`${form.id?'Edit':'New'} Expense`}>
+          <Inp label="Category *" value={form.category} onChange={v=>setForm(x=>({...x,category:v}))} opts={EXP_CATS}/>
+          <Inp label="Amount (₹) *" value={form.amount} onChange={v=>setForm(x=>({...x,amount:v}))} type="number"/>
+          <Inp label="Date" value={form.date} onChange={v=>setForm(x=>({...x,date:v}))} type="date"/>
+          <Inp label="Notes" value={form.note} onChange={v=>setForm(x=>({...x,note:v}))}/>
+          <Row gap={8}><Btn outline onClick={()=>setModal(null)} full>Cancel</Btn><Btn onClick={saveExpense} full disabled={busy}>{busy?'Saving…':'Save'}</Btn></Row>
+        </Modal>}
+      </>}
+
+      {view==='monthly'&&<>
+        <Card accent={C.blue}>
+          <STitle><Ic n="chart" size={15} color={C.blue}/> Month-wise Profit & Loss</STitle>
+          {monthData.length===0&&<div style={{fontSize:13,color:C.grey,textAlign:'center',padding:16}}>No data yet.</div>}
+          {monthData.map(m=>(
+            <div key={m.month} style={{padding:'10px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+              <div style={{fontWeight:700,fontSize:13,color:C.dark,marginBottom:6}}>{m.label}</div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6}}>
+                <div style={{background:C.greenPale,borderRadius:8,padding:'5px 8px',textAlign:'center'}}>
+                  <div style={{fontSize:9,color:C.green,fontWeight:700}}>INCOME</div>
+                  <div style={{fontSize:12,fontWeight:700,color:C.green}}>{fmt(m.income)}</div>
+                </div>
+                <div style={{background:'#FFF3E0',borderRadius:8,padding:'5px 8px',textAlign:'center'}}>
+                  <div style={{fontSize:9,color:C.amber,fontWeight:700}}>EXPENSES</div>
+                  <div style={{fontSize:12,fontWeight:700,color:C.amber}}>{fmt(m.expenses)}</div>
+                </div>
+                <div style={{background:m.profit>=0?C.greenPale:'#FFEBEE',borderRadius:8,padding:'5px 8px',textAlign:'center'}}>
+                  <div style={{fontSize:9,color:m.profit>=0?C.green:C.red,fontWeight:700}}>PROFIT</div>
+                  <div style={{fontSize:12,fontWeight:700,color:m.profit>=0?C.green:C.red}}>{fmt(m.profit)}</div>
+                </div>
+              </div>
+              {m.dues>0&&<div style={{fontSize:11,color:C.amber,marginTop:4}}>⚠️ Pending dues: {fmt(m.dues)}</div>}
+            </div>
+          ))}
+        </Card>
+      </>}
+
+      {del&&<DelConfirm item={`Expense: ${fmt(del.amount)}`} onConfirm={async()=>{await dbDelete('expenses',del.id);setData(d=>({...d,expenses:d.expenses.filter(e=>e.id!==del.id)}));toast('Deleted.')}} onClose={()=>setDel(null)}/>}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REPORTS TAB  — Summary analytics
+═══════════════════════════════════════════════════════════════════ */
+function ReportsTab({data}) {
+  const [view,setView]=useState('summary')
+
+  const totalIncome = data.payments.reduce((s,p)=>s+Number(p.paid),0)+data.orders.reduce((s,o)=>s+Number(o.paid),0)
+  const totalExp    = data.expenses.reduce((s,e)=>s+Number(e.amount),0)+data.orders.reduce((s,o)=>s+(o.order_expenses||[]).reduce((a,x)=>a+Number(x.amt),0),0)
+  const totalDues   = data.payments.reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)
+
+  const topStudents = useMemo(()=>{
+    const m={}
+    data.payments.forEach(p=>{
+      const s=data.students.find(x=>x.id===p.student_id)
+      if(s) m[s.id]={name:s.name,mobile:s.mobile,paid:(m[s.id]?.paid||0)+Number(p.paid)}
+    })
+    return Object.values(m).sort((a,b)=>b.paid-a.paid).slice(0,5)
+  },[data])
+
+  const batchStats = useMemo(()=>data.batches.map(b=>{
+    const course=data.courses.find(c=>c.id===b.course_id)
+    const students=(b.student_ids||[]).length
+    const classes=data.classes.filter(c=>c.batch_id===b.id).length
+    const income=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+Number(p.paid),0)
+    const dues=data.payments.filter(p=>p.batch_id===b.id).reduce((s,p)=>s+(Number(p.amount)-Number(p.paid)),0)
+    const ytDone=data.classes.filter(c=>c.batch_id===b.id&&c.youtube_status==='Uploaded').length
+    const attendance=data.classes.filter(c=>c.batch_id===b.id).reduce((s,c)=>s+(c.attendees||[]).length,0)
+    const avgAtt=classes>0&&students>0?Math.round(attendance/(classes*students)*100):0
+    return {name:b.name,course:course?.name||'—',status:b.status,students,classes,income,dues,ytDone,avgAtt}
+  }),[data])
+
+  return (
+    <div>
+      <div style={{display:'flex',gap:6,marginBottom:14,overflowX:'auto',paddingBottom:2}}>
+        {[['summary','📊 Summary'],['batches','🎓 Batches'],['students','👥 Students']].map(([v,l])=>(
+          <div key={v} onClick={()=>setView(v)} style={{flexShrink:0,padding:'8px 14px',borderRadius:12,background:view===v?C.pink:C.greyL,color:view===v?C.white:C.grey,fontSize:12,fontWeight:view===v?700:500,cursor:'pointer'}}>{l}</div>
+        ))}
+      </div>
+
+      {view==='summary'&&<>
+        <div style={{background:`linear-gradient(135deg,${C.pink},${C.green})`,borderRadius:18,padding:18,marginBottom:14,color:'#fff'}}>
+          <div style={{fontSize:13,opacity:.85}}>Studio at a Glance</div>
+          <div style={{fontSize:20,fontWeight:900,marginTop:2}}>Kajol Makeover Studioz 💄</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginTop:12}}>
+            {[['Students',data.students.length],['Batches',data.batches.length],['Orders',data.orders.length]].map(([l,v])=>(
+              <div key={l} style={{background:'rgba(255,255,255,0.15)',borderRadius:10,padding:'8px 10px',textAlign:'center'}}>
+                <div style={{fontSize:20,fontWeight:900}}>{v}</div>
+                <div style={{fontSize:10,opacity:.85}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginBottom:14}}>
+          <StatBox label="Total Income" value={fmt(totalIncome)} color={C.green} icon="rupee"/>
+          <StatBox label="Total Expenses" value={fmt(totalExp)} color={C.amber} icon="expenses"/>
+          <StatBox label="Net Profit" value={fmt(totalIncome-totalExp)} color={totalIncome-totalExp>=0?C.green:C.red} icon="trend"/>
+          <StatBox label="Pending Dues" value={fmt(totalDues)} color={C.amber} icon="alert"/>
+        </div>
+
+        <Card accent={C.purple}>
+          <STitle><Ic n="batch" size={15} color={C.purple}/> Batch Overview</STitle>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8}}>
+            {[['Active',data.batches.filter(b=>b.status==='Active').length,C.green],['Completed',data.batches.filter(b=>b.status==='Completed').length,C.grey],['Total',data.batches.length,C.purple]].map(([l,v,c])=>(
+              <div key={l} style={{background:c+'12',borderRadius:10,padding:'8px 10px',textAlign:'center'}}>
+                <div style={{fontSize:20,fontWeight:800,color:c}}>{v}</div>
+                <div style={{fontSize:10,color:c,fontWeight:700}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card accent={C.blue}>
+          <STitle><Ic n="report" size={15} color={C.blue}/> Classes & YouTube</STitle>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            <div style={{background:C.blue+'12',borderRadius:10,padding:'10px 12px',textAlign:'center'}}>
+              <div style={{fontSize:20,fontWeight:800,color:C.blue}}>{data.classes.length}</div>
+              <div style={{fontSize:10,color:C.blue,fontWeight:700}}>Total Classes</div>
+            </div>
+            <div style={{background:C.yt+'12',borderRadius:10,padding:'10px 12px',textAlign:'center'}}>
+              <div style={{fontSize:20,fontWeight:800,color:C.yt}}>{data.classes.filter(c=>c.youtube_status==='Uploaded').length}</div>
+              <div style={{fontSize:10,color:C.yt,fontWeight:700}}>YT Uploaded</div>
+            </div>
+          </div>
+          {data.classes.filter(c=>c.youtube_status!=='Uploaded').length>0&&(
+            <div style={{marginTop:8,fontSize:12,color:C.amber}}>⚠️ {data.classes.filter(c=>c.youtube_status!=='Uploaded').length} classes pending YouTube upload</div>
+          )}
+        </Card>
+      </>}
+
+      {view==='batches'&&<>
+        {batchStats.length===0&&<div style={{textAlign:'center',color:C.grey,padding:32,background:C.white,borderRadius:16}}>No batches yet.</div>}
+        {batchStats.map((b,i)=>(
+          <Card key={i} accent={b.status==='Active'?C.green:C.grey}>
+            <Row style={{justifyContent:'space-between',marginBottom:8}}>
+              <div>
+                <div style={{fontWeight:700,fontSize:14,color:C.dark}}>{b.name}</div>
+                <div style={{fontSize:12,color:C.grey}}>{b.course} · <Badge color={b.status==='Active'?C.green:C.grey}>{b.status}</Badge></div>
+              </div>
+            </Row>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:6}}>
+              {[['Students',b.students,C.blue],['Classes',b.classes,C.purple],['Avg Att.',b.avgAtt+'%',C.teal],['Income',fmt(b.income),C.green],['Dues',fmt(b.dues),C.amber],['YT Done',b.ytDone,C.yt]].map(([l,v,c])=>(
+                <div key={l} style={{background:c+'10',borderRadius:8,padding:'5px 8px',textAlign:'center'}}>
+                  <div style={{fontSize:9,color:c,fontWeight:700,textTransform:'uppercase'}}>{l}</div>
+                  <div style={{fontSize:12,fontWeight:700,color:c}}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        ))}
+      </>}
+
+      {view==='students'&&<>
+        <Card accent={C.pink}>
+          <STitle><Ic n="star" size={15} color={C.pink}/> Top Students by Payment</STitle>
+          {topStudents.length===0&&<div style={{fontSize:13,color:C.grey,textAlign:'center',padding:12}}>No payment data yet.</div>}
+          {topStudents.map((s,i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <div style={{width:28,height:28,borderRadius:'50%',background:`linear-gradient(135deg,${C.pink},${C.green})`,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:700,fontSize:12,flexShrink:0}}>{i+1}</div>
+                <div>
+                  <div style={{fontWeight:700,fontSize:13}}>{s.name}</div>
+                  <div style={{fontSize:11,color:C.grey}}>{s.mobile}</div>
+                </div>
+              </div>
+              <div style={{fontSize:13,fontWeight:700,color:C.green}}>{fmt(s.paid)}</div>
+            </div>
+          ))}
+        </Card>
+
+        <Card accent={C.amber}>
+          <STitle><Ic n="alert" size={15} color={C.amber}/> Pending Dues by Student</STitle>
+          {data.payments.filter(p=>Number(p.amount)>Number(p.paid)).length===0&&<div style={{fontSize:13,color:C.green,textAlign:'center',padding:12}}>✅ All dues cleared!</div>}
+          {data.payments.filter(p=>Number(p.amount)>Number(p.paid)).map(p=>{
+            const s=data.students.find(x=>x.id===p.student_id)
+            const b=data.batches.find(x=>x.id===p.batch_id)
+            const due=Number(p.amount)-Number(p.paid)
+            return (
+              <div key={p.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+                <div>
+                  <div style={{fontWeight:600,fontSize:13}}>{s?.name||'Unknown'}</div>
+                  <div style={{fontSize:11,color:C.grey}}>{b?.name||''}</div>
+                </div>
+                <div style={{fontSize:13,fontWeight:700,color:C.amber}}>{fmt(due)}</div>
+              </div>
+            )
+          })}
+        </Card>
+      </>}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WEBSITE EDITOR TAB  — Edit site_content key/values for website
+═══════════════════════════════════════════════════════════════════ */
+function WebsiteEditorTab({toast}) {
+  const [content,setContent]=useState({})
+  const [busy,setBusy]=useState(false)
+  const [saved,setSaved]=useState({})
+  const [loading,setLoading]=useState(true)
+
+  useEffect(()=>{
+    sb.from('site_content').select('*').then(({data})=>{
+      if(data){const m={};data.forEach(r=>{m[r.key]=r.value});setContent(m)}
+      setLoading(false)
+    })
+  },[])
+
+  const save=async(key,value)=>{
+    setSaved(s=>({...s,[key]:false}))
+    setBusy(true)
+    const {error}=await sb.from('site_content').upsert({id:key,key,value,updated_at:new Date().toISOString()},{onConflict:'key'})
+    if(error){toast('Error saving: '+error.message)}else{setSaved(s=>({...s,[key]:true}));setTimeout(()=>setSaved(s=>({...s,[key]:false})),2000);toast('✅ Saved!')}
+    setBusy(false)
+  }
+
+  const set=k=>v=>setContent(c=>({...c,[k]:v}))
+
+  const FIELDS=[
+    {key:'hero_tagline',label:'Hero Tagline (homepage top text)',rows:2,placeholder:'Learn from Kajol J Kamble — professional artist & passionate teacher.'},
+    {key:'about_headline',label:'About Headline',rows:2,placeholder:'Passionate Artist.\nDedicated Teacher.'},
+    {key:'about_para1',label:'About Paragraph 1',rows:3,placeholder:'Hi! I\'m Kajol...'},
+    {key:'about_para2',label:'About Paragraph 2',rows:3,placeholder:'All my courses are conducted live...'},
+    {key:'stat_students',label:'Students Count (stats strip)',placeholder:'200+'},
+    {key:'stat_courses', label:'Courses Count (stats strip)',placeholder:'3'},
+    {key:'stat_classes', label:'Classes Done (stats strip)',placeholder:'50+'},
+    {key:'yt_playlist_id',label:'YouTube Playlist ID',placeholder:'PLxxxxxx'},
+  ]
+
+  if(loading) return <Spinner/>
+
+  return (
+    <div>
+      <Card accent={C.purple}>
+        <STitle><Ic n="globe" size={15} color={C.purple}/> Website Content Editor</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>Edit your website text live. Changes appear on your website immediately after saving. Visit your website to see updates.</div>
+        <a href="https://kajol-makeover-studioz.vercel.app" target="_blank" rel="noopener noreferrer" style={{display:'inline-flex',alignItems:'center',gap:5,fontSize:12,color:C.blue,textDecoration:'none',background:C.blue+'12',borderRadius:8,padding:'5px 10px'}}>
+          <Ic n="globe" size={13} color={C.blue}/>View Website
+        </a>
+      </Card>
+
+      {FIELDS.map(f=>(
+        <Card key={f.key} accent={C.pink}>
+          <div style={{fontSize:11,fontWeight:700,color:C.grey,marginBottom:4,textTransform:'uppercase',letterSpacing:.5}}>{f.label}</div>
+          {f.rows
+            ?<textarea value={content[f.key]||''} onChange={e=>set(f.key)(e.target.value)} rows={f.rows} placeholder={f.placeholder} style={{...baseInput,resize:'vertical',marginBottom:8}}/>
+            :<input value={content[f.key]||''} onChange={e=>set(f.key)(e.target.value)} placeholder={f.placeholder} style={{...baseInput,marginBottom:8}}/>
+          }
+          <Btn small onClick={()=>save(f.key,content[f.key]||'')} disabled={busy}>
+            {saved[f.key]?'✅ Saved!':'💾 Save'}
+          </Btn>
+        </Card>
+      ))}
+
+      <Card accent={C.green}>
+        <STitle><Ic n="image" size={15} color={C.green}/> Gallery & Reviews</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:8,lineHeight:1.6}}>
+          To add gallery photos, go to your Supabase Dashboard → SQL Editor and run:<br/>
+          <code style={{background:C.greyL,padding:'3px 6px',borderRadius:4,fontSize:11,display:'block',marginTop:6,wordBreak:'break-all'}}>{"INSERT INTO site_content(id,key,value) VALUES('gallery_photos','gallery_photos','[{\"url\":\"YOUR_IMAGE_URL\",\"label\":\"Bridal Mehndi\",\"cat\":\"Mehndi\"}]') ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;"}</code>
+        </div>
+        <div style={{fontSize:12,color:C.green,marginTop:8}}>
+          ✅ Upload photos to Supabase Storage → site-media bucket, then paste the public URL above.
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SETTINGS TAB  — Admin settings, data management
+═══════════════════════════════════════════════════════════════════ */
+function SettingsTab({data,setData,onLogout,toast}) {
+  const [confirmClear,setConfirmClear]=useState(false)
+  const [pwd,setPwd]=useState(''); const [err,setErr]=useState(''); const [busy,setBusy]=useState(false)
+
+  const handleClear=async()=>{
+    if(pwd!==ADMIN_PWD){setErr('Wrong password.');return}
+    setBusy(true)
+    try{await clearAll();setData({students:[],courses:[],batches:[],classes:[],homeworkCompliance:[],payments:[],orders:[],expenses:[],enrollmentRequests:[]});toast('All data cleared!');setConfirmClear(false)}
+    catch(e){toast('Error: '+e.message)}
+    setBusy(false)
+  }
+
+  return (
+    <div>
+      <Card accent={C.pink}>
+        <STitle><Ic n="settings" size={15} color={C.pink}/> Admin Settings</STitle>
+        <div style={{fontSize:13,color:C.grey,lineHeight:1.7}}>
+          Studio: <b>Kajol Makeover Studioz</b><br/>
+          Admin Password: <b>●●●●●●●●</b><br/>
+          Version: <b>v3.1</b><br/>
+          Supabase: <b>{SB_URL.replace('https://','').split('.')[0]}...</b>
+        </div>
+      </Card>
+
+      <Card accent={C.blue}>
+        <STitle><Ic n="report" size={15} color={C.blue}/> Data Summary</STitle>
+        {[['Students',data.students.length],['Courses',data.courses.length],['Batches',data.batches.length],['Classes',data.classes.length],['Payments',data.payments.length],['Orders',data.orders.length],['Expenses',data.expenses.length]].map(([l,v])=>(
+          <div key={l} style={{display:'flex',justifyContent:'space-between',padding:'7px 0',borderBottom:`1px solid ${C.pinkPale}`,fontSize:13}}>
+            <span style={{color:C.grey}}>{l}</span>
+            <span style={{fontWeight:700,color:C.dark}}>{v} records</span>
+          </div>
+        ))}
+      </Card>
+
+      <Card accent={C.wa}>
+        <STitle><Ic n="link" size={15} color={C.wa}/> Quick Links</STitle>
+        {[{l:'Enrollment Form',u:ENROLL_URL},{l:'WhatsApp Community',u:WA_COMMUNITY},{l:'Instagram',u:INSTAGRAM},{l:'YouTube Channel',u:YOUTUBE}].map(x=>(
+          <div key={x.u} style={{padding:'7px 0',borderBottom:`1px solid ${C.pinkPale}`}}>
+            <a href={x.u} target="_blank" rel="noopener noreferrer" style={{fontSize:13,color:C.blue,textDecoration:'none'}}>{x.l} →</a>
+          </div>
+        ))}
+      </Card>
+
+      <Card accent={C.red}>
+        <STitle><Ic n="alert" size={15} color={C.red}/> Danger Zone</STitle>
+        <div style={{fontSize:12,color:C.grey,marginBottom:10}}>⚠️ This will permanently delete ALL data from Supabase. This cannot be undone.</div>
+        {!confirmClear&&<Btn color={C.red} onClick={()=>setConfirmClear(true)}>🗑️ Clear All Data</Btn>}
+        {confirmClear&&<>
+          <Inp label="Admin Password to Confirm" value={pwd} onChange={v=>{setPwd(v);setErr('')}} type="password"/>
+          {err&&<div style={{color:C.red,fontSize:12,marginBottom:8}}>{err}</div>}
+          <Row gap={8}>
+            <Btn outline onClick={()=>setConfirmClear(false)} full>Cancel</Btn>
+            <Btn color={C.red} onClick={handleClear} full disabled={busy}>{busy?'Clearing…':'Confirm Delete All'}</Btn>
+          </Row>
+        </>}
+      </Card>
+
+      <Btn outline color={C.grey} full onClick={onLogout} style={{marginTop:8}}>
+        <Ic n="lock" size={14} color={C.grey}/>Logout
+      </Btn>
+    </div>
+  )
+}
+
               if(certEl){
                 printWin.document.write('<html><head><title>Certificate — '+student.name+'</title><style>@import url(https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap);body{margin:0;padding:20px;font-family:Georgia,serif;background:#fff;}@media print{body{padding:0;}}</style></head><body>'+certEl.innerHTML+'</body></html>')
                 printWin.document.close()
