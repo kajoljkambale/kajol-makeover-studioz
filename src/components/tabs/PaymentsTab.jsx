@@ -4,6 +4,7 @@ import { C, uid, today, fmt, fmtDate, monthKey, monthLabel, ADMIN_PWD,
          Ic, Modal, Inp, Btn, Badge, Card, Row, Divider, SectionTitle, StatBox,
          Toggle, Spinner, DelConfirm } from '../../lib/ui.jsx'
 import { supabase as sb, dbUpsert, dbDelete } from '../../lib/supabase.js'
+const STitle = SectionTitle
 
 const ENROLL_URL   = (typeof window !== 'undefined' ? window.location.origin : 'https://kajol-makeover-studioz.vercel.app') + '/enroll'
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
