@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+const STitle = SectionTitle
 import { C, today, fmtDate, Ic, Btn, Card, Row, SectionTitle, Inp } from '../../lib/ui.jsx'
 function KMSLogo({size=48,light=false}) {
   /* Artistic logo: circular badge with mehndi cone, makeup brush, ariwork palette
