@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+const STitle = SectionTitle
+const SB_URL = import.meta.env.VITE_SUPABASE_URL || ''
+const clearAll = clearAllData
 import { C, ADMIN_PWD, uid, Ic, Btn, Card, Row, Inp, SectionTitle, DelConfirm } from '../../lib/ui.jsx'
 import { clearAllData } from '../../lib/supabase.js'
 
