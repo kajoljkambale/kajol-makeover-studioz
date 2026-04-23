@@ -256,7 +256,7 @@ export default function EnrollForm() {
           {batches.length>0&&(
             <div style={{marginBottom:14}}>
               <label style={{fontSize:12,fontWeight:700,color:C.grey,display:'block',marginBottom:5,textTransform:'uppercase',letterSpacing:.5}}>Preferred Batch (optional)</label>
-              <select value={form.selected_batch} onChange={e=>setForm(f=>({...f,selected_batch:e.target.value}))} style={{...baseInput}}>
+              <select value={form.selected_batch} onChange={e=>setForm(f=>({...f,selected_batch:e.target.value}))} style={{width:'100%',padding:'12px 14px',borderRadius:12,border:`1.5px solid ${C.pinkPale}`,fontSize:14,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box'}}>
                 <option value="">— Any / Let Kajol Ma'am assign —</option>
                 {batches.map(b=><option key={b.id} value={b.id}>{b.name}{b.timing?` — ${b.timing}`:''}{b.schedule?` (${b.schedule})`:''}</option>)}
               </select>
