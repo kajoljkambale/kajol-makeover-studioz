@@ -4,6 +4,8 @@ import { C, uid, today, fmt, fmtDate, monthKey, monthLabel, ADMIN_PWD,
          Ic, Modal, Inp, Btn, Badge, Card, Row, Divider, SectionTitle, StatBox,
          Toggle, Spinner, DelConfirm } from '../../lib/ui.jsx'
 import { supabase as sb, dbUpsert, dbDelete } from '../../lib/supabase.js'
+const STitle = SectionTitle
+const COURSE_COLORS = ['#E91E8C','#C2185B','#2E7D32','#6A1B9A','#1565C0','#E65100','#00695C','#4527A0']
 
 const ENROLL_URL   = (typeof window !== 'undefined' ? window.location.origin : 'https://kajol-makeover-studioz.vercel.app') + '/enroll'
 const WA_COMMUNITY = 'https://chat.whatsapp.com/Lhq5qzRYJ0z11onVX669a3'
