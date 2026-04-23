@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-const STitle = SectionTitle
-import { C, Ic, Btn, Card, SectionTitle, Spinner } from '../../lib/ui.jsx'
+import React, { useState, useEffect, useRef } from 'react'
+import { C, Ic, Btn, Card, Row, SectionTitle, Spinner } from '../../lib/ui.jsx'
 import { supabase as sb } from '../../lib/supabase.js'
+const STitle = SectionTitle
 export default function WebsiteEditorTab({toast}) {
   const [content,setContent]=useState({})
   const [busy,setBusy]=useState(false)
@@ -78,7 +78,7 @@ export default function WebsiteEditorTab({toast}) {
     toast('Review removed!')
   }
 
-  const inp={...baseInput,marginBottom:8}
+  const inp={width:'100%',padding:'10px 12px',borderRadius:10,border:`1.5px solid ${C.pinkPale}`,fontSize:13,fontFamily:'inherit',outline:'none',color:C.dark,boxSizing:'border-box',marginBottom:8,display:'block'}
 
   if(loading) return <Spinner/>
 
