@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+const STitle = SectionTitle
 import { C, Ic, Btn, Card, SectionTitle, Spinner } from '../../lib/ui.jsx'
 import { supabase as sb } from '../../lib/supabase.js'
 export default function WebsiteEditorTab({toast}) {
