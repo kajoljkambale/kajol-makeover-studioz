@@ -110,6 +110,7 @@ export default function EnrollForm() {
   const [step,setStep]       = useState('form')   // form | success | error
   const [busy,setBusy]       = useState(false)
   const [form,setForm]       = useState({name:'',mobile:'',email:'',profession:'',address:'',birthday:'',selected_courses:[],selected_batch:'',message:''})
+  const [syllOpen,setSyllOpen] = useState({})
 
   useEffect(()=>{
     sb.from('courses').select('*').then(({data})=>data&&setCourses(data))
@@ -212,7 +213,7 @@ export default function EnrollForm() {
                 <div style={{fontSize:12,fontWeight:700,color:C.grey,marginBottom:10,textTransform:'uppercase',letterSpacing:.5}}>Select Courses (can choose multiple)</div>
                 {courses.map(c=>{
                   const sel=form.selected_courses.includes(c.id)
-                  const [syllOpen,setSyllOpen]=React.useState(false)
+                  const isOpen = syllOpen[c.id] || false
                   return (
                     <div key={c.id} style={{borderRadius:14,marginBottom:10,border:`2px solid ${sel?(c.color||C.pink):C.pinkPale}`,background:sel?(c.color||C.pink)+'08':'#fff',overflow:'hidden',transition:'all .2s'}}>
                       <div onClick={()=>toggleCourse(c.id)} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',cursor:'pointer'}}>
@@ -228,10 +229,10 @@ export default function EnrollForm() {
                       </div>
                       {c.syllabus&&(
                         <div>
-                          <button onClick={e=>{e.stopPropagation();setSyllOpen(!syllOpen)}} style={{width:'100%',padding:'8px 14px',background:(c.color||C.pink)+'15',border:'none',borderTop:`1px solid ${(c.color||C.pink)}30`,cursor:'pointer',fontSize:12,fontWeight:700,color:c.color||C.pink,fontFamily:'inherit',textAlign:'left',display:'flex',alignItems:'center',gap:6}}>
-                            📋 {syllOpen?'Hide Syllabus ▲':'View Full Syllabus ▼'}
+                          <button onClick={e=>{e.stopPropagation();setSyllOpen(prev=>({...prev,[c.id]:!prev[c.id]}))}} style={{width:'100%',padding:'8px 14px',background:(c.color||C.pink)+'15',border:'none',borderTop:`1px solid ${(c.color||C.pink)}30`,cursor:'pointer',fontSize:12,fontWeight:700,color:c.color||C.pink,fontFamily:'inherit',textAlign:'left',display:'flex',alignItems:'center',gap:6}}>
+                            📋 {isOpen?'Hide Syllabus ▲':'View Full Syllabus ▼'}
                           </button>
-                          {syllOpen&&(
+                          {isOpen&&(
                             <div style={{padding:'12px 14px',background:(c.color||C.pink)+'08',borderTop:`1px solid ${(c.color||C.pink)}20`}}>
                               <div style={{fontSize:12,fontWeight:700,color:c.color||C.pink,marginBottom:8,textTransform:'uppercase',letterSpacing:.5}}>Course Syllabus</div>
                               <div style={{fontSize:12,color:C.dark,lineHeight:1.9,whiteSpace:'pre-wrap'}}>{c.syllabus}</div>
