@@ -31,6 +31,7 @@ const TABS=[
   {id:'reports',  label:'Reports',   icon:'report'},
   {id:'broadcast',label:'Broadcast', icon:'broadcast'},
   {id:'website',  label:'Website',   icon:'globe'},
+  {id:'certificate',label:'Certs',   icon:'certificate'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
 const TITLES={home:'Dashboard',orders:'Leads & Orders',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Leads & Orders (Pune)',website:'Website Editor', certificate:'Certificates',settings:'Settings & Admin'}
