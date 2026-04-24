@@ -33,7 +33,7 @@ const TABS=[
   {id:'website',  label:'Website',   icon:'globe'},
   {id:'settings', label:'Settings',  icon:'settings'},
 ]
-const TITLES={home:'Dashboard',orders:'Leads & Orders',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Leads & Orders (Pune)',website:'Website Editor',settings:'Settings & Admin'}
+const TITLES={home:'Dashboard',orders:'Leads & Orders',enroll:'Enrollment Requests',students:'Students',courses:'Courses & Syllabus',batches:'Batches & Classes',payments:'Payments',finance:'Finance & Expenses',reports:'Reports',broadcast:'Broadcast Messaging',leads:'Leads & Orders (Pune)',website:'Website Editor', certificate:'Certificates',settings:'Settings & Admin'}
 const BOTTOM_NAV=['home','enroll','students','batches','payments','broadcast']
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -149,6 +149,7 @@ function AdminApp() {
                 {tab==='orders'   &&<LeadsOrdersTab data={data} setData={setData} toast={toast}/>}
                 {tab==='leads'    &&<LeadsOrdersTab data={data} setData={setData} toast={toast}/>}
                 {tab==='website'  &&<WebsiteEditorTab toast={toast}/>}
+                {tab==='certificate'&&<CertificateTab   data={data} toast={toast}/>}
                 {tab==='settings' &&<SettingsTab   data={data} setData={setData} onLogout={()=>setLoggedIn(false)} toast={toast}/>}
               </>}
             </div>
