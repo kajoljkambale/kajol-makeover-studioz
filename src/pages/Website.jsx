@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+        import React, { useState, useEffect, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const SB_URL = import.meta.env.VITE_SUPABASE_URL  || 'https://zlzrdpagpwlrbljfmxzy.supabase.co'
@@ -117,8 +117,8 @@ function KMSLogo({ size = 48 }) {
 
 function LogoMark({ dark: isDark = true }) {
   return (
-    <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-      <KMSLogo size={110} light={!isDark}/>
+    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+      <KMSLogo size={38}/>
       <div>
         <div style={{ fontSize:13, fontWeight:900, letterSpacing:0.4, lineHeight:1.2, color: isDark ? C.pink : '#fff' }}>
           Kajol Makeover
@@ -135,8 +135,10 @@ function HeroLogo() {
   return (
     <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:12 }}>
       <div style={{position:'relative'}}>
-        <div style={{position:'absolute',inset:-6,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',animation:'spinSlow 18s linear infinite'}}/>
-        <KMSLogo size={110} light={true}/>
+        <div style={{position:'absolute',inset:-8,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.4)',animation:'spinSlow 18s linear infinite'}}/>
+        <div style={{width:160,height:160,borderRadius:'50%',overflow:'hidden',background:'rgba(255,255,255,0.95)',padding:6,boxShadow:'0 8px 32px rgba(0,0,0,0.25)'}}>
+          <KMSLogo size={148}/>
+        </div>
       </div>
       <div style={{ fontSize:32, fontWeight:900, color:'#fff', fontFamily:"'Playfair Display',serif", textShadow:'0 2px 18px rgba(0,0,0,0.32)', letterSpacing:1 }}>
         Kajol Makeover<br/>
