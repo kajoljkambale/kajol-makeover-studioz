@@ -231,10 +231,15 @@ export default function CertificateTab({data, toast}) {
   </div>
 
 </div>
-<script>window.onload=function(){window.print();}</script>
+<script>
+  document.fonts.ready.then(function(){
+    window.print();
+  });
+</script>
 </body></html>`
     const win = window.open('', '_blank', 'width=1120,height=800')
     if (!win) { toast('⚠️ Allow popups to print/save PDF'); return }
+    win.document.open()
     win.document.write(html)
     win.document.close()
   }
