@@ -24,15 +24,18 @@ export default function CertificateTab({data, toast}) {
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{margin:0;padding:0;width:297mm;height:210mm;overflow:hidden;background:#fff;}
     @page{size:297mm 210mm;margin:0;}
-    body{font-family:'Nunito','Segoe UI',sans-serif;background:#fff;}
+    html{width:297mm;height:210mm;}
+    body{width:297mm;height:210mm;overflow:hidden;font-family:'Nunito','Segoe UI',sans-serif;background:#fff;}
+    @media print{
+      html,body{width:297mm;height:210mm;overflow:hidden;}
+      .cert{width:297mm!important;height:210mm!important;break-after:avoid;break-inside:avoid;}
+    }
     .cert{
       width:297mm;height:210mm;
       position:relative;overflow:hidden;
       background:#fff;
       display:flex;flex-direction:row;
-      page-break-inside:avoid;
     }
     /* ── Outer border frames ── */
     .border-outer{position:absolute;inset:6mm;border:2.5px solid #E91E8C;border-radius:6px;z-index:20;pointer-events:none;opacity:0.5;}
@@ -233,11 +236,16 @@ export default function CertificateTab({data, toast}) {
 </div>
 <script>
   document.fonts.ready.then(function(){
-    window.print();
+    // Ensure the page renders at exactly 297x210mm before printing
+    var meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=1122'; // 297mm at 96dpi ≈ 1122px
+    document.head.appendChild(meta);
+    setTimeout(function(){ window.print(); }, 300);
   });
 </script>
 </body></html>`
-    const win = window.open('', '_blank')
+    const win = window.open('', '_blank', 'width=1122,height=794,scrollbars=no')
     if (!win) { toast('⚠️ Allow popups to print/save PDF'); return }
     win.document.open()
     win.document.write(html)
