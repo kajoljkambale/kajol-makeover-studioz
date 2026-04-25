@@ -24,15 +24,15 @@ export default function CertificateTab({data, toast}) {
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:297mm;height:210mm;overflow:hidden;}
-    @page{size:A4 landscape;margin:0;}
-    @media print{html,body{width:297mm;height:210mm;}}
+    html,body{margin:0;padding:0;width:297mm;height:210mm;overflow:hidden;background:#fff;}
+    @page{size:297mm 210mm;margin:0;}
     body{font-family:'Nunito','Segoe UI',sans-serif;background:#fff;}
     .cert{
       width:297mm;height:210mm;
       position:relative;overflow:hidden;
       background:#fff;
       display:flex;flex-direction:row;
+      page-break-inside:avoid;
     }
     /* ── Outer border frames ── */
     .border-outer{position:absolute;inset:6mm;border:2.5px solid #E91E8C;border-radius:6px;z-index:20;pointer-events:none;opacity:0.5;}
@@ -237,7 +237,7 @@ export default function CertificateTab({data, toast}) {
   });
 </script>
 </body></html>`
-    const win = window.open('', '_blank', 'width=1120,height=800')
+    const win = window.open('', '_blank')
     if (!win) { toast('⚠️ Allow popups to print/save PDF'); return }
     win.document.open()
     win.document.write(html)
