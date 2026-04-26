@@ -14,8 +14,17 @@ export default function CertificateTab({data, toast}) {
   const targets  = selStudent === 'all' ? students : students.filter(s => s.id === selStudent)
 
   /* ── Print a single certificate in a new window ── */
+  /* Mirrors PreviewCard exactly: 1122×794px (A4 landscape at 96dpi), 62/38 split */
   const printCert = (student) => {
-    const courseType = course?.type || 'Mehndi'
+    // W=1122, H=794. Left=62%=696px, Right=38%=426px
+    const W = 1122, H = 794
+    const LW = Math.round(W * 0.62)  // 696
+    const RW = W - LW                 // 426
+
+    // Scale factor vs PreviewCard vw (PreviewCard renders at ~100vw wide)
+    // Font sizes in PreviewCard use vw. At 1122px wide: 1vw = 11.22px
+    const vw = W / 100
+
     const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -24,230 +33,101 @@ export default function CertificateTab({data, toast}) {
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    @page{size:297mm 210mm;margin:0;}
-    html{width:297mm;height:210mm;}
-    body{width:297mm;height:210mm;overflow:hidden;font-family:'Nunito','Segoe UI',sans-serif;background:#fff;}
+    html,body{width:${W}px;height:${H}px;overflow:hidden;background:#fff;}
+    @page{size:${W}px ${H}px;margin:0;}
     @media print{
-      html,body{width:297mm;height:210mm;overflow:hidden;}
-      .cert{width:297mm!important;height:210mm!important;break-after:avoid;break-inside:avoid;}
+      html,body{width:${W}px;height:${H}px;}
+      .cert{page-break-inside:avoid;}
     }
-    .cert{
-      width:297mm;height:210mm;
-      position:relative;overflow:hidden;
-      background:#fff;
-      display:flex;flex-direction:row;
-    }
-    /* ── Outer border frames ── */
-    .border-outer{position:absolute;inset:6mm;border:2.5px solid #E91E8C;border-radius:6px;z-index:20;pointer-events:none;opacity:0.5;}
-    .border-inner{position:absolute;inset:9mm;border:1px solid #2E7D32;border-radius:4px;z-index:20;pointer-events:none;opacity:0.3;}
-    /* ── Corner ornaments ── */
-    .corner{position:absolute;width:18mm;height:18mm;z-index:21;}
-    .corner svg{width:100%;height:100%;}
-    .c-tl{top:3mm;left:3mm;}
-    .c-tr{top:3mm;right:3mm;transform:scaleX(-1);}
-    .c-bl{bottom:3mm;left:3mm;transform:scaleY(-1);}
-    .c-br{bottom:3mm;right:3mm;transform:scale(-1,-1);}
-    /* ── Left panel ── */
-    .left{
-      width:185mm;height:210mm;
-      padding:18mm 14mm 14mm 18mm;
-      display:flex;flex-direction:column;
-      justify-content:space-between;
-      position:relative;z-index:2;
-      background:#fff;
-    }
-    .studio-header{display:flex;align-items:center;gap:5mm;}
-    .studio-header img{width:20mm;height:20mm;object-fit:contain;}
-    .studio-name{font-size:8.5pt;font-weight:900;color:#E91E8C;letter-spacing:1px;line-height:1.3;}
-    .studio-sub{font-size:6pt;color:#757575;letter-spacing:2px;text-transform:uppercase;margin-top:1mm;}
-    .cert-label{font-size:7pt;color:#757575;letter-spacing:4px;text-transform:uppercase;margin-bottom:3mm;}
-    .cert-title{
-      font-family:'Playfair Display',Georgia,serif;
-      font-size:32pt;font-weight:700;
-      color:#E91E8C;line-height:1.05;
-      margin-bottom:4mm;
-    }
-    .awarded-to{font-size:7pt;color:#757575;letter-spacing:2px;text-transform:uppercase;margin-bottom:2mm;}
-    .student-name{
-      font-family:'Playfair Display',Georgia,serif;
-      font-size:22pt;font-weight:700;font-style:italic;
-      color:#1A1A2E;letter-spacing:0.5px;
-      border-bottom:1.5px solid #BDBDBD;
-      padding-bottom:2mm;display:inline-block;
-      min-width:120mm;
-    }
-    .desc{font-size:8.5pt;color:#555;line-height:1.7;margin-top:4mm;}
-    .desc strong{color:#1A1A2E;font-weight:700;}
-    .sig-row{display:flex;gap:16mm;align-items:flex-end;margin-top:auto;}
-    .sig-block{display:flex;flex-direction:column;}
-    .sig-name{font-family:'Playfair Display',Georgia,serif;font-size:13pt;font-style:italic;color:#E91E8C;font-weight:700;margin-bottom:1.5mm;}
-    .sig-line{width:42mm;height:0.5px;background:#BDBDBD;margin-bottom:2mm;}
-    .sig-label{font-size:6pt;color:#9E9E9E;letter-spacing:1.5px;text-transform:uppercase;}
-    .footer-note{font-size:6pt;color:#BDBDBD;letter-spacing:0.5px;margin-top:3mm;}
-    /* ── Right decorative panel ── */
-    .right{
-      width:112mm;height:210mm;
-      position:relative;overflow:hidden;
-      flex-shrink:0;
-    }
-    .right-bg{position:absolute;inset:0;background:linear-gradient(160deg,#FFF0F7 0%,#FCE4EC 40%,#E91E8C22 100%);}
-    .right-logo-wrap{
-      position:absolute;
-      top:50%;left:50%;
-      transform:translate(-50%,-50%);
-      width:72mm;height:72mm;
-      border-radius:50%;
-      background:rgba(255,255,255,0.92);
-      border:3px solid #E91E8C44;
-      box-shadow:0 4px 24px rgba(233,30,140,0.18);
-      display:flex;align-items:center;justify-content:center;
-      overflow:hidden;
-    }
-    .right-logo-wrap img{width:68mm;height:68mm;object-fit:contain;}
-    .right-top-text{
-      position:absolute;top:18mm;left:0;right:0;
-      text-align:center;
-      font-size:7.5pt;font-weight:900;color:#E91E8C;
-      letter-spacing:2px;text-transform:uppercase;
-      opacity:0.7;
-    }
-    .right-bottom-text{
-      position:absolute;bottom:18mm;left:0;right:0;
-      text-align:center;
-      font-family:'Playfair Display',Georgia,serif;
-      font-size:9pt;font-style:italic;color:#C2185B;
-      opacity:0.8;
-    }
-    .divider-line{position:absolute;left:0;top:0;bottom:0;width:0.5mm;background:linear-gradient(to bottom,transparent,#E91E8C,transparent);}
-    /* Floral decorative circles */
-    .floral-dot{position:absolute;border-radius:50%;background:#E91E8C;}
   </style>
 </head>
 <body>
-<div class="cert">
+<div style="
+  width:${W}px;height:${H}px;
+  background:#fff;
+  border:1.5px solid #FCE4EC;
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  font-family:Georgia,'Times New Roman',serif;
+">
 
-  <!-- Corner ornaments -->
-  <div class="corner c-tl">
-    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 58 L2 8 Q2 2 8 2 L58 2" stroke="#E91E8C" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M2 42 L2 18 Q2 8 12 8 L42 8" stroke="#E91E8C" stroke-width="0.8" fill="none" opacity="0.5"/>
-      <circle cx="8" cy="8" r="4" fill="#E91E8C" opacity="0.8"/>
-      <circle cx="8" cy="22" r="2" fill="#2E7D32" opacity="0.6"/>
-      <circle cx="22" cy="8" r="2" fill="#2E7D32" opacity="0.6"/>
-      <path d="M8 8 Q16 4 24 8 Q16 12 8 8Z" fill="#E91E8C" opacity="0.3"/>
-    </svg>
-  </div>
-  <div class="corner c-tr">
-    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 58 L2 8 Q2 2 8 2 L58 2" stroke="#E91E8C" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M2 42 L2 18 Q2 8 12 8 L42 8" stroke="#E91E8C" stroke-width="0.8" fill="none" opacity="0.5"/>
-      <circle cx="8" cy="8" r="4" fill="#E91E8C" opacity="0.8"/>
-      <circle cx="8" cy="22" r="2" fill="#2E7D32" opacity="0.6"/>
-      <circle cx="22" cy="8" r="2" fill="#2E7D32" opacity="0.6"/>
-      <path d="M8 8 Q16 4 24 8 Q16 12 8 8Z" fill="#E91E8C" opacity="0.3"/>
-    </svg>
-  </div>
-  <div class="corner c-bl">
-    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 58 L2 8 Q2 2 8 2 L58 2" stroke="#E91E8C" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M2 42 L2 18 Q2 8 12 8 L42 8" stroke="#E91E8C" stroke-width="0.8" fill="none" opacity="0.5"/>
-      <circle cx="8" cy="8" r="4" fill="#E91E8C" opacity="0.8"/>
-      <circle cx="8" cy="22" r="2" fill="#2E7D32" opacity="0.6"/>
-      <circle cx="22" cy="8" r="2" fill="#2E7D32" opacity="0.6"/>
-      <path d="M8 8 Q16 4 24 8 Q16 12 8 8Z" fill="#E91E8C" opacity="0.3"/>
-    </svg>
-  </div>
-  <div class="corner c-br">
-    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 58 L2 8 Q2 2 8 2 L58 2" stroke="#E91E8C" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M2 42 L2 18 Q2 8 12 8 L42 8" stroke="#E91E8C" stroke-width="0.8" fill="none" opacity="0.5"/>
-      <circle cx="8" cy="8" r="4" fill="#E91E8C" opacity="0.8"/>
-      <circle cx="8" cy="22" r="2" fill="#2E7D32" opacity="0.6"/>
-      <circle cx="22" cy="8" r="2" fill="#2E7D32" opacity="0.6"/>
-      <path d="M8 8 Q16 4 24 8 Q16 12 8 8Z" fill="#E91E8C" opacity="0.3"/>
-    </svg>
-  </div>
+  <!-- Outer border frame -->
+  <div style="position:absolute;inset:6px;border:2px solid #E91E8C;border-radius:4px;opacity:.3;z-index:10;pointer-events:none;"></div>
+  <div style="position:absolute;inset:10px;border:1px solid #2E7D32;border-radius:3px;opacity:.2;z-index:10;pointer-events:none;"></div>
 
-  <div class="border-outer"></div>
-  <div class="border-inner"></div>
+  <!-- LEFT PANEL (62%) -->
+  <div style="
+    flex:0 0 ${LW}px;width:${LW}px;height:${H}px;
+    padding:${Math.round(H*.06)}px ${Math.round(LW*.05)}px ${Math.round(H*.05)}px ${Math.round(LW*.06)}px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    z-index:2;background:#fff;
+  ">
 
-  <!-- LEFT PANEL -->
-  <div class="left">
-    <!-- Studio header -->
-    <div class="studio-header">
-      <img src="${LOGO_URL}" alt="KMS Logo"/>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="${LOGO_URL}" alt="logo" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;"/>
       <div>
-        <div class="studio-name">KAJOL MAKEOVER STUDIOZ</div>
-        <div class="studio-sub">Pune · Maharashtra · India</div>
+        <div style="font-size:${Math.round(8*vw/10)}px;font-weight:900;color:#E91E8C;letter-spacing:1px;font-family:inherit;">KAJOL MAKEOVER STUDIOZ</div>
+        <div style="font-size:${Math.round(6*vw/10)}px;color:#757575;letter-spacing:2px;text-transform:uppercase;">Pune · Maharashtra · India</div>
       </div>
     </div>
 
-    <!-- Certificate title -->
+    <!-- Title -->
     <div>
-      <div class="cert-label">Certificate of Achievement</div>
-      <div class="cert-title">Certificate<br/>of Completion</div>
+      <div style="font-size:${Math.round(6*vw/10)}px;color:#757575;letter-spacing:4px;text-transform:uppercase;margin-bottom:4px;">Certificate of Achievement</div>
+      <div style="font-size:${Math.round(3.5*vw)}px;font-weight:700;color:#E91E8C;line-height:1.05;font-family:Georgia,serif;">Certificate<br/>of Completion</div>
     </div>
 
-    <!-- Awarded to -->
+    <!-- Student -->
     <div>
-      <div class="awarded-to">Proudly Presented To</div>
-      <div class="student-name">${student.name}</div>
-      <div class="desc">
-        For successfully completing the<br/>
-        <strong>${course?.name || batch?.name || 'Professional Course'}</strong> programme<br/>
-        conducted at <strong>Kajol Makeover Studioz, Pune.</strong><br/>
-        <span style="font-size:7.5pt;color:#757575;">Batch: ${batch?.name || ''} &nbsp;·&nbsp; Duration: ${batch?.duration || course?.duration || ''}</span>
+      <div style="font-size:${Math.round(6*vw/10)}px;color:#757575;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">Proudly Presented To</div>
+      <div style="font-family:Georgia,serif;font-size:${Math.round(2.2*vw)}px;color:#1A1A2E;font-style:italic;font-weight:700;border-bottom:1px solid #BDBDBD;padding-bottom:3px;display:inline-block;min-width:50%;">${student.name}</div>
+      <div style="font-size:${Math.round(1*vw)}px;color:#555;line-height:1.7;margin-top:4px;">
+        For successfully completing<br/>
+        <b style="color:#1A1A2E;">${course?.name || batch?.name || 'Professional Course'}</b><br/>
+        at <b>Kajol Makeover Studioz, Pune.</b><br/>
+        <span style="font-size:${Math.round(0.85*vw)}px;color:#757575;">Batch: ${batch?.name || ''} &nbsp;·&nbsp; Duration: ${batch?.duration || course?.duration || ''}</span>
       </div>
     </div>
 
     <!-- Signatures -->
-    <div class="sig-row">
-      <div class="sig-block">
-        <div class="sig-name">Kajol J Kamble</div>
-        <div class="sig-line"></div>
-        <div class="sig-label">Director &amp; Head Trainer</div>
+    <div style="display:flex;gap:8%;align-items:flex-end;">
+      <div>
+        <div style="font-family:Georgia,serif;font-size:${Math.round(1.4*vw)}px;color:#E91E8C;font-style:italic;font-weight:700;margin-bottom:3px;">Kajol J Kamble</div>
+        <div style="width:60px;height:0.5px;background:#BDBDBD;margin-bottom:3px;"></div>
+        <div style="font-size:${Math.round(0.8*vw)}px;color:#9E9E9E;letter-spacing:1px;text-transform:uppercase;">Director &amp; Head Trainer</div>
       </div>
-      <div class="sig-block">
-        <div class="sig-name" style="color:#2E7D32;">${fmtDate(certDate)}</div>
-        <div class="sig-line"></div>
-        <div class="sig-label">Date of Issue</div>
+      <div>
+        <div style="font-family:Georgia,serif;font-size:${Math.round(1.4*vw)}px;color:#2E7D32;font-style:italic;font-weight:700;margin-bottom:3px;">${fmtDate(certDate)}</div>
+        <div style="width:60px;height:0.5px;background:#BDBDBD;margin-bottom:3px;"></div>
+        <div style="font-size:${Math.round(0.8*vw)}px;color:#9E9E9E;letter-spacing:1px;text-transform:uppercase;">Date of Issue</div>
       </div>
     </div>
 
-    <div class="footer-note">kajol-makeover-studioz.vercel.app &nbsp;·&nbsp; kajoljkambale@gmail.com &nbsp;·&nbsp; 8390695155</div>
+    <div style="font-size:${Math.round(0.7*vw)}px;color:#BDBDBD;">kajol-makeover-studioz.vercel.app · 8390695155</div>
   </div>
 
-  <!-- RIGHT DECORATIVE PANEL -->
-  <div class="right">
-    <div class="right-bg"></div>
-    <div class="divider-line"></div>
-    <div class="right-top-text">Mehndi &nbsp;·&nbsp; Ariwork &nbsp;·&nbsp; Makeup</div>
-    <div class="right-logo-wrap">
-      <img src="${LOGO_URL}" alt="Kajol Makeover Studioz"/>
+  <!-- RIGHT PANEL (38%) -->
+  <div style="flex:0 0 ${RW}px;width:${RW}px;height:${H}px;position:relative;overflow:hidden;background:linear-gradient(160deg,#FFF0F7,#FCE4EC);">
+    <!-- Divider -->
+    <div style="position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,#E91E8C,transparent);opacity:.5;"></div>
+    <!-- Top text -->
+    <div style="position:absolute;top:0;left:0;right:0;text-align:center;padding:${Math.round(H*.08)}px 4% 0;font-size:${Math.round(0.7*vw)}px;font-weight:900;color:#E91E8C;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Mehndi · Ariwork · Makeup</div>
+    <!-- Center logo circle -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:55%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,0.92);border:2px solid rgba(233,30,140,0.27);box-shadow:0 4px 16px rgba(233,30,140,0.15);overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <img src="${LOGO_URL}" alt="logo" style="width:90%;height:90%;object-fit:contain;"/>
     </div>
-    <div class="right-bottom-text">Professional Excellence Award</div>
-    <!-- decorative dots -->
-    <div class="floral-dot" style="width:8mm;height:8mm;top:38mm;right:8mm;opacity:0.25;"></div>
-    <div class="floral-dot" style="width:5mm;height:5mm;top:44mm;right:16mm;opacity:0.18;"></div>
-    <div class="floral-dot" style="width:6mm;height:6mm;bottom:38mm;right:10mm;opacity:0.22;"></div>
-    <div class="floral-dot" style="width:4mm;height:4mm;bottom:46mm;right:20mm;opacity:0.15;background:#2E7D32;"></div>
+    <!-- Bottom text -->
+    <div style="position:absolute;bottom:0;left:0;right:0;text-align:center;padding:0 4% ${Math.round(H*.08)}px;font-family:Georgia,serif;font-size:${Math.round(0.8*vw)}px;font-style:italic;color:#C2185B;opacity:.8;">Professional Excellence Award</div>
   </div>
 
 </div>
-<script>
-  document.fonts.ready.then(function(){
-    // Ensure the page renders at exactly 297x210mm before printing
-    var meta = document.createElement('meta');
-    meta.name = 'viewport';
-    meta.content = 'width=1122'; // 297mm at 96dpi ≈ 1122px
-    document.head.appendChild(meta);
-    setTimeout(function(){ window.print(); }, 300);
-  });
-</script>
+<script>window.onload=function(){window.print();}</script>
 </body></html>`
-    const win = window.open('', '_blank', 'width=1122,height=794,scrollbars=no')
+    const win = window.open('', '_blank', 'width=1160,height=860')
     if (!win) { toast('⚠️ Allow popups to print/save PDF'); return }
-    win.document.open()
     win.document.write(html)
     win.document.close()
   }
