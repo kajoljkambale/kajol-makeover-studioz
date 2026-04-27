@@ -13,9 +13,7 @@ export default function CertificateTab({data, toast}) {
   const students = batch ? data.students.filter(s => (batch.student_ids||[]).includes(s.id)) : []
   const targets  = selStudent === 'all' ? students : students.filter(s => s.id === selStudent)
 
-  /* ── Print a single certificate in a new window ── */
-  /* A4 landscape: 1122x794px. Certificate image is full background.
-     Text overlaid at positions matching OF_Completion.png design. */
+  /* ── Print a single certificate ── */
   const printCert = (student) => {
     const W = 1122, H = 794
     const courseName = course?.name || batch?.name || 'Professional Course'
@@ -25,64 +23,59 @@ export default function CertificateTab({data, toast}) {
 <head>
   <meta charset="utf-8"/>
   <title>Certificate — ${student.name}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     html,body{width:${W}px;height:${H}px;overflow:hidden;background:#fff;}
-    @page{size:${W}px ${H}px;margin:0;}
+    @page{size:${W}px ${H}px landscape;margin:0;}
     @media print{html,body{width:${W}px;height:${H}px;}}
   </style>
 </head>
 <body>
 <div style="width:${W}px;height:${H}px;position:relative;overflow:hidden;">
-  <!-- Background certificate image -->
-  <img src="${CERT_BG}" style="position:absolute;top:0;left:0;width:${W}px;height:${H}px;object-fit:fill;"/>
 
-  <!-- Student name in gold cursive — matches "Varsha kadam" position -->
+  <!-- Full background image — covers ALL old content -->
+  <img src="${CERT_BG}"
+    style="position:absolute;top:0;left:0;width:${W}px;height:${H}px;display:block;z-index:1;"/>
+
+  <!-- White rectangle to erase any old dynamic text zones (safety layer) -->
+  <div style="position:absolute;top:${Math.round(H*0.35)}px;left:${Math.round(W*0.27)}px;
+    width:${Math.round(W*0.70)}px;height:${Math.round(H*0.45)}px;
+    background:transparent;z-index:2;"></div>
+
+  <!-- Student name in gold cursive (matches "Varsha kadam" position) -->
   <div style="
     position:absolute;
-    top:${Math.round(H*0.41)}px;
-    left:${Math.round(W*0.29)}px;
-    width:${Math.round(W*0.68)}px;
+    top:${Math.round(H*0.415)}px;
+    left:${Math.round(W*0.27)}px;
+    width:${Math.round(W*0.70)}px;
     text-align:center;
     font-family:'Great Vibes',cursive;
-    font-size:${Math.round(H*0.095)}px;
-    color:#C9A84C;
+    font-size:${Math.round(H*0.098)}px;
+    color:#C9A53C;
     line-height:1;
     white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
+    z-index:10;
   ">${student.name}</div>
 
-  <!-- Body text — matches "This is Certify That..." paragraph -->
+  <!-- Body paragraph -->
   <div style="
     position:absolute;
-    top:${Math.round(H*0.575)}px;
-    left:${Math.round(W*0.29)}px;
-    width:${Math.round(W*0.67)}px;
+    top:${Math.round(H*0.578)}px;
+    left:${Math.round(W*0.27)}px;
+    width:${Math.round(W*0.70)}px;
     text-align:center;
     font-family:'Lato',sans-serif;
-    font-size:${Math.round(H*0.026)}px;
-    color:#333;
-    line-height:1.65;
+    font-size:${Math.round(H*0.0255)}px;
+    color:#222;
+    line-height:1.7;
+    z-index:10;
   ">
     This is Certify That Ms/Mrs <b>${student.name}</b> Successfully<br/>
-    Completed her <b style="color:#1B5E20;">${courseName}</b> On ${fmtDate(certDate)} This Certification is<br/>
-    Being Issued By <b>KAJOL MAKEOVER STUDIOZ, PUNE.</b>
+    Completed her <b style="color:#1B5E20;">${courseName}</b> On ${fmtDate(certDate)}<br/>
+    This Certification is Being Issued By <b>KAJOL MAKEOVER STUDIOZ, PUNE.</b>
   </div>
-
-  <!-- Signature text — matches "Kajol kambale" cursive on right -->
-  <div style="
-    position:absolute;
-    bottom:${Math.round(H*0.175)}px;
-    right:${Math.round(W*0.05)}px;
-    width:${Math.round(W*0.22)}px;
-    text-align:center;
-    font-family:'Great Vibes',cursive;
-    font-size:${Math.round(H*0.065)}px;
-    color:#1B5E20;
-    line-height:1;
-  ">Kajol kambale</div>
 
 </div>
 <script>window.onload=function(){window.print();}</script>
@@ -105,7 +98,7 @@ Your certificate is ready!
 
 Keep creating beautiful art! 💄🌿🎨
 
-— Kajol Ma'am
+— Kajol Ma\'am
 Kajol Makeover Studioz`
     window.open(`https://wa.me/91${student.mobile}?text=${encodeURIComponent(msg)}`, '_blank')
   }
@@ -122,57 +115,47 @@ Kajol J Kamble`
     else alert(`No email saved for ${student.name}. Add it in Students tab.`)
   }
 
-  /* ── Screen preview card (mirrors print exactly, scaled to fit screen) ── */
+  /* ── Screen preview (proportional to actual certificate) ── */
   const PreviewCard = ({student}) => {
     const courseName = course?.name || batch?.name || 'Professional Course'
     return (
-      <div style={{
-        width:'100%', aspectRatio:'1122/794',
-        position:'relative', overflow:'hidden',
-        borderRadius:8, boxShadow:'0 4px 20px rgba(0,0,0,0.15)',
-      }}>
-        {/* Certificate background image */}
-        <img src={CERT_BG} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',objectFit:'fill'}}/>
+      <div style={{width:'100%',aspectRatio:'1122/794',position:'relative',
+        overflow:'hidden',borderRadius:8,boxShadow:'0 4px 20px rgba(0,0,0,0.15)'}}>
 
-        {/* Student name — gold cursive, ~41% from top, 29% from left */}
+        {/* Full background image */}
+        <img src={CERT_BG} style={{position:'absolute',top:0,left:0,
+          width:'100%',height:'100%',objectFit:'fill',display:'block',zIndex:1}}/>
+
+        {/* Student name */}
         <div style={{
           position:'absolute',
-          top:'41%', left:'29%', width:'68%',
+          top:'41.5%',left:'27%',width:'70%',
           textAlign:'center',
-          fontFamily:"'Great Vibes', cursive",
-          fontSize:'9.5vw',
-          color:'#C9A84C',
+          fontFamily:"'Great Vibes',cursive",
+          fontSize:'min(9vw, 6.5rem)',
+          color:'#C9A53C',
           lineHeight:1,
           whiteSpace:'nowrap',
           overflow:'hidden',
-          textOverflow:'ellipsis',
+          zIndex:10,
         }}>{student.name}</div>
 
         {/* Body text */}
         <div style={{
           position:'absolute',
-          top:'57.5%', left:'29%', width:'67%',
+          top:'57.8%',left:'27%',width:'70%',
           textAlign:'center',
-          fontFamily:"'Lato', sans-serif",
-          fontSize:'1.5vw',
-          color:'#333',
-          lineHeight:1.65,
+          fontFamily:"'Lato',sans-serif",
+          fontSize:'min(1.4vw, 1rem)',
+          color:'#222',
+          lineHeight:1.7,
+          zIndex:10,
         }}>
           This is Certify That Ms/Mrs <b>{student.name}</b> Successfully<br/>
-          Completed her <b style={{color:'#1B5E20'}}>{courseName}</b> On {fmtDate(certDate)} This Certification is<br/>
-          Being Issued By <b>KAJOL MAKEOVER STUDIOZ, PUNE.</b>
+          Completed her <b style={{color:'#1B5E20'}}>{courseName}</b> On {fmtDate(certDate)}<br/>
+          This Certification is Being Issued By <b>KAJOL MAKEOVER STUDIOZ, PUNE.</b>
         </div>
 
-        {/* Signature */}
-        <div style={{
-          position:'absolute',
-          bottom:'17.5%', right:'5%', width:'22%',
-          textAlign:'center',
-          fontFamily:"'Great Vibes', cursive",
-          fontSize:'4.5vw',
-          color:'#1B5E20',
-          lineHeight:1,
-        }}>Kajol kambale</div>
       </div>
     )
   }
@@ -224,7 +207,6 @@ Kajol J Kamble`
             <div style={{fontSize:28}}>🎓</div>
           </Row>
 
-          {/* Screen preview */}
           <div style={{marginBottom:12}}>
             <PreviewCard student={student}/>
           </div>
