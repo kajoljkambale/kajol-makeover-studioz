@@ -125,7 +125,7 @@ Kajol J Kamble`
           top:'41.5%',left:'24%',width:'74%',
           textAlign:'center',
           fontFamily:"'Great Vibes',cursive",
-          fontSize:'min(8.5vw,5.5rem)',
+          fontSize:'min(6vw,4rem)',
           color:'#C9A53C',
           lineHeight:1,
           whiteSpace:'nowrap',
@@ -136,7 +136,7 @@ Kajol J Kamble`
         {/* Paragraph */}
         <div style={{
           position:'absolute',
-          top:'57.5%',left:'24%',width:'74%',
+          top:'57.5%',left:'26%',width:'74%',
           textAlign:'center',
           fontFamily:"'Lato',sans-serif",
           fontSize:'min(1.35vw,0.9rem)',
